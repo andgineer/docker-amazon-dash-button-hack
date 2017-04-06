@@ -97,7 +97,10 @@ class Sheet:
                 return
             if not last_end:
                 if datetime.datetime.now() - last_start > datetime.timedelta(seconds=params['autoclose']):
-                    close_event(event_sheet, last_event, last_start + datetime.timedelta(seconds=params['default'])).strftime(GDRIVE_TIME_FORMAT)
+                    close_event(
+                        event_sheet,
+                        last_event,
+                        (last_start + datetime.timedelta(seconds=params['default'])).strftime(GDRIVE_TIME_FORMAT))
                     print('Auto close previous event')
                 else:
                     close_event(event_sheet, last_event, datetime.datetime.now().strftime(GDRIVE_TIME_FORMAT))
