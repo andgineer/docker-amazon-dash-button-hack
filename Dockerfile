@@ -17,5 +17,6 @@ RUN apk --update add curl ca-certificates tar build-base \
     && rm -rf ~/.pip/cache/
     
 COPY amazon_dash.py  /
+COPY google_sheet.py  /
 
 CMD ["python3", "amazon_dash.py"]
