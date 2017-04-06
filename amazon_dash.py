@@ -21,12 +21,14 @@ def arp_handler(pkt):
 
 def trigger(button):
     """ Button press action """
+    print('button {} pressed'.format(button))
     sheet = Sheet()
     sheet.press(button)
     sheet.event(button)
 
 
 def main():
+    print('amazon_dash started')
     sniff(prn=arp_handler, filter="arp", store=0)
 
 main()
