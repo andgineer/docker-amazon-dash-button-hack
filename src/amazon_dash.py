@@ -1,18 +1,26 @@
 """
-Amazon Button (dash) press handler
+Amazon Button (dash) server
 
-Sniff for ARP traffic
+Sniff for ARP traffic and detects amazon dash (button) press.
+Register events in class Action
 """
 
 from scapy.all import *
-from google_sheet import Sheet
+from action import Action
 import json
 
 
-BUTTONS_FILE_NAME = 'amazone-dash-private/buttons.json'
+BUTTONS_FILE_NAME = '../amazon-dash-private/buttons.json'
+SETTINGS_FILE_NAME = '../amazon-dash-private/settings.json'
 
 buttons = {}
+settings = {}
 seen_macs = set()
+
+
+def load_settings():
+    with open(SETTINGS_FILE_NAME, 'r') as settings_file:
+        return json.loads(settings_file.read())
 
 
 def load_buttons():
@@ -37,15 +45,16 @@ def arp_handler(pkt):
 def trigger(button):
     """ Button press action """
     print('button {} pressed'.format(button))
-    sheet = Sheet()
-    sheet.press(button)
-    sheet.event(button)
+    Action(settings).action(button)
 
 
 def main():
-    global buttons
+    global buttons, settings
     buttons = load_buttons()
+    settings = load_settings()
     print('amazon_dash started, loaded {} buttons'.format(len(buttons)))
     sniff(prn=arp_handler, filter="arp", store=0)
 
-main()
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,46 @@
+{
+  "calendarId": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
+  "credentialsFileName": "../amazon-dash-private/amazon-dash-hack.json",
+  "iftttKeyFileName": "../amazon-dash-private/ifttt-key.json",
+  "actions": {
+    "white": {
+      "actions": [
+        {
+          "type": "sheet",
+          "name": "amazon_dash",
+          "summary": "white",
+          "press_sheet": "press",
+          "event_sheet": "event",
+          "restart": 60,
+          "autoclose": 10800,
+          "default": 900
+        },
+        {
+          "type": "calendar",
+          "name": "Anna",
+          "summary": "#white",
+          "restart": 60,
+          "autoclose": 10800,
+          "default": 900
+        },
+        {
+          "type": "ifttt",
+          "summary": "white_amazon_dash"
+        }
+      ]
+    },
+    "__DEFAULT__": {
+      "actions": [
+        {
+          "type": "sheet",
+          "name": "amazon_dash",
+          "press_sheet": "press",
+          "event_sheet": "event",
+          "restart": 60,
+          "autoclose": 10800,
+          "default": 900
+        }
+      ]
+    }
+  }
+}
