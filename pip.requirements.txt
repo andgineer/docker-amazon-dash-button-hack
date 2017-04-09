@@ -1,4 +1,4 @@
-dateutil
+python-dateutil
 scapy-python3
 oauth2client
 google-api-python-client
