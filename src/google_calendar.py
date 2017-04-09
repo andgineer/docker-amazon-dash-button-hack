@@ -59,6 +59,9 @@ class Calendar(object):
     def time_to_str(self, t):
         GCAL_TIME_FORMAT = '%Y-%m-%dT%H:%M:%S'
         tz = - time.timezone / 60 / 60 * 100
+        #todo that is incorrect - you need minutes after ':' not hours % 100
+        # so h = int(- time.timezone / 60 / 60)
+        # m = abs(time.timezone / 60) - h * 60
         s = t.strftime(GCAL_TIME_FORMAT) + '%+03d:%02d' % (tz / 100, abs(tz % 100))
         return s
 
