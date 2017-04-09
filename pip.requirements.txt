@@ -1,4 +1,4 @@
+dateutil
 scapy-python3
 oauth2client
-gspread
 google-api-python-client

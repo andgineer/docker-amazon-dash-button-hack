@@ -5,23 +5,23 @@ from googleapiclient import discovery
 import httplib2
 import datetime
 import os
+import dateutil.parser
+import time
 
 
-GCAL_TIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
-GCAL_TIME_PARSE = '%Y-%m-%dT%H:%M:%SZ'
+#GCAL_TIME_PARSE = '%Y-%m-%dT%H:%M:%S%z'
 
 class Calendar(object):
-    def __init__(self, settings):
+    def __init__(self, settings, calendar_id):
         self.settings = settings
         self.http = self.get_credentials_http()
         self.service = self.get_service()
         self.tz = os.environ.get('TZ', 'Europe/Moscow')
-        self.calendarId = self.settings['calendarId']
-        #self.calendarId = self.get_calendar_id(name)
+        self.calendarId = calendar_id
 
     def get_credentials_http(self):
         credentials = ServiceAccountCredentials.from_json_keyfile_name(
-            self.settings['credentialsFileName'],
+            self.settings['credentials_file_name'],
             [
                 'https://www.googleapis.com/auth/calendar',
                 'https://www.googleapis.com/auth/spreadsheets',
@@ -38,10 +38,10 @@ class Calendar(object):
         )
 
     def get_calendar_id(self, name):
-        """Does not work for some uncleare reasons.
+        """Does not work for some unclear reasons.
         returns empty items.
         And if I access calendar 'primary' events created in some other calendar invisible for other accounts.
-        So we have to specify calendarId implicitely and cannot find it by name.
+        So we have to specify calendarId implicitly and cannot find it by name.
         """
         page_token = None
         while True:
@@ -53,24 +53,33 @@ class Calendar(object):
             if not page_token:
                 break
 
+    def parse_time(self, s):
+        return dateutil.parser.parse(s)
+
+    def time_to_str(self, t):
+        GCAL_TIME_FORMAT = '%Y-%m-%dT%H:%M:%S'
+        tz = - time.timezone / 60 / 60 * 100
+        s = t.strftime(GCAL_TIME_FORMAT) + '%+03d:%02d' % (tz / 100, abs(tz % 100))
+        return s
+
     def start_event(self, summary):
         INSERT_EVENT_REQUEST = {
             'summary': summary,
             'description': 'Event created by amazon dash (button) click.',
             'start': {
-                'dateTime': datetime.datetime.utcnow().strftime(GCAL_TIME_FORMAT),
-                'timeZone': '{tz}'.format(tz=self.tz),
+                'dateTime': self.time_to_str(datetime.datetime.now()),
+                #'timeZone': '{tz}'.format(tz=self.tz),
             },
             'end': {
-                'dateTime': datetime.datetime.utcnow().strftime(GCAL_TIME_FORMAT),
-                'timeZone': '{tz}'.format(tz=self.tz),
+                'dateTime': self.time_to_str(datetime.datetime.now()),
+                #'timeZone': '{tz}'.format(tz=self.tz),
             },
         }
         event = self.service.events().insert(
             calendarId=self.calendarId, #'primary',
             body=INSERT_EVENT_REQUEST
         ).execute()
-        print('Event created: %s' % (event.get('htmlLink')))
+        #print('Calendar event created: %s' % (event.get('htmlLink')))
 
     def get_last_event(self, summary):
         """
@@ -85,7 +94,7 @@ class Calendar(object):
                 calendarId=self.calendarId, #'primary',
                 timeMin=self.google_time_format(datetime.datetime.now() - datetime.timedelta(days=100)), # better limit than sorry
                 q=summary,
-                timeZone='UTC',
+                #timeZone='UTC',
                 orderBy="startTime",
                 singleEvents=True,
                 showDeleted=False,
@@ -98,11 +107,11 @@ class Calendar(object):
                     event = events['items'][-1]
                     # from pprint import pprint
                     # pprint(events)
-                    start = datetime.datetime.strptime(event['start']['dateTime'], GCAL_TIME_PARSE)
+                    start = self.parse_time(event['start']['dateTime'])
                     if event['start'] == event['end']:
                         return event['id'], [event['summary'], start]
                     else:
-                        end = datetime.datetime.strptime(event['end']['dateTime'], GCAL_TIME_PARSE)
+                        end = self.parse_time(event['end']['dateTime'])
                         return event['id'], [event['summary'], start, end]
                 return None, None
 
@@ -117,21 +126,21 @@ class Calendar(object):
             calendarId=self.calendarId, #'primary',
             eventId=event_id).execute()
         event['end'] = {
-            'dateTime': close_time.strftime(GCAL_TIME_FORMAT),
-            'timeZone': '{tz}'.format(tz=self.tz),
+            'dateTime': self.time_to_str(close_time),
+            #'timeZone': '{tz}'.format(tz=self.tz),
         }
         updated_event = self.service.events().update(
             calendarId=self.calendarId, #'primary',
             eventId=event_id,
             body=event
         ).execute()
-        print(updated_event)
+        #print(updated_event)
 
     def google_time_format(self, t):
         return t.strftime('%Y-%m-%dT%H:%M:%SZ')
 
     def google_now(self):
-        return self.google_time_format(datetime.datetime.utcnow())
+        return self.google_time_format(datetime.datetime.now())
 
     def google_today(self):
         return self.google_time_format(
@@ -142,16 +151,14 @@ class Calendar(object):
 if __name__ == "__main__":
     from amazon_dash import load_settings
     settings = load_settings()
-    calendar = Calendar(settings)
+    calendar = Calendar(settings, settings['actions']['white']['actions'][1]['calendar_id'])
     # while True:
     #     id, event = calendar.get_last_event('Google')
     #     if id:
     #         calendar.delete_event(id)
     #     else:
     #         break
-    calendar.get_calendar_id('Anna')
     calendar.start_event('Google')
     print(calendar.get_last_event('Google'))
     id, event = calendar.get_last_event('Google')
-    calendar.close_event(id, (datetime.datetime.utcnow() + datetime.timedelta(minutes=5)))
-    #calendar.action('white')
+    calendar.close_event(id, (datetime.datetime.now() + datetime.timedelta(minutes=5)))

@@ -10,14 +10,14 @@ class Ifttt():
         self.key = self.key_file['key']
 
     def load_key(self):
-        with open(self.settings['iftttKeyFileName'], 'r') as key_file:
+        with open(self.settings['ifttt_key_file_name'], 'r') as key_file:
             return json.loads(key_file.read())
 
-    def press(self, summary):
+    def press(self, summary, v1, v2, v3):
         payload = {
-            'value1': 'hello1',
-            'value2': 'hello2',
-            'value3': 'hello3'
+            'value1': v1,
+            'value2': v2,
+            'value3': v3
         }
         requests.post(
             'https://maker.ifttt.com/trigger/{event}/with/key/{key}'.format(

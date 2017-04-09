@@ -96,7 +96,7 @@ class Sheet(object):
 
     def get_credentials_http(self):
         credentials = ServiceAccountCredentials.from_json_keyfile_name(
-            self.settings['credentialsFileName'],
+            self.settings['credentials_file_name'],
             [
                 'https://www.googleapis.com/auth/calendar',
                 'https://www.googleapis.com/auth/spreadsheets',

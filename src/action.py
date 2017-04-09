@@ -6,6 +6,7 @@ from google_sheet import Sheet
 from google_calendar import Calendar
 from ifttt import Ifttt
 import datetime
+import copy
 
 
 class Action(object):
@@ -13,26 +14,49 @@ class Action(object):
         self.settings = settings
         self.actions = settings['actions']
 
+    def preprocess_actions(self, button, actions):
+        """
+        Add summary (with button name value) if there is no one.
+        Substitutes {button} with button name in parameters.
+        """
+        def subst(s):
+            return s.format(button=button)
+        actions = copy.deepcopy(actions)
+        for action in actions:
+            if 'summary' not in action:
+                action['summary'] = button
+            for param in action:
+                if isinstance(action[param], str):
+                    action[param] = subst(action[param])
+        return actions
+
     def action(self, button):
-        """Registers event from button"""
+        """Registers event from the button"""
         ACTION_HANDLERS = {
             'sheet': self.sheet_action,
             'calendar': self.calendar_action,
             'ifttt': self.ifttt_action,
         }
         if button in self.actions:
-            actions = self.actions[button]
+            actions = self.actions[button]['actions']
         else:
-            actions = self.actions['__DEFAULT__']
-        for act in actions['actions']:
+            actions = self.actions['__DEFAULT__']['actions']
+        actions = self.preprocess_actions(button, actions)
+        for act in actions:
+            print('Event for {}:'.format(act['type']))
             ACTION_HANDLERS[act['type']](button, act)
 
     def ifttt_action(self, button, action_params):
         ifttt = Ifttt(self.settings)
-        ifttt.press(action_params['summary'])
+        ifttt.press(
+            action_params['summary'],
+            action_params.get('value1', ''),
+            action_params.get('value2', ''),
+            action_params.get('value3', '')
+        )
 
     def calendar_action(self, button, action_params):
-        calendar = Calendar(self.settings)
+        calendar = Calendar(self.settings, action_params['calendar_id'])
         self.event(calendar, action_params)
 
     def sheet_action(self, button, action_params):
@@ -54,14 +78,15 @@ class Action(object):
                 last_end = last_event[2]
             else:
                 last_end = None
-            if last_end and datetime.datetime.now() - last_end < datetime.timedelta(seconds=action_params['restart']):
+            nowtz = datetime.datetime.now(last_start.tzinfo)
+            if last_end and abs(nowtz - last_end) < datetime.timedelta(seconds=action_params['restart']):
                 print('Button press ignored because previuos event closed and it is too early to start new one')
                 return
-            if datetime.datetime.now() - last_start < datetime.timedelta(seconds=action_params['restart']):
+            if nowtz - last_start < datetime.timedelta(seconds=action_params['restart']):
                 print('Button press ignored because event in progress and it is too early to close it')
                 return
             if not last_end:
-                if datetime.datetime.now() - last_start > datetime.timedelta(seconds=action_params['autoclose']):
+                if abs(nowtz - last_start) > datetime.timedelta(seconds=action_params['autoclose']):
                     target.close_event(
                         last_event_row,
                         (last_start + datetime.timedelta(seconds=action_params['default'])))
