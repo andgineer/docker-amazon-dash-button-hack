@@ -1,4 +1,4 @@
-"""Register amazon dash (button) events in Google calendar using Google Calendar API """
+"""Register Amazon Dash Button events in Google Calendar using Google Calendar API """
 
 from oauth2client.service_account import ServiceAccountCredentials
 from googleapiclient import discovery

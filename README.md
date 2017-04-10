@@ -1,6 +1,7 @@
-# amazon_dash
+This is a docker container for the Amazon Dash Button hack.
+It can write to Google Sheets, Google Calendar and fire event in [IFTTT](https://ifttt.com).
 
-This is a docker container for the amazon dash button hack, I use it on my Synology.
+I use it on my [Synology](https://www.synology.com).
 
 To run it:
 ```
@@ -8,10 +9,14 @@ docker rm -f amazon_dash
 docker run --net host -it --name amazon_dash -v $PWD/amazon-dash-private:/amazon-dash-private:ro masterandrey/amazon-dash
 ```
 
-In folder `amazone-dash-private` you should have settings files `settings.json` 
-and `buttons.json` (see [examples](https://github.com/masterandrey/docker-amazon-dash/tree/master/amazon-dash-private)),
-`amazon-dash-hack.json` with google API credentials and
-`ifttt-key.json` with 
-[Maker Webhook key](https://ifttt.com/services/maker_webhooks/settings).
+In folder `amazone-dash-private` you should have:
 
-See details in [blog post](http://masterandrey.com/posts/en/amazon_dash/).
+
+* settings `settings.json` 
+* buttons list `buttons.json` 
+* `amazon-dash-hack.json` with google API credentials [Google Sheets](https://console.developers.google.com/start/api?id=sheets.googleapis.com), [Google Calendar](https://console.developers.google.com/start/api?id=calendar)
+* `ifttt-key.json` with [Maker Webhook key](https://ifttt.com/services/maker_webhooks/settings)
+
+[Examples of this files](https://github.com/masterandrey/docker-amazon-dash/tree/master/amazon-dash-private).
+
+See details in [Smart wifi button and Docker on Synology (Amazon Dash Button hack)](http://masterandrey.com/posts/en/amazon_dash/).

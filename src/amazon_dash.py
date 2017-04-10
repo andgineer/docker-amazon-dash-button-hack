@@ -1,5 +1,5 @@
 """
-Amazon Button (dash) server
+Amazon Dash Button server
 
 Sniff for ARP traffic and detects amazon dash (button) press.
 Register events in class Action

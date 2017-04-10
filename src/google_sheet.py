@@ -1,4 +1,4 @@
-"""Register amazon dash (button) events in Google spreadsheet using Google Sheet API """
+"""Register Amazon Dash Button events in Google Sheets using Google Sheets API """
 
 from oauth2client.service_account import ServiceAccountCredentials
 from googleapiclient import discovery

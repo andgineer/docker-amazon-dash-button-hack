@@ -1,4 +1,7 @@
-"""Register amazon dash (button) events IFTTT Makers API """
+"""
+Register Amazon Dash Button events in IFTTT Maker Webhook
+https://ifttt.com/maker_webhooks
+"""
 import requests
 import json
 
@@ -19,6 +22,7 @@ class Ifttt():
             'value2': v2,
             'value3': v3
         }
+        #todo urlencode event string
         requests.post(
             'https://maker.ifttt.com/trigger/{event}/with/key/{key}'.format(
                 event=summary,
