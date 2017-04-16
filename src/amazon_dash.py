@@ -8,6 +8,7 @@ Register events in class Action
 from scapy.all import *
 from action import Action
 import json
+import os.path
 
 
 BUTTONS_FILE_NAME = '../amazon-dash-private/buttons.json'
@@ -18,13 +19,24 @@ settings = {}
 seen_macs = set()
 
 
+NO_SETTINGS_FILE = '''\nNo {} found. \nIf you run application in docker container you
+should connect volume with setting files, like
+    -v $PWD/amazon-dash-private:/amazon-dash-private:ro'''
+
 def load_settings():
+    """ Load settings """
+    if not os.path.isfile(SETTINGS_FILE_NAME):
+        print(NO_SETTINGS_FILE.format(SETTINGS_FILE_NAME))
+    exit(1)
     with open(SETTINGS_FILE_NAME, 'r') as settings_file:
         return json.loads(settings_file.read())
 
 
 def load_buttons():
     """ Load known buttons """
+    if not os.path.isfile(BUTTONS_FILE_NAME):
+        print(NO_SETTINGS_FILE.format(BUTTONS_FILE_NAME))
+        exit(1)
     with open(BUTTONS_FILE_NAME, 'r') as buttons_file:
         buttons = json.loads(buttons_file.read())
     return buttons
