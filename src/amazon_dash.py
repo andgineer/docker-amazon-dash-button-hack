@@ -27,7 +27,7 @@ def load_settings():
     """ Load settings """
     if not os.path.isfile(SETTINGS_FILE_NAME):
         print(NO_SETTINGS_FILE.format(SETTINGS_FILE_NAME))
-    exit(1)
+        exit(1)
     with open(SETTINGS_FILE_NAME, 'r') as settings_file:
         return json.loads(settings_file.read())
 
