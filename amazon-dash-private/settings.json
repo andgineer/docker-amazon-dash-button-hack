@@ -1,8 +1,8 @@
 {
   "credentials_file_name": "../amazon-dash-private/amazon-dash-hack.json",
   "ifttt_key_file_name": "../amazon-dash-private/ifttt-key.json",
+  "images_folder": "../amazon-dash-private/images/",
   "dashboards": {
-    "images_folder": "../amazon-dash-private/images/",
     "anna_work_out": {
       "summary": "Anna work-out",
       "empty_image": "old-woman.png"
