@@ -14,6 +14,29 @@ class Action(object):
         self.settings = settings
         self.actions = settings['actions']
 
+    def set_summary_by_time(self, button_actions):
+        for action in button_actions:
+            if isinstance(action['summary'], list):
+                assert len(action['summary']) > 0, '''summary param must be string or array like
+        [{"summary":"summary1", "before":"10:00:00"}, {"summary": "summary2", "before":"19:00:00"}, ...]'''
+                time = datetime.datetime.now()
+                for interval_idx, interval in enumerate(action['summary']):
+                    if 'before' in interval:
+                        time_parts = interval['before'].split(':')
+                        try:
+                            assert len([i for i in time_parts if 0 <= int(i) < 60]) == 3, \
+                                'Before param ({}) should be "HH:MM:SS", for example 10:00:00.'.format(interval['before'])
+                        except ValueError:
+                            raise Exception('Between ":" in "before" param should be numbers.')
+                        interval_end_parts = [int(s) for s in time_parts]
+                        interval_end = time.replace(hour=interval_end_parts[0], minute=interval_end_parts[1], second=interval_end_parts[2])
+                        if time < interval_end:
+                            action['summary'] = interval['summary']
+                            break
+                else:
+                    action['summary'] = interval['summary']
+        return button_actions
+
     def preprocess_actions(self, button, button_settings):
         """
         Add summary (with button name value) if there is no one.
@@ -32,26 +55,6 @@ class Action(object):
                 if isinstance(action[param], str):
                     action[param] = subst(action[param])
                 #todo recursive replace if param is list/dict
-            # set summary by time
-            if isinstance(action['summary'], list):
-                assert len(action['summary']) > 0, '''summary param must be string or array like
-    [{"summary":"summary1", "before":"10:00:00"}, {"summary": "summary2", "before":"19:00:00"}, ...]'''
-                time = datetime.datetime.now()
-                for interval_idx, interval in enumerate(action['summary']):
-                    if 'before' in interval:
-                        time_parts = interval['before'].split(':')
-                        try:
-                            assert len([i for i in time_parts if 0 <= int(i) < 60]) == 3, \
-                                'Before param ({}) should be "HH:MM:SS", for example 10:00:00.'.format(interval['before'])
-                        except ValueError:
-                            raise Exception('Between ":" in "before" param should be numbers.')
-                        interval_end_parts = [int(s) for s in time_parts]
-                        interval_end = time.replace(hour=interval_end_parts[0], minute=interval_end_parts[1], second=interval_end_parts[2])
-                        if time < interval_end:
-                            action['summary'] = interval['summary']
-                            break
-                else:
-                    action['summary'] = interval['summary']
         return actions
 
     def action(self, button):
@@ -66,6 +69,7 @@ class Action(object):
         else:
             button_settings = self.actions['__DEFAULT__']
         actions = self.preprocess_actions(button, button_settings)
+        actions = self.set_summary_by_time(actions)
         for act in actions:
             print('Event for {}: ({})'.format(act['type'], act))
             ACTION_HANDLERS[act['type']](button, act)
