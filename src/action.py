@@ -7,6 +7,7 @@ from google_calendar import Calendar
 from ifttt import Ifttt
 import datetime
 import copy
+import collections
 
 
 class Action(object):
@@ -42,8 +43,20 @@ class Action(object):
         Add summary (with button name value) if there is no one.
         Substitutes {button} with button name in parameters.
         """
-        def subst(s):
-            return s.format(button=button)
+        def subst(param):
+            if isinstance(param, str):
+                return param.format(button=button)
+            if isinstance(param, collections.Mapping):
+                result = {}
+                for item in param:
+                    result[item] = subst(param[item])
+                return result
+            if isinstance(param, collections.Iterable):
+                result = []
+                for item in param:
+                    result.append(subst(item))
+                return result
+            return param
         actions = copy.deepcopy(button_settings['actions'])
         for action in actions:
             if 'summary' not in action:
@@ -52,12 +65,10 @@ class Action(object):
                 else:
                     action['summary'] = button
             for param in action:
-                if isinstance(action[param], str):
-                    action[param] = subst(action[param])
-                #todo recursive replace if param is list/dict
+                action[param] = subst(action[param])
         return actions
 
-    def action(self, button):
+    def action(self, button, dry_run=False):
         """Registers event from the button"""
         ACTION_HANDLERS = {
             'sheet': self.sheet_action,
@@ -72,7 +83,8 @@ class Action(object):
         actions = self.set_summary_by_time(actions)
         for act in actions:
             print('Event for {}: ({})'.format(act['type'], act))
-            ACTION_HANDLERS[act['type']](button, act)
+            if not dry_run:
+                ACTION_HANDLERS[act['type']](button, act)
 
     def ifttt_action(self, button, action_params):
         ifttt = Ifttt(self.settings)
@@ -131,4 +143,4 @@ if __name__ == "__main__":
     from amazon_dash import load_settings
     settings = load_settings()
     action = Action(settings)
-    action.action('white')
+    action.action('white', dry_run=True)

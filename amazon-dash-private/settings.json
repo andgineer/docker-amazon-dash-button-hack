@@ -1,6 +1,9 @@
 {
+  "latitude": "60.002228",
+  "longitude": "30.296947",
   "credentials_file_name": "../amazon-dash-private/amazon-dash-hack.json",
   "ifttt_key_file_name": "../amazon-dash-private/ifttt-key.json",
+  "openweathermap_key_file_name": "../amazon-dash-private/openweathermap-key.json",
   "images_folder": "../amazon-dash-private/images/",
   "dashboards": {
     "anna_work_out": {
@@ -11,8 +14,8 @@
   "actions": {
     "white": {
       "summary": [
-        {"summary": "Morning work-out", "before": "12:00:00", "image": "morning.png"},
-        {"summary": "Physiotherapy", "image": "evening.png"}
+        {"summary": "Morning work-out", "before": "12:00:00", "image": "morning4.png"},
+        {"summary": "Physiotherapy", "image": "evening2.png"}
       ],
       "actions": [
         {
