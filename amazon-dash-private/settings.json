@@ -14,7 +14,7 @@
   "actions": {
     "white": {
       "summary": [
-        {"summary": "Morning work-out", "before": "12:00:00", "image": "morning4.png"},
+        {"summary": "Morning work-out", "before": "12:00:00", "image": "morning.png"},
         {"summary": "Physiotherapy", "image": "evening2.png"}
       ],
       "actions": [
