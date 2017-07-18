@@ -7,7 +7,7 @@ I use it on my [Synology](https://www.synology.com).
 To run it:
 ```
 docker rm -f amazon_dash
-docker run --net host -it --name amazon_dash -v $PWD/amazon-dash-private:/amazon-dash-private:ro masterandrey/amazon-dash
+docker run --net host -it --name amazon_dash -v $PWD/amazon-dash-private:/amazon-dash-private:ro masterandrey/docker-amazon-dash-button-hack
 ```
 
 In folder `amazone-dash-private` you should have:
