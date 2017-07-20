@@ -28,7 +28,7 @@ def load_settings():
     if not os.path.isfile(SETTINGS_FILE_NAME):
         print(NO_SETTINGS_FILE.format(SETTINGS_FILE_NAME))
         exit(1)
-    with open(SETTINGS_FILE_NAME, 'r') as settings_file:
+    with open(SETTINGS_FILE_NAME, 'r', encoding='utf-8-sig') as settings_file:
         return json.loads(settings_file.read())
 
 
@@ -37,7 +37,7 @@ def load_buttons():
     if not os.path.isfile(BUTTONS_FILE_NAME):
         print(NO_SETTINGS_FILE.format(BUTTONS_FILE_NAME))
         exit(1)
-    with open(BUTTONS_FILE_NAME, 'r') as buttons_file:
+    with open(BUTTONS_FILE_NAME, 'r', encoding='utf-8-sig') as buttons_file:
         buttons = json.loads(buttons_file.read())
     return buttons
 

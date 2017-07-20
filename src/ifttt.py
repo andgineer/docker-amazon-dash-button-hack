@@ -13,7 +13,7 @@ class Ifttt():
         self.key = self.key_file['key']
 
     def load_key(self):
-        with open(self.settings['ifttt_key_file_name'], 'r') as key_file:
+        with open(self.settings['ifttt_key_file_name'], 'r', encoding='utf-8-sig') as key_file:
             return json.loads(key_file.read())
 
     def press(self, summary, v1, v2, v3):
