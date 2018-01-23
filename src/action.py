@@ -5,6 +5,7 @@ Supports google sheet (google_sheet.py), google calendar (google_calendar.py) an
 from google_sheet import Sheet
 from google_calendar import Calendar
 from ifttt import Ifttt
+from openhab import OpenHab
 import datetime
 import copy
 import collections
@@ -74,6 +75,7 @@ class Action(object):
             'sheet': self.sheet_action,
             'calendar': self.calendar_action,
             'ifttt': self.ifttt_action,
+            'openhab': self.openhab_action,
         }
         if button in self.actions:
             button_settings = self.actions[button]
@@ -97,6 +99,10 @@ class Action(object):
             action_params.get('value2', ''),
             action_params.get('value3', '')
         )
+
+    def openhab_action(self, button, action_params):
+        openhab = OpenHab(self.settings)
+        openhab.press(action_params)
 
     def calendar_action(self, button, action_params):
         calendar = Calendar(self.settings, action_params['calendar_id'])

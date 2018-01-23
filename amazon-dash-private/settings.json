@@ -128,6 +128,12 @@
           "value1": "",
           "value2": "",
           "value3": ""
+        },
+        {
+          "type": "openhab",
+          "path": "http://localhost:8080",
+          "item": "{button}_amazon_dash",
+          "command": "ON;OFF"
         }
       ]
     }
