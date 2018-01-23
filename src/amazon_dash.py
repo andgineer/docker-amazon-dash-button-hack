@@ -9,6 +9,7 @@ from scapy.all import *
 from action import Action
 import json
 import os.path
+from datetime import datetime, timedelta
 
 
 BUTTONS_FILE_NAME = '../amazon-dash-private/buttons.json'
@@ -17,6 +18,7 @@ SETTINGS_FILE_NAME = '../amazon-dash-private/settings.json'
 buttons = {}
 settings = {}
 seen_macs = set()
+de_chatter = {}  # chatter protection (multiple packets less that chatter_delay)
 
 
 NO_SETTINGS_FILE = '''\nNo {} found. \nIf you run application in docker container you
@@ -43,29 +45,40 @@ def load_buttons():
 
 
 def arp_handler(pkt):
-    """ Handles sniffed ARP requests """
-    if pkt.haslayer(ARP):
-        if pkt[ARP].op == 1: #who-has request
-            if pkt[ARP].hwsrc in buttons:
-                trigger(buttons[pkt[ARP].hwsrc])
+    """ Handles sniffed ARP and DHCP requests """
+    who_has_request = 1
+    if pkt.haslayer(ARP) and pkt[ARP].op == who_has_request \
+        or pkt.haslayer(DHCP):
+            mac = pkt.src  # pkt[layer].hwsrc
+            if pkt.haslayer(DHCP):
+                print('DHCP request from MAC {}:\n{}'.format(mac, pkt[DHCP].options))
+            if mac in buttons:
+                trigger(buttons[mac])
             else:
-                if pkt[ARP].hwsrc not in seen_macs:
-                    print('ARP request from unknown MAC {}'.format(pkt[ARP].hwsrc))
-                    seen_macs.add(pkt[ARP].hwsrc)
+                if mac not in seen_macs:
+                    print('Network request from unknown MAC {}'.format(mac))
+                    seen_macs.add(mac)
 
 
 def trigger(button):
     """ Button press action """
-    print('button {} pressed'.format(button))
+    if button in de_chatter:
+        if de_chatter[button]['time'] + timedelta(seconds=chatter_delay) > datetime.now():
+            print('Chatter protection. Skip this network request from "{}" as duplicate (see "chatter_delay" in settings).'.format(button))
+            return
+    de_chatter[button] = {'time': datetime.now()}
+    print('button "{}" pressed'.format(button))
     Action(settings).action(button)
 
 
 def main():
-    global buttons, settings
+    global buttons, settings, chatter_delay
+
     buttons = load_buttons()
     settings = load_settings()
+    chatter_delay = int(settings.get('chatter_delay', 5))
     print('amazon_dash started, loaded {} buttons'.format(len(buttons)))
-    sniff(prn=arp_handler, filter="arp", store=0)
+    sniff(prn=arp_handler, store=0, filter='arp or (udp and port 67)')
 
 
 if __name__ == '__main__':
