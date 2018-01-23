@@ -1,24 +1,22 @@
 """Register Amazon Dash Button events in Google Sheets using Google Sheets API """
 
-from oauth2client.service_account import ServiceAccountCredentials
-from googleapiclient import discovery
-import httplib2
 import datetime
+from google_api import GoogleApi
 
 
 GSHEET_TIME_FORMAT = '%d/%m/%Y %H:%M:%S'
 
 
-class Sheet(object):
+class Sheet(GoogleApi):
     def __init__(self, settings, name, press_sheet='press', event_sheet='event'):
         self.settings = settings
         self.http = self.get_credentials_http()
-        self.service = self.get_service()
-        self.drive_service = self.get_drive_service()
-        self.spreadSheetId = self.get_file_id(name)
-        self.get_sheets()
+        self._service = self.get_service(api='sheets', version='v4')  # discoveryServiceUrl=('https://sheets.googleapis.com/$discovery/rest?version=v4')
+        self.drive_service = self.get_service(api='drive', version='v3')
         self.press_sheet = press_sheet
         self.event_sheet = event_sheet
+        self.spreadSheetId = self.get_file_id(name)
+        self.sheets = self.get_sheets(press_sheet, event_sheet)
 
     def get_last_event(self, summary):
         """
@@ -59,21 +57,23 @@ class Sheet(object):
         :param name: file name
         :return: file id
         """
-        page_token = None
-        while True:
-            # Full blown page iteration from API doc
-            # but in fact we will get exactly one or no one file
-            response = self.drive_service.files().list(
-                q="name='{}'".format(name),
-                spaces='drive',
-                fields='nextPageToken, files(id, name)',
-                pageToken=page_token
-            ).execute()
-            for file in response.get('files', []):
-                return file.get('id')
-            page_token = response.get('nextPageToken', None)
-            if page_token is None:
-                break
+        if self.drive_service:
+            page_token = None
+            while True:
+                # Full blown page iteration from API doc
+                # but in fact we will get exactly one or no one file
+                response = self.drive_service.files().list(
+                    q="name='{}'".format(name),
+                    spaces='drive',
+                    fields='nextPageToken, files(id, name)',
+                    pageToken=page_token
+                ).execute()
+                for file in response.get('files', []):
+                    return file.get('id')
+                page_token = response.get('nextPageToken', None)
+                if page_token is None:
+                    break
+        return None
 
     def find_last_row(self, sheet, search_string, search_in_col=0):
         """ Very stupid implementation, but:
@@ -94,39 +94,21 @@ class Sheet(object):
         else:
             return None, None
 
-    def get_credentials_http(self):
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(
-            self.settings['credentials_file_name'],
-            [
-                'https://www.googleapis.com/auth/calendar',
-                'https://www.googleapis.com/auth/spreadsheets',
-                'https://www.googleapis.com/auth/drive.metadata.readonly'
-            ]
-        )
-        return credentials.authorize(httplib2.Http())
-
-    def get_service(self):
-        return discovery.build(
-            'sheets',
-            'v4',
-            http=self.http,
-            discoveryServiceUrl=('https://sheets.googleapis.com/$discovery/rest?version=v4')
-        )
-
-    def get_drive_service(self):
-        return discovery.build('drive', 'v3', http=self.http)
-
-    def get_sheets(self):
-        request = self.service.spreadsheets().get(
-            spreadsheetId=self.spreadSheetId,
-            ranges=[],
-            includeGridData=False)
-        sheets = request.execute()['sheets']
-        self.sheets = {sheet['properties']['title']: sheet['properties']['sheetId'] for sheet in sheets}
+    def get_sheets(self, press_sheet, event_sheet):
+        if self.service():
+            request = self.service().spreadsheets().get(
+                spreadsheetId=self.spreadSheetId,
+                ranges=[],
+                includeGridData=False)
+            sheets = request.execute()['sheets']
+            #todo check if press_sheet and event_sheet are in the sheets
+            return {sheet['properties']['title']: sheet['properties']['sheetId'] for sheet in sheets}
+        else:
+            return {press_sheet: None, event_sheet: None}
 
     def update_cells(self, sheet, values, row=1, col=0):
         """row and col 0-based"""
-        request = self.service.spreadsheets().values().update(
+        request = self.service().spreadsheets().values().update(
             spreadsheetId=self.spreadSheetId,
             range='{sheet}!{col}{row}:{last_col}'.format(
                 sheet=sheet, col=chr(ord('A') + col), row=row + 1, last_col=chr(ord('A') + col + len(values) - 1)),
@@ -141,7 +123,7 @@ class Sheet(object):
 
     def append_row(self, sheet, values, row=1):
         """row 0-based"""
-        request = self.service.spreadsheets().values().append(
+        request = self.service().spreadsheets().values().append(
             spreadsheetId=self.spreadSheetId,
             range='{sheet}!A{row}:{last_col}'.format(
                 sheet=sheet, row=row + 1, last_col=chr(ord('A') + len(values) - 1)),
@@ -171,7 +153,7 @@ class Sheet(object):
                 },
             ],
         }
-        request = self.service.spreadsheets().batchUpdate(
+        request = self.service().spreadsheets().batchUpdate(
             spreadsheetId=self.spreadSheetId,
             body=INSERT_ROW_REQUEST
         )
@@ -202,7 +184,7 @@ class Sheet(object):
                 }
             ]
         }
-        request = self.service.spreadsheets().batchUpdate(
+        request = self.service().spreadsheets().batchUpdate(
             spreadsheetId=self.spreadSheetId,
             body=COPY_FORMATTING_REQUEST
         )
@@ -210,7 +192,7 @@ class Sheet(object):
 
     def get_rows(self, sheet, row=1, rows=1, cols=3):
         """row 0-based"""
-        result = self.service.spreadsheets().values().get(
+        result = self.service().spreadsheets().values().get(
             spreadsheetId=self.spreadSheetId,
             range='{sheet}!A{row}:{last_col}{last_row}'.format(
                 sheet=sheet, row=row + 1, last_col=chr(ord('A') + cols - 1), last_row=row + rows - 1),

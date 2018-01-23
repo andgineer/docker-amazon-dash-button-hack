@@ -84,7 +84,10 @@ class Action(object):
         for act in actions:
             print('Event for {}: ({})'.format(act['type'], act))
             if not dry_run:
-                ACTION_HANDLERS[act['type']](button, act)
+                try:
+                    ACTION_HANDLERS[act['type']](button, act)
+                except Exception as e:
+                    print('!'*5, 'Event handling error:\n{}'.format(e))
 
     def ifttt_action(self, button, action_params):
         ifttt = Ifttt(self.settings)

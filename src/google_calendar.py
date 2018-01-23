@@ -1,41 +1,21 @@
 """Register Amazon Dash Button events in Google Calendar using Google Calendar API """
 
-from oauth2client.service_account import ServiceAccountCredentials
-from googleapiclient import discovery
-import httplib2
 import datetime
 import os
 import dateutil.parser
 import time
+from google_api import GoogleApi
 
 
 #GCAL_TIME_PARSE = '%Y-%m-%dT%H:%M:%S%z'
 
-class Calendar(object):
+class Calendar(GoogleApi):
     def __init__(self, settings, calendar_id):
         self.settings = settings
         self.http = self.get_credentials_http()
-        self.service = self.get_service()
+        self._service = self.get_service(api='calendar', version='v3')
         self.tz = os.environ.get('TZ', 'Europe/Moscow')
         self.calendarId = calendar_id
-
-    def get_credentials_http(self):
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(
-            self.settings['credentials_file_name'],
-            [
-                'https://www.googleapis.com/auth/calendar',
-                'https://www.googleapis.com/auth/spreadsheets',
-                'https://www.googleapis.com/auth/drive.metadata.readonly'
-            ]
-        )
-        return credentials.authorize(httplib2.Http())
-
-    def get_service(self):
-        return discovery.build(
-            'calendar',
-            'v3',
-            http=self.http
-        )
 
     def get_calendar_id(self, name):
         """Does not work for some unclear reasons.
@@ -45,7 +25,7 @@ class Calendar(object):
         """
         page_token = None
         while True:
-            calendar_list = self.service.calendarList().list(pageToken=page_token).execute()
+            calendar_list = self.service().calendarList().list(pageToken=page_token).execute()
             print(calendar_list)
             for calendar_list_entry in calendar_list['items']:
                 print(calendar_list_entry['summary'])
@@ -78,7 +58,7 @@ class Calendar(object):
                 #'timeZone': '{tz}'.format(tz=self.tz),
             },
         }
-        event = self.service.events().insert(
+        event = self.service().events().insert(
             calendarId=self.calendarId, #'primary',
             body=INSERT_EVENT_REQUEST
         ).execute()
@@ -93,7 +73,7 @@ class Calendar(object):
         page_token = None
         while True:
             # we need only last event but do not see how to get just it from the API
-            events = self.service.events().list(
+            events = self.service().events().list(
                 calendarId=self.calendarId, #'primary',
                 timeMin=self.google_time_format(datetime.datetime.now() - datetime.timedelta(days=100)), # better limit than sorry
                 q=summary,
@@ -119,20 +99,20 @@ class Calendar(object):
                 return None, None
 
     def delete_event(self, event_id):
-        self.service.events().delete(
+        self.service().events().delete(
             calendarId=self.calendarId, #'primary',
             eventId=event_id
         ).execute()
 
     def close_event(self, event_id, close_time):
-        event = self.service.events().get(
+        event = self.service().events().get(
             calendarId=self.calendarId, #'primary',
             eventId=event_id).execute()
         event['end'] = {
             'dateTime': self.time_to_str(close_time),
             #'timeZone': '{tz}'.format(tz=self.tz),
         }
-        updated_event = self.service.events().update(
+        updated_event = self.service().events().update(
             calendarId=self.calendarId, #'primary',
             eventId=event_id,
             body=event
