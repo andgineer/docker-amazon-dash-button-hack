@@ -18,6 +18,7 @@ SETTINGS_FILE_NAME = '../amazon-dash-private/settings.json'
 buttons = {}
 settings = {}
 seen_macs = set()
+seen_dhcp = set()
 de_chatter = {}  # chatter protection (multiple packets less that chatter_delay)
 
 
@@ -25,13 +26,20 @@ NO_SETTINGS_FILE = '''\nNo {} found. \nIf you run application in docker containe
 should connect volume with setting files, like
     -v $PWD/amazon-dash-private:/amazon-dash-private:ro'''
 
+def json_safe_loads(str):
+    try:
+        return json.loads(str)
+    except:
+        print('\n', '!'*5, 'Wrong json:\n', str)
+        raise
+
 def load_settings():
     """ Load settings """
     if not os.path.isfile(SETTINGS_FILE_NAME):
         print(NO_SETTINGS_FILE.format(SETTINGS_FILE_NAME))
         exit(1)
     with open(SETTINGS_FILE_NAME, 'r', encoding='utf-8-sig') as settings_file:
-        return json.loads(settings_file.read())
+        return json_safe_loads(settings_file.read())
 
 
 def load_buttons():
@@ -40,7 +48,7 @@ def load_buttons():
         print(NO_SETTINGS_FILE.format(BUTTONS_FILE_NAME))
         exit(1)
     with open(BUTTONS_FILE_NAME, 'r', encoding='utf-8-sig') as buttons_file:
-        buttons = json.loads(buttons_file.read())
+        buttons = json_safe_loads(buttons_file.read())
     return buttons
 
 
@@ -50,12 +58,13 @@ def arp_handler(pkt):
     if pkt.haslayer(ARP) and pkt[ARP].op == who_has_request \
         or pkt.haslayer(DHCP):
             mac = pkt.src  # pkt[layer].hwsrc
-            if pkt.haslayer(DHCP):
-                print('DHCP request from MAC {}:\n{}'.format(mac, pkt[DHCP].options))
             if mac in buttons:
                 trigger(buttons[mac])
             else:
-                if mac not in seen_macs:
+                if pkt.haslayer(DHCP) and mac not in seen_dhcp:
+                    print('DHCP request from unknown MAC {}:\n{}'.format(mac, pkt[DHCP].options))
+                    seen_dhcp.add(mac)
+                if mac not in seen_macs and mac not in seen_dhcp:
                     print('Network request from unknown MAC {}'.format(mac))
                     seen_macs.add(mac)
 
