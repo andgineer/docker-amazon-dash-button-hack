@@ -4,6 +4,7 @@ https://ifttt.com/maker_webhooks
 """
 import requests
 import json
+from requests import RequestException
 
 
 class Ifttt():
@@ -23,18 +24,21 @@ class Ifttt():
             'value3': v3
         }
         #todo urlencode event string
-        requests.post(
-            'https://maker.ifttt.com/trigger/{event}/with/key/{key}'.format(
-                event=summary,
-                key=self.key
-            ),
-            data=json.dumps(payload),
-            headers={'content-type': 'application/json'}
-        )
+        try:
+            url = 'https://maker.ifttt.com/trigger/{event}/with/key/{key}'.format(event=summary, key=self.key)
+            result = requests.post(
+                url,
+                data=json.dumps(payload),
+                headers={'content-type': 'application/json'}
+            )
+            if result.status_code != 200:
+                print('*'*10, 'IFTTT error:\n', url, '\n', result)
+        except RequestException as e:
+            print('*'*10, 'IFTTT request fail:\n', url, '\n', e)
 
 
 if __name__ == "__main__":
     from amazon_dash import load_settings
     settings = load_settings()
     ifttt = Ifttt(settings)
-    ifttt.press('white_amazon_dash')
+    ifttt.press('white_amazon_dash', '1', '2', '3')
