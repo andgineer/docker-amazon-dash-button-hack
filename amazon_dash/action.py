@@ -6,7 +6,7 @@ from google_sheet import Sheet
 from google_calendar import Calendar
 from ifttt import Ifttt
 from openhab import OpenHab
-import datetime
+from datetime import datetime, timedelta
 import copy
 import collections
 
@@ -17,11 +17,17 @@ class Action(object):
         self.actions = settings['actions']
 
     def set_summary_by_time(self, button_actions):
+        """
+        :param button_actions:
+        :return:
+        if summary of any action in button_actions is a list, then select only one summary from the list
+        in accordance with the current time
+        """
         for action in button_actions:
             if isinstance(action['summary'], list):
                 assert len(action['summary']) > 0, '''summary param must be string or array like
         [{"summary":"summary1", "before":"10:00:00"}, {"summary": "summary2", "before":"19:00:00"}, ...]'''
-                time = datetime.datetime.now()
+                time = datetime.now()
                 for interval_idx, interval in enumerate(action['summary']):
                     if 'before' in interval:
                         time_parts = interval['before'].split(':')
@@ -67,6 +73,7 @@ class Action(object):
                     action['summary'] = button
             for param in action:
                 action[param] = subst(action[param])
+        print(actions)
         return actions
 
     def action(self, button, dry_run=False):
@@ -127,29 +134,23 @@ class Action(object):
                 last_end = last_event[2]
             else:
                 last_end = None
-            nowtz = datetime.datetime.now(last_start.tzinfo)
-            if last_end and abs(nowtz - last_end) < datetime.timedelta(seconds=action_params['restart']):
+            nowtz = datetime.now(last_start.tzinfo)
+            if last_end and abs(nowtz - last_end) < timedelta(seconds=action_params['restart']):
                 print('Button press ignored because previuos event closed and it is too early to start new one')
                 return
-            if nowtz - last_start < datetime.timedelta(seconds=action_params['restart']):
+            if nowtz - last_start < timedelta(seconds=action_params['restart']):
                 print('Button press ignored because event in progress and it is too early to close it')
                 return
             if not last_end:
-                if abs(nowtz - last_start) > datetime.timedelta(seconds=action_params['autoclose']):
+                if abs(nowtz - last_start) > timedelta(seconds=action_params['autoclose']):
                     target.close_event(
                         last_event_row,
-                        (last_start + datetime.timedelta(seconds=action_params['default'])))
+                        (last_start + timedelta(seconds=action_params['default'])))
                     print('Auto close previous event')
                 else:
-                    target.close_event(last_event_row, datetime.datetime.now())
+                    target.close_event(last_event_row, datetime.now())
                     print('Close previous event')
                     return
         target.start_event(action_params['summary'])
         print('New event started')
 
-
-if __name__ == "__main__":
-    from amazon_dash import load_settings
-    settings = load_settings()
-    action = Action(settings)
-    action.action('white', dry_run=True)
