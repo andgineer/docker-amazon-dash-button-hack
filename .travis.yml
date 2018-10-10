@@ -3,4 +3,3 @@
     - "3.6"
   script:
     - pytest
-  before_install: cd amazon_dash
