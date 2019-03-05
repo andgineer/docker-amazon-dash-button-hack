@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/masterandrey/docker-amazon-dash-button-hack.png)](https://travis-ci.org/masterandrey/docker-amazon-dash-button-hack)
+
 This is a [Docker Hub container](https://hub.docker.com/r/masterandrey/docker-amazon-dash-button-hack/) 
 for the Amazon Dash Button hack.
 It can write to Google Sheets, Google Calendar and fire event in [IFTTT](https://ifttt.com).

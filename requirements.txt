@@ -1,5 +1,6 @@
 python-dateutil
-scapy-python3
+scapy
 oauth2client
 google-api-python-client
 requests
+cffi

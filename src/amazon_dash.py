@@ -12,8 +12,12 @@ import os.path
 from datetime import datetime, timedelta
 
 
-BUTTONS_FILE_NAME = '../amazon-dash-private/buttons.json'
-SETTINGS_FILE_NAME = '../amazon-dash-private/settings.json'
+def button_file_name(root):
+    return os.path.join(root, 'amazon-dash-private', 'buttons.json')
+
+
+def setting_file_name(root):
+    return os.path.join('amazon-dash-private', 'settings.json')
 
 buttons = {}
 settings = {}
@@ -33,21 +37,21 @@ def json_safe_loads(str):
         print('\n', '!'*5, 'Wrong json:\n', str)
         raise
 
-def load_settings():
+def load_settings(settings_folder='..'):
     """ Load settings """
-    if not os.path.isfile(SETTINGS_FILE_NAME):
-        print(NO_SETTINGS_FILE.format(SETTINGS_FILE_NAME))
+    if not os.path.isfile(setting_file_name(settings_folder)):
+        print(NO_SETTINGS_FILE.format(setting_file_name(settings_folder)))
         exit(1)
-    with open(SETTINGS_FILE_NAME, 'r', encoding='utf-8-sig') as settings_file:
+    with open(setting_file_name(settings_folder), 'r', encoding='utf-8-sig') as settings_file:
         return json_safe_loads(settings_file.read())
 
 
-def load_buttons():
+def load_buttons(settings_folder='..'):
     """ Load known buttons """
-    if not os.path.isfile(BUTTONS_FILE_NAME):
-        print(NO_SETTINGS_FILE.format(BUTTONS_FILE_NAME))
+    if not os.path.isfile(button_file_name(settings_folder)):
+        print(NO_SETTINGS_FILE.format(button_file_name(settings_folder)))
         exit(1)
-    with open(BUTTONS_FILE_NAME, 'r', encoding='utf-8-sig') as buttons_file:
+    with open(button_file_name(settings_folder), 'r', encoding='utf-8-sig') as buttons_file:
         buttons = json_safe_loads(buttons_file.read())
     return buttons
 
@@ -80,6 +84,10 @@ def trigger(button):
     Action(settings).action(button)
 
 
+def sniff_arp():
+    sniff(prn=arp_handler, store=0, filter='arp or (udp and port 67)')
+
+
 def main():
     global buttons, settings, chatter_delay
 
@@ -87,7 +95,7 @@ def main():
     settings = load_settings()
     chatter_delay = int(settings.get('chatter_delay', 5))
     print('amazon_dash started, loaded {} buttons'.format(len(buttons)))
-    sniff(prn=arp_handler, store=0, filter='arp or (udp and port 67)')
+    sniff_arp()
 
 
 if __name__ == '__main__':
