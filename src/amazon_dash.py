@@ -84,6 +84,10 @@ def trigger(button):
     Action(settings).action(button)
 
 
+def sniff_arp():
+    sniff(prn=arp_handler, store=0, filter='arp or (udp and port 67)')
+
+
 def main():
     global buttons, settings, chatter_delay
 
@@ -91,7 +95,7 @@ def main():
     settings = load_settings()
     chatter_delay = int(settings.get('chatter_delay', 5))
     print('amazon_dash started, loaded {} buttons'.format(len(buttons)))
-    sniff(prn=arp_handler, store=0, filter='arp or (udp and port 67)')
+    sniff_arp()
 
 
 if __name__ == '__main__':
