@@ -17,7 +17,7 @@ def button_file_name(root):
 
 
 def setting_file_name(root):
-    return os.path.join('amazon-dash-private', 'settings.json')
+    return os.path.join(root, 'amazon-dash-private', 'settings.json')
 
 buttons = {}
 settings = {}
