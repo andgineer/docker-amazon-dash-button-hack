@@ -1,4 +1,4 @@
-FROM masterandrey/docker-python-base
+FROM andgineer/python-base
 
 COPY requirements.txt /requirements.txt
 
