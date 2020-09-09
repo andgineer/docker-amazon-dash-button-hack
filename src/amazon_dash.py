@@ -75,10 +75,13 @@ def arp_handler(pkt):
 
 def trigger(button):
     """ Button press action """
-    if button in de_chatter:
-        if de_chatter[button]['time'] + timedelta(seconds=chatter_delay) > datetime.now():
-            print('Chatter protection. Skip this network request from "{}" as duplicate (see "chatter_delay" in settings).'.format(button))
-            return
+    if (
+        button in de_chatter
+        and de_chatter[button]['time'] + timedelta(seconds=chatter_delay)
+        > datetime.now()
+    ):
+        print('Chatter protection. Skip this network request from "{}" as duplicate (see "chatter_delay" in settings).'.format(button))
+        return
     de_chatter[button] = {'time': datetime.now()}
     print('button "{}" pressed'.format(button))
     Action(settings).action(button)
