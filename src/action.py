@@ -8,7 +8,7 @@ from ifttt import Ifttt
 from openhab import OpenHab
 from datetime import datetime, timedelta
 import copy
-import collections
+import collections.abc
 
 
 class Action(object):
@@ -53,12 +53,12 @@ class Action(object):
         def subst(param):
             if isinstance(param, str):
                 return param.format(button=button)
-            if isinstance(param, collections.Mapping):
+            if isinstance(param, collections.abc.Mapping):
                 result = {}
                 for item in param:
                     result[item] = subst(param[item])
                 return result
-            if isinstance(param, collections.Iterable):
+            if isinstance(param, collections.abc.Iterable):
                 result = []
                 for item in param:
                     result.append(subst(item))
@@ -91,12 +91,12 @@ class Action(object):
         actions = self.preprocess_actions(button, button_settings)
         actions = self.set_summary_by_time(actions)
         for act in actions:
-            print('Event for {}: ({})'.format(act['type'], act))
+            print(f"Event for {act['type']}: ({act})")
             if not dry_run:
                 try:
                     ACTION_HANDLERS[act['type']](button, act)
                 except Exception as e:
-                    print('!'*5, 'Event handling error:\n{}'.format(e))
+                    print('!'*5, f'Event handling error:\n{e}')
 
     def ifttt_action(self, button, action_params):
         ifttt = Ifttt(self.settings)

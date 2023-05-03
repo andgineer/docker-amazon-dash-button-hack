@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/andgineer/docker-amazon-dash-button-hack.png)](https://travis-ci.org/angineer/docker-amazon-dash-button-hack)
+[![Build Status](https://github.com/andgineer/docker-amazon-dash-button-hack/workflows/ci/badge.svg)](https://github.com/andgineer/docker-amazon-dash-button-hack/actions)
 
 This is a [Docker Hub container](https://cloud.docker.com/repository/registry-1.docker.io/andgineer/amazon-dash-button-hack) 
 for the Amazon Dash Button hack.
@@ -25,3 +25,8 @@ There are your secrets in that folder so you have to **create all this files by 
 you see by link above.
 
 See details in [Smart wifi button and Docker on Synology (Amazon Dash Button hack)](https://sorokin.engineer/posts/en/amazon_dash_button_hack/).
+
+
+## Developers
+
+We use `collections.abc` so min Python3.10
