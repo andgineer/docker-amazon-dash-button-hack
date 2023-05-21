@@ -2,6 +2,9 @@
 
 This is a [Docker Hub container](https://cloud.docker.com/repository/registry-1.docker.io/andgineer/amazon-dash-button-hack) 
 for the Amazon Dash Button hack.
+
+It sniff network to catch Amazon Buttons communications with Amazon. And thus detects press on the buttons.
+
 It can write to Google Sheets, Google Calendar and fire event in [IFTTT](https://ifttt.com).
 
 I use it on my [Synology](https://www.synology.com).
@@ -30,6 +33,15 @@ you see by link above.
 
 See details in [Smart wifi button and Docker on Synology (Amazon Dash Button hack)](https://sorokin.engineer/posts/en/amazon_dash_button_hack/).
 
+## MacOS and Windows
+
+You cannot sniff network from Docker containers running on MacOS and Windows because they do not run
+docker demon natively but use Virtual Machine to run it.
+
+So to debug on MacOS and Windows: 
+
+    . ./activate.sh
+    sudo python src/amazon_dash.py
 
 ## Developers
 
