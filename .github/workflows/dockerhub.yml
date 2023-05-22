@@ -3,7 +3,7 @@
 name: dockerhub
 
 on:
-  ci_run:
+  workflow_run:
     workflows: ["ci"]
     types:
       - success
@@ -12,7 +12,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    if: ${{ github.event.ci_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout
