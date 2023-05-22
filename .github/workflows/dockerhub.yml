@@ -6,7 +6,7 @@ on:
   workflow_run:
     workflows: ["ci"]
     types:
-      - success
+      - completed
 
 jobs:
   build:
