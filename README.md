@@ -1,25 +1,27 @@
 [![Build Status](https://github.com/andgineer/docker-amazon-dash-button-hack/workflows/ci/badge.svg)](https://github.com/andgineer/docker-amazon-dash-button-hack/actions)
 
 This is a [Docker Hub container](https://cloud.docker.com/repository/registry-1.docker.io/andgineer/amazon-dash-button-hack) 
-for the Amazon Dash Button hack.
+for the [Amazon Dash Button hack](https://sorokin.engineer/posts/en/amazon_dash_button_hack.html).
 
-It sniff network to catch Amazon Buttons communications with Amazon. And thus detects press on the buttons.
+It sniffs the network to intercept Amazon Button communications with Amazon, 
+thereby detecting button presses.
 
 It can write to Google Sheets, Google Calendar and fire event in [IFTTT](https://ifttt.com).
 
-I use it on my [Synology](https://www.synology.com).
+I use it on my [Synology](https://www.synology.com) for 
+[IoT calendar](https://sorokin.engineer/posts/en/iot_calendar_synology.html).
 
-To run it:
+To run the container on Linux:
 ```
 docker run \
     --net host \
     -it \
     --rm \
-    -v $PWD/amazon-dash-private:/amazon-dash-private:ro \
+    -v $PWD/../amazon-dash-private:/amazon-dash-private:ro \
     andgineer/amazon-dash-button-hack
 ```
 
-In folder `amazone-dash-private` you should have:
+In folder `../amazone-dash-private` you should have:
 
 * settings `settings.json` 
 * buttons list `buttons.json` 
@@ -27,11 +29,9 @@ In folder `amazone-dash-private` you should have:
 * `ifttt-key.json` with [Maker Webhook key](https://ifttt.com/services/maker_webhooks/settings)
 
 [Examples of this files](https://github.com/andgineer/docker-amazon-dash-button-hack/tree/master/amazon-dash-private).
+- this is folder `amazone-dash-private` of the repo.
 
-There are your secrets in that folder so you have to **create all this files by youself** from examples
-you see by link above.
-
-See details in [Smart wifi button and Docker on Synology (Amazon Dash Button hack)](https://sorokin.engineer/posts/en/amazon_dash_button_hack/).
+See details in [User manual](https://sorokin.engineer/posts/en/amazon_dash_button_hack_install.html).
 
 ## MacOS and Windows
 
