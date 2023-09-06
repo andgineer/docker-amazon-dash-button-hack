@@ -1,6 +1,7 @@
-"""Register Amazon Dash Button events in Google Sheets using Google Sheets API """
+"""Register Amazon Dash Button events in Google Sheets using Google Sheets API."""
 
 import datetime
+from typing import Any, Dict, List, Optional, Tuple
 
 from google_api import GoogleApi
 
@@ -8,7 +9,16 @@ GSHEET_TIME_FORMAT = "%d/%m/%Y %H:%M:%S"
 
 
 class Sheet(GoogleApi):
-    def __init__(self, settings, name, press_sheet="press", event_sheet="event"):
+    """Google Sheet API wrapper."""
+
+    def __init__(
+        self,
+        settings: Dict[str, Any],
+        name: str,
+        press_sheet: str = "press",
+        event_sheet: str = "event",
+    ) -> None:
+        """Init."""
         self.settings = settings
         self.http = self.get_credentials_http()
         self._service = self.get_service(
@@ -20,8 +30,9 @@ class Sheet(GoogleApi):
         self.spreadSheetId = self.get_file_id(name)
         self.sheets = self.get_sheets(press_sheet, event_sheet)
 
-    def get_last_event(self, summary):
-        """
+    def get_last_event(self, summary: str) -> Tuple[Optional[int], Optional[List[Any]]]:
+        """Get last event from Google Sheet.
+
         :param summary: text to search
         :return:
         <id for close event>, [summary, start, end]
@@ -31,10 +42,10 @@ class Sheet(GoogleApi):
             for col in range(1, len(event)):
                 event[col] = self.from_serial_time(event[col])
             return row, event
-        else:
-            return None, None
+        return None, None
 
-    def start_event(self, summary):
+    def start_event(self, summary: str) -> None:
+        """Start event in Google Sheet."""
         self.insert_row(sheet=self.event_sheet)
         self.copy_row_formatting(sheet=self.event_sheet)
         self.update_cells(
@@ -42,8 +53,11 @@ class Sheet(GoogleApi):
             values=[summary, datetime.datetime.now().strftime(GSHEET_TIME_FORMAT)],
         )
 
-    def close_event(self, event_row, close_time):
-        """row 0-based"""
+    def close_event(self, event_row: int, close_time: datetime.datetime) -> None:
+        """Close event in Google Sheet.
+
+        row 0-based
+        """
         self.update_cells(
             sheet=self.event_sheet,
             row=event_row,
@@ -54,7 +68,8 @@ class Sheet(GoogleApi):
             ],
         )
 
-    def press(self, summary):
+    def press(self, summary: str) -> None:
+        """Register press event in Google Sheet."""
         self.insert_row(sheet=self.press_sheet)
         self.copy_row_formatting(sheet=self.press_sheet)
         self.update_cells(
@@ -62,8 +77,9 @@ class Sheet(GoogleApi):
             values=[summary, datetime.datetime.now().strftime(GSHEET_TIME_FORMAT)],
         )
 
-    def get_file_id(self, name):
-        """
+    def get_file_id(self, name: str) -> Optional[str]:
+        """Get file id by name.
+
         :param name: file name
         :return: file id
         """
@@ -75,7 +91,7 @@ class Sheet(GoogleApi):
                 response = (
                     self.drive_service.files()
                     .list(
-                        q="name='{}'".format(name),
+                        q=f"name='{name}'",
                         spaces="drive",
                         fields="nextPageToken, files(id, name)",
                         pageToken=page_token,
@@ -83,14 +99,18 @@ class Sheet(GoogleApi):
                     .execute()
                 )
                 for file in response.get("files", []):
-                    return file.get("id")
+                    return file.get("id")  # type: ignore
                 page_token = response.get("nextPageToken", None)
                 if page_token is None:
                     break
         return None
 
-    def find_last_row(self, sheet, search_string, search_in_col=0):
-        """Very stupid implementation, but:
+    def find_last_row(
+        self, sheet: str, search_string: str, search_in_col: int = 0
+    ) -> Tuple[Optional[int], Optional[List[Any]]]:
+        """Find last row with search_string in search_in_col column.
+
+        Very stupid implementation, but:
         The Sheets API v4 does not currently have a direct equivalent for the Sheets API v3 structured queries.
         However, you can retrieve the relevant data and sort through it as needed in your application.
         """
@@ -107,10 +127,13 @@ class Sheet(GoogleApi):
                 row_idx += 1
             else:
                 return None, None
-        else:
-            return None, None
+        return None, None
 
-    def get_sheets(self, press_sheet, event_sheet):
+    def get_sheets(self, press_sheet: str, event_sheet: str) -> Dict[str, Any]:
+        """Get sheets ids.
+
+        Returns {sheet_name: sheet_id}
+        """
         if self.service():
             request = (
                 self.service()
@@ -122,23 +145,20 @@ class Sheet(GoogleApi):
             return {
                 sheet["properties"]["title"]: sheet["properties"]["sheetId"] for sheet in sheets
             }
-        else:
-            return {press_sheet: None, event_sheet: None}
+        return {press_sheet: None, event_sheet: None}
 
-    def update_cells(self, sheet, values, row=1, col=0):
-        """row and col 0-based"""
+    def update_cells(self, sheet: str, values: List[Any], row: int = 1, col: int = 0) -> None:
+        """Update cells in Google Sheet.
+
+        row and col 0-based
+        """
         request = (
             self.service()
             .spreadsheets()
             .values()
             .update(
                 spreadsheetId=self.spreadSheetId,
-                range="{sheet}!{col}{row}:{last_col}".format(
-                    sheet=sheet,
-                    col=chr(ord("A") + col),
-                    row=row + 1,
-                    last_col=chr(ord("A") + col + len(values) - 1),
-                ),
+                range=f"{sheet}!{chr(ord('A') + col)}{row + 1}:{chr(ord('A') + col + len(values) - 1)}",
                 valueInputOption="USER_ENTERED",
                 body={
                     "majorDimension": "ROWS",
@@ -146,26 +166,28 @@ class Sheet(GoogleApi):
                 },
             )
         )
-        return request.execute()
+        request.execute()
 
-    def append_row(self, sheet, values, row=1):
-        """row 0-based"""
+    def append_row(self, sheet: str, values: List[Any], row: int = 1) -> None:
+        """Append row to Google Sheet.
+
+        row 0-based
+        """
         request = (
             self.service()
             .spreadsheets()
             .values()
             .append(
                 spreadsheetId=self.spreadSheetId,
-                range="{sheet}!A{row}:{last_col}".format(
-                    sheet=sheet, row=row + 1, last_col=chr(ord("A") + len(values) - 1)
-                ),
+                range=f"{sheet}!A{row + 1}:{chr(ord('A') + len(values) - 1)}",
                 valueInputOption="RAW",  #'USER_ENTERED',
                 insertDataOption="INSERT_ROWS",
                 body={"majorDimension": "ROWS", "values": [values]},
             )
         )
 
-    def insert_row(self, sheet, after=1):
+    def insert_row(self, sheet: str, after: int = 1) -> None:
+        """Insert row to Google Sheet."""
         INSERT_ROW_REQUEST = {
             "requests": [
                 {
@@ -186,9 +208,10 @@ class Sheet(GoogleApi):
             .spreadsheets()
             .batchUpdate(spreadsheetId=self.spreadSheetId, body=INSERT_ROW_REQUEST)
         )
-        return request.execute()
+        request.execute()
 
-    def copy_row_formatting(self, sheet, copy_from=2, copy_to=1):
+    def copy_row_formatting(self, sheet: str, copy_from: int = 2, copy_to: int = 1) -> None:
+        """Copy row formatting from copy_from to copy_to."""
         COPY_FORMATTING_REQUEST = {
             "requests": [
                 {
@@ -218,31 +241,29 @@ class Sheet(GoogleApi):
             .spreadsheets()
             .batchUpdate(spreadsheetId=self.spreadSheetId, body=COPY_FORMATTING_REQUEST)
         )
-        return request.execute()
+        request.execute()
 
-    def get_rows(self, sheet, row=1, rows=1, cols=3):
-        """row 0-based"""
+    def get_rows(self, sheet: str, row: int = 1, rows: int = 1, cols: int = 3) -> List[List[Any]]:
+        """Get rows from Google Sheet.
+
+        row 0-based
+        """
         result = (
             self.service()
             .spreadsheets()
             .values()
             .get(
                 spreadsheetId=self.spreadSheetId,
-                range="{sheet}!A{row}:{last_col}{last_row}".format(
-                    sheet=sheet,
-                    row=row + 1,
-                    last_col=chr(ord("A") + cols - 1),
-                    last_row=row + rows - 1,
-                ),
+                range=f"{sheet}!A{row + 1}:{chr(ord('A') + cols - 1)}{row + rows - 1}",
                 valueRenderOption="UNFORMATTED_VALUE",
             )
             .execute()
         )
         values = result.get("values", [])
-        return values
+        return values  # type: ignore
 
-    def from_serial_time(self, serial):
-        """Converts google 'serial number' date-time to datetime"""
+    def from_serial_time(self, serial: float) -> datetime.datetime:
+        """Convert google 'serial number' date-time to datetime."""
         return datetime.datetime(year=1899, month=12, day=30) + datetime.timedelta(days=serial)
 
 

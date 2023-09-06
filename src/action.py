@@ -14,6 +14,7 @@ from openhab import OpenHab
 
 class Action(object):
     """Register events from amazon dash (button)."""
+
     def __init__(self, settings) -> None:
         """Init."""
         self.settings = settings
