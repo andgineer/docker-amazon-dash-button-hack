@@ -15,4 +15,7 @@ ver-release:
 	bash ./scripts/verup.sh release
 
 reqs:
+	pre-commit autoupdate
 	bash ./scripts/compile_requirements.sh
+	pip install -r requirements.txt
+	pip install -r requirements.dev.txt

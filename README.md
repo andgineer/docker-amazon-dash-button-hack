@@ -1,14 +1,14 @@
 [![Build Status](https://github.com/andgineer/docker-amazon-dash-button-hack/workflows/ci/badge.svg)](https://github.com/andgineer/docker-amazon-dash-button-hack/actions)
 
-This is a [Docker Hub container](https://cloud.docker.com/repository/registry-1.docker.io/andgineer/amazon-dash-button-hack) 
+This is a [Docker Hub container](https://cloud.docker.com/repository/registry-1.docker.io/andgineer/amazon-dash-button-hack)
 for the [Amazon Dash Button hack](https://sorokin.engineer/posts/en/amazon_dash_button_hack.html).
 
-It sniffs the network to intercept Amazon Button communications with Amazon, 
+It sniffs the network to intercept Amazon Button communications with Amazon,
 thereby detecting button presses.
 
 It can write to Google Sheets, Google Calendar and fire event in [IFTTT](https://ifttt.com).
 
-I use it on my [Synology](https://www.synology.com) for 
+I use it on my [Synology](https://www.synology.com) for
 [IoT calendar](https://sorokin.engineer/posts/en/iot_calendar_synology.html).
 
 To run the container on Linux:
@@ -23,8 +23,8 @@ docker run \
 
 In folder `../amazone-dash-private` you should have:
 
-* settings `settings.json` 
-* buttons list `buttons.json` 
+* settings `settings.json`
+* buttons list `buttons.json`
 * `amazon-dash-hack.json` with google API credentials [Google Sheets](https://console.developers.google.com/start/api?id=sheets.googleapis.com), [Google Calendar](https://console.developers.google.com/start/api?id=calendar)
 * `ifttt-key.json` with [Maker Webhook key](https://ifttt.com/services/maker_webhooks/settings)
 
@@ -38,7 +38,7 @@ See details in [User manual](https://sorokin.engineer/posts/en/amazon_dash_butto
 You cannot sniff network from Docker containers running on MacOS and Windows because they do not run
 docker demon natively but use Virtual Machine to run it.
 
-So to debug on MacOS and Windows: 
+So to debug on MacOS and Windows:
 
     . ./activate.sh
     sudo python src/amazon_dash.py
