@@ -4,15 +4,19 @@
 #
 #    pip-compile requirements.test.in
 #
-exceptiongroup==1.1.1
+exceptiongroup==1.1.3
     # via pytest
 iniconfig==2.0.0
     # via pytest
 packaging==23.1
     # via pytest
-pluggy==1.0.0
+pluggy==1.3.0
     # via pytest
-pytest==7.3.1
+pytest==7.4.2
     # via -r requirements.test.in
 tomli==2.0.1
     # via pytest
+types-requests==2.31.0.2
+    # via -r requirements.test.in
+types-urllib3==1.26.25.14
+    # via types-requests
