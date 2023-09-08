@@ -24,10 +24,12 @@ class OpenHab:
             print(
                 '\nWrong "command" setting in openhab action. '
                 'Should be two openHAB commands separated by ";" ("ON;OFF" or "UP;DOWN"). '
-                'Button press will switch between them.'
+                "Button press will switch between them."
             )
 
-        state = requests.get(f"{base_url}/state", headers={"content-type": "application/json"}, timeout=5)
+        state = requests.get(
+            f"{base_url}/state", headers={"content-type": "application/json"}, timeout=5
+        )
         try:
             current_idx = commands.index(state.text.upper())
         except ValueError:
