@@ -30,7 +30,10 @@ class Ifttt:
         url = f"https://maker.ifttt.com/trigger/{summary}/with/key/{self.key}"
         try:
             result = requests.post(
-                url, data=json.dumps(payload), headers={"content-type": "application/json"}, timeout=5
+                url,
+                data=json.dumps(payload),
+                headers={"content-type": "application/json"},
+                timeout=5,
             )
             if result.status_code != 200:
                 print("*" * 10, "IFTTT error:\n", url, "\n", result)

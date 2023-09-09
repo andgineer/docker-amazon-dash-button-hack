@@ -5,6 +5,7 @@ Supports google sheet (google_sheet.py), google calendar (google_calendar.py) an
 import collections.abc
 import copy
 from datetime import datetime, timedelta
+from typing import List, Dict, Any
 
 from google_calendar import Calendar
 from google_sheet import Sheet
@@ -20,15 +21,22 @@ class Action(object):
         self.settings = settings
         self.actions = settings["actions"]
 
-    def set_summary_by_time(self, button_actions):
-        """Set summary by time.
+    def set_summary_by_time(self, button_actions: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Set even summary according now().
+
+        If summary is a list like
+
+            [{"summary":"summary1", "before":"10:00:00"}, {"summary": "summary2"}]
+
+        then select only one summary from the list in accordance with the current time.
 
         :param button_actions:
         :return:
         if summary of any action in button_actions is a list, then select only one summary from the list
         in accordance with the current time
         """
-        for action in button_actions:
+        result_actions = copy.deepcopy(button_actions)
+        for action in result_actions:
             if isinstance(action["summary"], list):
                 assert (
                     len(action["summary"]) > 0
@@ -57,7 +65,7 @@ class Action(object):
                             break
                 else:
                     action["summary"] = interval["summary"]
-        return button_actions
+        return result_actions
 
     def preprocess_actions(self, button, button_settings):
         """Add summary (with button name value) if there is no one.
@@ -161,10 +169,8 @@ class Action(object):
                     "Button press ignored because previuos event closed and it is too early to start new one"
                 )
                 return
-            if nowtz - last_start < timedelta(seconds=action_params["restart"]):
-                print(
-                    "Button press ignored because event in progress and it is too early to close it"
-                )
+            if last_start <= nowtz and (nowtz - last_start) < timedelta(seconds=action_params["restart"]):
+                print("Button press ignored because event in progress and it is too early to close it")
                 return
             if not last_end:
                 if abs(nowtz - last_start) > timedelta(seconds=action_params["autoclose"]):
