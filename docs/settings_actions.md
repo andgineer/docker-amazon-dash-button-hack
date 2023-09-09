@@ -1,4 +1,4 @@
-# Amazon Dash Actions Configuration Guide
+# Amazon Dash Actions Configuration
 
 In the configuration file, actions are defined that dictate the response to different Amazon Dash button presses. 
 Each button links to a set of specified actions and, optionally, a summarized purpose.
