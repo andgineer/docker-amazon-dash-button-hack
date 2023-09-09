@@ -159,10 +159,7 @@ class Action(object):
         last_event_row, last_event = target.get_last_event(action_params["summary"])
         if last_event:
             last_start = last_event[1]
-            if len(last_event) > 2:
-                last_end = last_event[2]
-            else:
-                last_end = None
+            last_end = last_event[2] if len(last_event) > 2 else None
             nowtz = datetime.now(last_start.tzinfo)
             if last_end and abs(nowtz - last_end) < timedelta(seconds=action_params["restart"]):
                 print(

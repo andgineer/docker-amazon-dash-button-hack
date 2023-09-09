@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from unittest.mock import Mock, patch, MagicMock
 
 from action import Action
@@ -181,3 +181,31 @@ def test_calendar_close_event(mock_calendar, action_instance):
         mock_datetime.now = Mock(return_value=mocked_now)
         action_instance.calendar_action("test_button", action_params)
     mock_calendar_instance.close_event.assert_called_with(prev_even_id, mocked_now)
+
+
+@patch("action.Calendar")
+def test_calendar_auto_close_event(mock_calendar, action_instance):
+    mock_calendar_instance = MagicMock()
+    mock_calendar.return_value = mock_calendar_instance
+
+    prev_even_id = 1
+    prev_event_summary = "test_summary"
+    prev_event_start = datetime(2023, 9, 9, 10, 0, 0)
+    mock_calendar_instance.get_last_event.return_value = (prev_even_id, [prev_event_summary, prev_event_start])
+
+    auto_closed_event_lenth_seconds = 900
+    action_params = {
+        "type": "calendar",
+        "calendar_id": "some_id",
+        "dashboard": "some_dashboard",
+        "restart": 15,
+        "autoclose": 60,
+        "default": auto_closed_event_lenth_seconds,
+        "summary": "test_summary",
+    }
+
+    mocked_now = datetime(2023, 9, 9, 11, 0, 0)
+    with patch("action.datetime") as mock_datetime:
+        mock_datetime.now = Mock(return_value=mocked_now)
+        action_instance.calendar_action("test_button", action_params)
+    mock_calendar_instance.close_event.assert_called_with(prev_even_id, prev_event_start + timedelta(seconds=auto_closed_event_lenth_seconds))
