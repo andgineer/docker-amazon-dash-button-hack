@@ -1,5 +1,7 @@
 # Settings for the Amazon Dash button
 
+[settings.json](https://github.com/andgineer/docker-amazon-dash-button-hack/blob/master/amazon-dash-private/settings.json)
+
 ## Root Keys
 
 ### `latitude` and `longitude`
