@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/andgineer/docker-amazon-dash-button-hack/workflows/ci/badge.svg)](https://github.com/andgineer/docker-amazon-dash-button-hack/actions)
+[![Build Status](https://github.com/andgineer/docker-amazon-dash-button-hack/workflows/ci/badge.svg)](https://github.com/andgineer/docker-amazon-dash-button-hack/actions)[![Coverage](https://raw.githubusercontent.com/andgineer/docker-amazon-dash-button-hack/python-coverage-comment-action-data/badge.svg)](https://htmlpreview.github.io/?https://github.com/andgineer/docker-amazon-dash-button-hack/blob/python-coverage-comment-action-data/htmlcov/index.html)
 
 This is a [Docker Hub container](https://cloud.docker.com/repository/registry-1.docker.io/andgineer/amazon-dash-button-hack)
 for the [Amazon Dash Button hack](https://sorokin.engineer/posts/en/amazon_dash_button_hack.html).
