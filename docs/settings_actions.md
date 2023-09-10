@@ -1,6 +1,6 @@
 # Amazon Dash Actions Configuration
 
-In the configuration file, actions are defined that dictate the response to different Amazon Dash button presses. 
+In the configuration file, actions are defined that dictate the response to different Amazon Dash button presses.
 Each button links to a set of specified actions and, optionally, a summarized purpose.
 
 ---
@@ -11,23 +11,23 @@ Each button links to a set of specified actions and, optionally, a summarized pu
       "actions": [
         "button1" " {
           "summary": [...],
-          "actions": [...]  
+          "actions": [...]
         },
         "button2" " {
           "summary": [...],
-          "actions": [...]  
+          "actions": [...]
         },
         ...
       ]
     ```
 
-Each button corresponds to a key within the `actions` dictionary. 
+Each button corresponds to a key within the `actions` dictionary.
 This key holds actions executed upon the button's press and can be detailed as follows:
 
-- **Summary** (Optional): 
+- **Summary** (Optional):
     - Describes the button's purpose. Useful for user feedback or logging.
     - Can vary depending on time (e.g., actions before 12:00:00).
-    
+
 - **Actions**:
     - A list of actions to perform.
     - Actions have a specific `type` which determines their behavior.
@@ -137,11 +137,11 @@ This key holds actions executed upon the button's press and can be detailed as f
 
 Upon pressing:
 
-- **Before 12:00:00**: 
+- **Before 12:00:00**:
     - Recognized as **Morning work-out**.
     - Image used: `morning.png`.
 
-- **After 12:00:00**: 
+- **After 12:00:00**:
     - Labeled as **Physiotherapy**.
     - Image used: `evening2.png`.
 
@@ -153,7 +153,7 @@ The actions executed:
 
 ### Default Configuration
 
-If a button isn't uniquely configured, the "__DEFAULT__" configuration activates. 
+If a button isn't uniquely configured, the "__DEFAULT__" configuration activates.
 This offers a standard set of actions for any non-specific button.
 
     ```json

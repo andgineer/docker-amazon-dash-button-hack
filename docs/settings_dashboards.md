@@ -7,14 +7,14 @@
       "dashboards": [
         "dashboard1" " {
           "summary": [...],
-          "actions": [...]  
+          "actions": [...]
         },
         ...
       ]
     ```
 
 - **Type**: Object
-- **Description**: Contains configurations for different dashboards. 
+- **Description**: Contains configurations for different dashboards.
 Each dashboard has its own properties, such as `summary`, `empty_image`, and `absent`.
 
     - `summary`: A textual description or title for the dashboard.

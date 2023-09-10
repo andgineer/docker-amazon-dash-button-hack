@@ -5,7 +5,7 @@ Supports google sheet (google_sheet.py), google calendar (google_calendar.py) an
 import collections.abc
 import copy
 from datetime import datetime, timedelta
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 from google_calendar import Calendar
 from google_sheet import Sheet
@@ -166,8 +166,12 @@ class Action(object):
                     "Button press ignored because previuos event closed and it is too early to start new one"
                 )
                 return
-            if last_start <= nowtz and (nowtz - last_start) < timedelta(seconds=action_params["restart"]):
-                print("Button press ignored because event in progress and it is too early to close it")
+            if last_start <= nowtz and (nowtz - last_start) < timedelta(
+                seconds=action_params["restart"]
+            ):
+                print(
+                    "Button press ignored because event in progress and it is too early to close it"
+                )
                 return
             if not last_end:
                 if abs(nowtz - last_start) > timedelta(seconds=action_params["autoclose"]):
