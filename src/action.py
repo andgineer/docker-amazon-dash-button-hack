@@ -13,15 +13,15 @@ from ifttt import Ifttt
 from openhab import OpenHab
 
 
-class Action(object):
+class Action:
     """Register events from amazon dash (button)."""
 
-    def __init__(self, settings) -> None:
+    def __init__(self, settings: Dict[str, Any]) -> None:
         """Init."""
         self.settings = settings
-        self.actions = settings["actions"]
+        self.actions: List[Dict[str, Any]] = settings["actions"]
 
-    def set_summary_by_time(self, button_actions: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def set_summary_by_time(self, button_actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Set even summary according now().
 
         If summary is a list like
@@ -45,15 +45,7 @@ class Action(object):
                 time = datetime.now()
                 for interval_idx, interval in enumerate(action["summary"]):
                     if "before" in interval:
-                        time_parts = interval["before"].split(":")
-                        try:
-                            assert (
-                                len([i for i in time_parts if 0 <= int(i) < 60]) == 3
-                            ), 'Before param ({}) should be "HH:MM:SS", for example 10:00:00.'.format(
-                                interval["before"]
-                            )
-                        except ValueError:
-                            raise Exception('Between ":" in "before" param should be numbers.')
+                        time_parts = self.get_time_parts(interval["before"])
                         interval_end_parts = [int(s) for s in time_parts]
                         interval_end = time.replace(
                             hour=interval_end_parts[0],
@@ -66,6 +58,21 @@ class Action(object):
                 else:
                     action["summary"] = interval["summary"]
         return result_actions
+
+    def get_time_parts(self, time_str: str) -> List[str]:
+        """Get [h, m, s] from string HH:MM:SS."""
+        time_parts = time_str.split(":")
+        valid_parts = []
+        for i in time_parts:
+            try:
+                if 0 <= int(i) < 60:
+                    valid_parts.append(i)
+            except ValueError:
+                raise ValueError('Between ":" in `before` param should be numbers.')
+        if len(valid_parts) != 3:
+            raise ValueError(
+                f'`before` param should be "HH:MM:SS", for example 10:00:00. Got `{time_str}` instead.')
+        return time_parts
 
     def preprocess_actions(self, button, button_settings):
         """Add summary (with button name value) if there is no one.
@@ -123,7 +130,7 @@ class Action(object):
                 except Exception as e:
                     print("!" * 5, f"Event handling error:\n{e}")
 
-    def ifttt_action(self, button, action_params):
+    def ifttt_action(self, button, action_params):  # pylint: disable=unused-argument
         """Register event in IFTTT."""
         ifttt = Ifttt(self.settings)
         ifttt.press(
@@ -133,17 +140,17 @@ class Action(object):
             action_params.get("value3", ""),
         )
 
-    def openhab_action(self, button, action_params):
+    def openhab_action(self, button, action_params):  # pylint: disable=unused-argument
         """Register event in OpenHab."""
         openhab = OpenHab(self.settings)
         openhab.press(action_params)
 
-    def calendar_action(self, button, action_params):
+    def calendar_action(self, button, action_params):  # pylint: disable=unused-argument
         """Register event in Google Calendar."""
         calendar = Calendar(self.settings, action_params["calendar_id"])
         self.event(calendar, action_params)
 
-    def sheet_action(self, button, action_params):
+    def sheet_action(self, button, action_params):  # pylint: disable=unused-argument
         """Register event in Google Sheet."""
         sheet = Sheet(
             self.settings,
