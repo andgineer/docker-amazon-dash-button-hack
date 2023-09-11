@@ -1,3 +1,5 @@
 pytest
 types-requests
 coverage
+pytest-mock
+requests-mock
