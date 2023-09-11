@@ -21,7 +21,7 @@ class Ifttt:
     def load_key(self) -> Dict[str, Any]:
         """Load IFTTT key from file."""
         with open(self.settings["ifttt_key_file_name"], "r", encoding="utf-8-sig") as key_file:
-            return json.loads(key_file.read())
+            return json.loads(key_file.read())  # type: ignore
 
     def press(self, summary: str, v1: str, v2: str, v3: str) -> None:
         """Register event in IFTTT."""

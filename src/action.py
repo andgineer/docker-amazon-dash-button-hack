@@ -71,7 +71,8 @@ class Action:
                 raise ValueError('Between ":" in `before` param should be numbers.')
         if len(valid_parts) != 3:
             raise ValueError(
-                f'`before` param should be "HH:MM:SS", for example 10:00:00. Got `{time_str}` instead.')
+                f'`before` param should be "HH:MM:SS", for example 10:00:00. Got `{time_str}` instead.'
+            )
         return time_parts
 
     def preprocess_actions(self, button, button_settings):
