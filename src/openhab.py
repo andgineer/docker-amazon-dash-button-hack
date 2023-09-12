@@ -26,6 +26,7 @@ class OpenHab:
                 'Should be two openHAB commands separated by ";" ("ON;OFF" or "UP;DOWN"). '
                 "Button press will switch between them."
             )
+            return
 
         state = requests.get(
             f"{base_url}/state", headers={"content-type": "application/json"}, timeout=5
