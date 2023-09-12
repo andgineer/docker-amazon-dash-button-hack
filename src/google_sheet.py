@@ -19,7 +19,6 @@ class Sheet(GoogleApi):
         event_sheet: str = "event",
     ) -> None:
         """Init."""
-        self.settings = settings
         self.http = self.get_credentials_http()
         self._service = self.get_service(
             api="sheets", version="v4"
@@ -29,6 +28,7 @@ class Sheet(GoogleApi):
         self.event_sheet = event_sheet
         self.spreadSheetId = self.get_file_id(name)
         self.sheets = self.get_sheets(press_sheet, event_sheet)
+        super().__init__(settings)
 
     def get_last_event(self, summary: str) -> Tuple[Optional[int], Optional[List[Any]]]:
         """Get last event from Google Sheet.

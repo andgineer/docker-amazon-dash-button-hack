@@ -1,10 +1,18 @@
+"""Google API class."""
 import httplib2
 from googleapiclient import discovery
 from oauth2client.service_account import ServiceAccountCredentials
 
 
-class GoogleApi(object):
+class GoogleApi:
+    """Google API class."""
+
+    def __init__(self, settings) -> None:
+        """Init."""
+        self.settings = settings
+
     def get_credentials_http(self):
+        """Get credentials for http."""
         try:
             credentials = ServiceAccountCredentials.from_json_keyfile_name(
                 self.settings["credentials_file_name"],
