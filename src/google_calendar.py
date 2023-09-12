@@ -13,11 +13,9 @@ from google_api import GoogleApi
 
 class Calendar(GoogleApi):
     def __init__(self, settings, calendar_id):
-        self.http = self.get_credentials_http()
-        self._service = self.get_service(api="calendar", version="v3")
+        super().__init__(settings, self.get_service(api="calendar", version="v3"))
         self.tz = os.environ.get("TZ", "Europe/Moscow")
         self.calendarId = calendar_id
-        super().__init__(settings)
 
     def get_calendar_id(self, name):
         """Does not work for some unclear reasons.

@@ -13,7 +13,7 @@ def google_api_settings():
 
 @pytest.fixture
 def google_api_instance(google_api_settings):
-    return GoogleApi(google_api_settings)
+    return GoogleApi(google_api_settings, Mock())
 
 
 def test_get_credentials_http_success(google_api_instance):

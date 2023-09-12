@@ -19,16 +19,17 @@ class Sheet(GoogleApi):
         event_sheet: str = "event",
     ) -> None:
         """Init."""
-        self.http = self.get_credentials_http()
-        self._service = self.get_service(
-            api="sheets", version="v4"
-        )  # discoveryServiceUrl=('https://sheets.googleapis.com/$discovery/rest?version=v4')
+        super().__init__(
+            settings,
+            self.get_service(
+                api="sheets", version="v4"
+            ),  # discoveryServiceUrl=('https://sheets.googleapis.com/$discovery/rest?version=v4')
+        )
         self.drive_service = self.get_service(api="drive", version="v3")
         self.press_sheet = press_sheet
         self.event_sheet = event_sheet
         self.spreadSheetId = self.get_file_id(name)
         self.sheets = self.get_sheets(press_sheet, event_sheet)
-        super().__init__(settings)
 
     def get_last_event(self, summary: str) -> Tuple[Optional[int], Optional[List[Any]]]:
         """Get last event from Google Sheet.
