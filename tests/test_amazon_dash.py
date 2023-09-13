@@ -9,15 +9,15 @@ import os
 
 
 def test_button_file_name():
-    result = amazon_dash.button_file_name("/test/")
-    expected = os.path.join("/test", "amazon-dash-private", "buttons.json")
+    result = amazon_dash.button_file_name(os.path.join("", "test"))
+    expected = os.path.join("", "test", "amazon-dash-private", "buttons.json")
     assert result == expected
+
 
 def test_setting_file_name():
-    result = amazon_dash.setting_file_name("/test/")
-    expected = os.path.join("/test", "amazon-dash-private", "settings.json")
+    result = amazon_dash.setting_file_name(os.path.join("", "test"))
+    expected = os.path.join("", "test", "amazon-dash-private", "settings.json")
     assert result == expected
-
 
 
 def test_json_safe_loads_valid():
@@ -87,19 +87,6 @@ class MockDateTime:
 
     def __init__(self, current_time):
         MockDateTime.current_time = current_time
-
-
-def test_arp_handler_known_mac(mocker):
-    known_mac = "00:11:22:33:44:55"
-    amazon_dash.buttons = {known_mac: "TestButton"}
-    mock_trigger = mocker.patch('amazon_dash.trigger')
-
-    pkt = Packet()
-    pkt.src = known_mac
-    pkt[ARP].op = 1  # who_has_request
-
-    amazon_dash.arp_handler(pkt)
-    mock_trigger.assert_called_once_with("TestButton")
 
 
 def test_arp_handler_known_mac(mocker):
