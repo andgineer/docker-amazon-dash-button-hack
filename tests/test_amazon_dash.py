@@ -5,16 +5,19 @@ import pytest
 import amazon_dash
 import json
 from datetime import datetime
+import os
 
 
 def test_button_file_name():
     result = amazon_dash.button_file_name("/test/")
-    assert result == "/test/amazon-dash-private/buttons.json"
-
+    expected = os.path.join("/test", "amazon-dash-private", "buttons.json")
+    assert result == expected
 
 def test_setting_file_name():
     result = amazon_dash.setting_file_name("/test/")
-    assert result == "/test/amazon-dash-private/settings.json"
+    expected = os.path.join("/test", "amazon-dash-private", "settings.json")
+    assert result == expected
+
 
 
 def test_json_safe_loads_valid():

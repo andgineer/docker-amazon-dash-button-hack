@@ -108,7 +108,7 @@ def sniff_arp() -> None:
 
 def run() -> None:
     """Run server."""
-    global buttons, settings, chatter_delay
+    global buttons, settings, chatter_delay  # pylint: disable=global-statement
 
     buttons = load_buttons()
     settings = load_settings()
