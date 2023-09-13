@@ -28,7 +28,7 @@ def test_json_safe_loads_valid():
 
 def test_json_safe_loads_invalid():
     data = '{"key": "value"'
-    with pytest.raises(Exception):
+    with pytest.raises(json.decoder.JSONDecodeError):
         amazon_dash.json_safe_loads(data)
 
 

@@ -46,7 +46,7 @@ def json_safe_loads(text: str) -> Dict[str, Any]:
     """Load json from string."""
     try:
         return json.loads(text)  # type: ignore
-    except:
+    except json.decoder.JSONDecodeError:
         print("\n", "!" * 5, "Wrong json:\n", text)
         raise
 
