@@ -3,6 +3,7 @@
 import datetime
 import os
 import time
+from typing import Any, Dict, List, Optional
 
 import dateutil.parser
 
@@ -17,21 +18,28 @@ class Calendar(GoogleApi):
         self.tz = os.environ.get("TZ", "Europe/Moscow")
         self.calendarId = calendar_id
 
-    def get_calendar_id(self, name):
+    def get_calendar_id(self, name: str) -> Optional[str]:
         """Does not work for some unclear reasons.
         returns empty items.
         And if I access calendar 'primary' events created in some other calendar invisible for other accounts.
         So we have to specify calendarId implicitly and cannot find it by name.
+
+        In theory should return [{"id": .., "summary": ..}, ...]
         """
         page_token = None
         while True:
             calendar_list = self.service().calendarList().list(pageToken=page_token).execute()
-            print(calendar_list)
-            for calendar_list_entry in calendar_list["items"]:
-                print(calendar_list_entry["summary"])
+            print("Calendar page:", calendar_list)
+            if ids := [
+                item["id"]
+                for item in calendar_list.get("items", [])
+                if item["summary"] == name
+            ]:
+                return ids[0]
             page_token = calendar_list.get("nextPageToken")
             if not page_token:
                 break
+        return None
 
     def parse_time(self, s):
         return dateutil.parser.parse(s)

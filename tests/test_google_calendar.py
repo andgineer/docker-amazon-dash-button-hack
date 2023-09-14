@@ -75,3 +75,61 @@ def test_google_api_get_credentials_http(mock_get_credentials_http):
     assert calendar.http is not None
     mock_get_credentials_http.assert_called_once()
 
+def test_get_calendar_id(mock_calendar):
+    # Sample mock data
+    mock_data_first_page = {
+        "items": [
+            {"summary": "Calendar 1", "id": "cal1"},
+            {"summary": "Calendar 2", "id": "cal2"}
+        ],
+        "nextPageToken": "next_token"
+    }
+
+    mock_data_second_page = {
+        "items": [
+            {"summary": "Calendar 3", "id": "cal3"},
+            {"summary": "Calendar 4", "id": "cal4"}
+        ],
+    }
+
+    # Set side_effect for mock to return multiple values on consecutive calls
+    calendar_list_pages = [mock_data_first_page, mock_data_second_page]
+    mock_calendar.service().calendarList().list().execute.side_effect = calendar_list_pages
+    mock_calendar.service().calendarList().list.reset_mock()
+
+    # Call the method
+    calendar_id = mock_calendar.get_calendar_id("Calendar 3")
+
+    assert calendar_id == "cal3"
+    assert mock_calendar.service().calendarList().list.call_count == len(calendar_list_pages)
+    mock_calendar.service().calendarList().list().execute.assert_called()
+
+
+def test_google_now(mock_calendar):
+    # Mock datetime.datetime.now()
+    mock_now = datetime.datetime(2023, 9, 15, 12, 0, 0)
+
+    with patch('google_calendar.datetime') as mock_datetime:
+        mock_datetime.datetime.now.return_value = mock_now
+
+        result = mock_calendar.google_now()
+
+    # Here you should replace with the expected format from google_time_format
+    expected_format = mock_calendar.google_time_format(mock_now)
+    assert result == expected_format
+
+
+def test_google_today(mock_calendar):
+    # Mock datetime.datetime.now()
+    mock_today = datetime.datetime(2023, 9, 15, 12, 0, 0)
+
+    with patch('google_calendar.datetime') as mock_datetime:
+        mock_datetime.datetime.now.return_value = mock_today
+
+        result = mock_calendar.google_today()
+
+    # Here you should replace with the expected format from google_time_format
+    expected_format = mock_calendar.google_time_format(
+        mock_today.replace(hour=0, minute=0, second=0, microsecond=0)
+    )
+    assert result == expected_format
