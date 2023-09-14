@@ -14,14 +14,14 @@ charset-normalizer==3.2.0
     # via requests
 google-api-core==2.11.1
     # via google-api-python-client
-google-api-python-client==2.98.0
+google-api-python-client==2.99.0
     # via -r requirements.in
-google-auth==2.22.0
+google-auth==2.23.0
     # via
     #   google-api-core
     #   google-api-python-client
     #   google-auth-httplib2
-google-auth-httplib2==0.1.0
+google-auth-httplib2==0.1.1
     # via google-api-python-client
 googleapis-common-protos==1.60.0
     # via google-api-core
@@ -66,8 +66,6 @@ scapy==2.5.0
     # via -r requirements.in
 six==1.16.0
     # via
-    #   google-auth
-    #   google-auth-httplib2
     #   oauth2client
     #   python-dateutil
 uritemplate==4.1.1

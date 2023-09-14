@@ -9,11 +9,11 @@ from oauth2client.service_account import ServiceAccountCredentials
 class GoogleApi:
     """Google API class."""
 
-    def __init__(self, settings: Dict[str, Any], service: Optional[discovery.Resource]) -> None:
+    def __init__(self, settings: Dict[str, Any], api: str, version: str) -> None:
         """Init."""
         self.settings = settings
-        self._service = service
         self.http = self.get_credentials_http()
+        self._service = self.get_service(api=api, version=version)
 
     def get_credentials_http(self) -> Optional[httplib2.Http]:
         """Get credentials for http."""

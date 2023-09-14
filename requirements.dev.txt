@@ -12,6 +12,8 @@ coverage==7.3.1
     # via -r requirements.dev.in
 exceptiongroup==1.1.3
     # via pytest
+freezegun==1.2.2
+    # via -r requirements.dev.in
 idna==3.4
     # via requests
 iniconfig==2.0.0
@@ -26,12 +28,16 @@ pytest==7.4.2
     #   pytest-mock
 pytest-mock==3.11.1
     # via -r requirements.dev.in
+python-dateutil==2.8.2
+    # via freezegun
 requests==2.31.0
     # via requests-mock
 requests-mock==1.11.0
     # via -r requirements.dev.in
 six==1.16.0
-    # via requests-mock
+    # via
+    #   python-dateutil
+    #   requests-mock
 tomli==2.0.1
     # via pytest
 types-requests==2.31.0.2

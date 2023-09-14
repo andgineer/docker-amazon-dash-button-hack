@@ -13,7 +13,7 @@ from google_api import GoogleApi
 
 class Calendar(GoogleApi):
     def __init__(self, settings, calendar_id):
-        super().__init__(settings, self.get_service(api="calendar", version="v3"))
+        super().__init__(settings, api="calendar", version="v3")
         self.tz = os.environ.get("TZ", "Europe/Moscow")
         self.calendarId = calendar_id
 

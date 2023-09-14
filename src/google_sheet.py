@@ -21,9 +21,8 @@ class Sheet(GoogleApi):
         """Init."""
         super().__init__(
             settings,
-            self.get_service(
-                api="sheets", version="v4"
-            ),  # discoveryServiceUrl=('https://sheets.googleapis.com/$discovery/rest?version=v4')
+            api="sheets",
+            version="v4",  # discoveryServiceUrl=('https://sheets.googleapis.com/$discovery/rest?version=v4')
         )
         self.drive_service = self.get_service(api="drive", version="v3")
         self.press_sheet = press_sheet
