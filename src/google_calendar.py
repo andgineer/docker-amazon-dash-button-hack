@@ -1,4 +1,4 @@
-"""Register Amazon Dash Button events in Google Calendar using Google Calendar API """
+"""Register Amazon Dash Button events in Google Calendar using Google Calendar API."""
 
 import datetime
 import os
@@ -13,69 +13,72 @@ from google_api import GoogleApi
 
 
 class Calendar(GoogleApi):
-    def __init__(self, settings, calendar_id):
+    """Google Calendar API wrapper."""
+
+    def __init__(self, settings: Dict[str, Any], calendar_id: str) -> None:
+        """Init."""
         super().__init__(settings, api="calendar", version="v3")
         self.tz = os.environ.get("TZ", "Europe/Moscow")
         self.calendarId = calendar_id
 
     def get_calendar_id(self, name: str) -> Optional[str]:
-        """Does not work for some unclear reasons.
-        returns empty items.
+        """Get ID of the calendar named as `name`.
+
+        Does not work for some unclear reasons.
+        returns empty `items` array in response.
+
         And if I access calendar 'primary' events created in some other calendar invisible for other accounts.
         So we have to specify calendarId implicitly and cannot find it by name.
-
-        In theory should return [{"id": .., "summary": ..}, ...]
         """
         page_token = None
         while True:
             calendar_list = self.service().calendarList().list(pageToken=page_token).execute()
             print("Calendar page:", calendar_list)
             if ids := [
-                item["id"]
-                for item in calendar_list.get("items", [])
-                if item["summary"] == name
+                item["id"] for item in calendar_list.get("items", []) if item["summary"] == name
             ]:
-                return ids[0]
+                return ids[0]  # type: ignore
             page_token = calendar_list.get("nextPageToken")
             if not page_token:
                 break
         return None
 
-    def parse_time(self, s):
+    def parse_time(self, s: str) -> datetime.datetime:
+        """Parse Google Calendar time format to datetime."""
         return dateutil.parser.parse(s)
 
-    def time_to_str(self, t):
+    def time_to_str(self, t: datetime.datetime) -> str:
+        """Convert datetime to Google Calendar time format."""
         GCAL_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
-        tz = -time.timezone / 60 / 60 * 100
-        # todo that is incorrect - you need minutes after ':' not hours % 100
-        # so h = int(- time.timezone / 60 / 60)
-        # m = abs(time.timezone / 60) - h * 60
-        s = t.strftime(GCAL_TIME_FORMAT) + "%+03d:%02d" % (tz / 100, abs(tz % 100))
-        return s
+        tz_minutes = -time.timezone // 60
+        tz_hours, tz_minutes = divmod(tz_minutes, 60)
+        return f"{t.strftime(GCAL_TIME_FORMAT)}{tz_hours:+03d}:{abs(tz_minutes):02d}"
 
-    def start_event(self, summary):
+    def start_event(self, summary: str) -> None:
+        """Start event in Google Calendar."""
         INSERT_EVENT_REQUEST = {
             "summary": summary,
             "description": "Event created by amazon dash (button) click.",
             "start": {
                 "dateTime": self.time_to_str(datetime.datetime.now()),
-                #'timeZone': '{tz}'.format(tz=self.tz),
+                # 'timeZone': '{tz}'.format(tz=self.tz),
             },
             "end": {
                 "dateTime": self.time_to_str(datetime.datetime.now()),
-                #'timeZone': '{tz}'.format(tz=self.tz),
+                # 'timeZone': '{tz}'.format(tz=self.tz),
             },
         }
-        event = (
+        _ = (
             self.service()
             .events()
-            .insert(calendarId=self.calendarId, body=INSERT_EVENT_REQUEST)  #'primary',
+            .insert(calendarId=self.calendarId, body=INSERT_EVENT_REQUEST)  # 'primary',
             .execute()
         )
         # print('Calendar event created: %s' % (event.get('htmlLink')))
 
-    def get_last_event(self, summary):
-        """
+    def get_last_event(self, summary: str) -> Optional[List[Any]]:
+        """Get last event from Google Calendar.
+
         :param summary: text to search
         :return:
         <id for close event>, [summary, start, end]
@@ -87,7 +90,7 @@ class Calendar(GoogleApi):
                 self.service()
                 .events()
                 .list(
-                    calendarId=self.calendarId,  #'primary',
+                    calendarId=self.calendarId,  # 'primary',
                     timeMin=self.google_time_format(
                         datetime.datetime.now() - datetime.timedelta(days=100)
                     ),  # better limit than sorry
@@ -110,42 +113,46 @@ class Calendar(GoogleApi):
                     start = self.parse_time(event["start"]["dateTime"])
                     if event["start"] == event["end"]:
                         return event["id"], [event["summary"], start]
-                    else:
-                        end = self.parse_time(event["end"]["dateTime"])
-                        return event["id"], [event["summary"], start, end]
+                    end = self.parse_time(event["end"]["dateTime"])
+                    return event["id"], [event["summary"], start, end]
                 return None, None
 
-    def delete_event(self, event_id):
+    def delete_event(self, event_id: str) -> None:
+        """Delete event from Google Calendar."""
         self.service().events().delete(
-            calendarId=self.calendarId, eventId=event_id  #'primary',
+            calendarId=self.calendarId, eventId=event_id  # 'primary',
         ).execute()
 
-    def close_event(self, event_id, close_time):
+    def close_event(self, event_id: str, close_time: datetime.datetime) -> None:
+        """Close event in Google Calendar."""
         event = (
             self.service()
             .events()
-            .get(calendarId=self.calendarId, eventId=event_id)  #'primary',
+            .get(calendarId=self.calendarId, eventId=event_id)  # 'primary',
             .execute()
         )
         event["end"] = {
             "dateTime": self.time_to_str(close_time),
-            #'timeZone': '{tz}'.format(tz=self.tz),
+            # 'timeZone': '{tz}'.format(tz=self.tz),
         }
-        updated_event = (
+        _ = (
             self.service()
             .events()
-            .update(calendarId=self.calendarId, eventId=event_id, body=event)  #'primary',
+            .update(calendarId=self.calendarId, eventId=event_id, body=event)  # 'primary',
             .execute()
         )
         # print(updated_event)
 
-    def google_time_format(self, t):
+    def google_time_format(self, t: datetime.datetime) -> str:
+        """Convert datetime to Google Calendar time format."""
         return t.strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    def google_now(self):
+    def google_now(self) -> str:
+        """Get current time in Google Calendar time format."""
         return self.google_time_format(datetime.datetime.now())
 
-    def google_today(self):
+    def google_today(self) -> str:
+        """Get today's date in Google Calendar time format."""
         return self.google_time_format(
             datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
         )
@@ -156,13 +163,14 @@ if __name__ == "__main__":  # pragma: no cover
 
     settings = load_settings()
     calendar = Calendar(settings, settings["actions"]["white"]["actions"][1]["calendar_id"])
+    calendar.get_calendar_id("Anna")
     # while True:
     #     id, event = calendar.get_last_event('Google')
     #     if id:
     #         calendar.delete_event(id)
     #     else:
     #         break
-    calendar.start_event("Google")
-    print(calendar.get_last_event("Google"))
-    id, event = calendar.get_last_event("Google")
-    calendar.close_event(id, (datetime.datetime.now() + datetime.timedelta(minutes=5)))
+    # calendar.start_event("Google")
+    # print(calendar.get_last_event("Google"))
+    # id, event = calendar.get_last_event("Google")
+    # calendar.close_event(id, (datetime.datetime.now() + datetime.timedelta(minutes=5)))

@@ -15,7 +15,7 @@ class GoogleApi:
         self.http = self.get_credentials_http()
         self._service = self.get_service(api=api, version=version)
 
-    def get_credentials_http(self) -> Optional[httplib2.Http]:
+    def get_credentials_http(self) -> httplib2.Http:
         """Get credentials for http."""
         try:
             credentials = ServiceAccountCredentials.from_json_keyfile_name(
@@ -28,17 +28,19 @@ class GoogleApi:
             )
         except Exception as e:
             error_message = (
-                "\n!!!!! Cannot get authorization from google API. "
+                f"\n!!!!! Cannot get authorization from google API. "
                 f"Maybe the API Key is invalid ({self.settings['credentials_file_name']}):\n\n{e}"
             )
-            print(error_message)
+            raise ValueError(error_message) from e
 
-            return None
         return credentials.authorize(httplib2.Http())
 
-    def get_service(self, api: str, version: str) -> Optional[discovery.Resource]:
+    def get_service(self, api: str, version: str) -> discovery.Resource:
         """Get service."""
-        return discovery.build(api, version, http=self.http) if self.http else None
+        if not self.http:
+            raise ValueError(f"Cannot get service `{api}`: Google API is not authorized.")
+
+        return discovery.build(api, version, http=self.http)
 
     def service(self) -> Optional[discovery.Resource]:
         """Get service."""

@@ -13,7 +13,12 @@ def google_api_settings():
 
 @pytest.fixture
 def google_api_instance(google_api_settings):
-    return GoogleApi(google_api_settings, Mock(), Mock())
+    # Temporarily mock the `get_credentials_http` and `get_service` for instantiation
+    with patch.object(GoogleApi, 'get_credentials_http', return_value=Mock()), patch.object(GoogleApi, 'get_service', return_value=Mock()):
+        instance = GoogleApi(google_api_settings, Mock(), Mock())
+
+    # Once the instance is created, the original methods are restored
+    return instance
 
 
 def test_get_credentials_http_success(google_api_instance):
@@ -30,14 +35,10 @@ def test_get_credentials_http_success(google_api_instance):
         assert http_instance is not None
 
 
-def test_get_credentials_http_failure(google_api_instance, capsys):
-    # Mocking the ServiceAccountCredentials to raise an exception
-    with patch('google_api.ServiceAccountCredentials.from_json_keyfile_name', side_effect=Exception("Test Exception")):
-        http_instance = google_api_instance.get_credentials_http()
-
-        captured = capsys.readouterr()
-        assert "Cannot get authorization from google API." in captured.out
-        assert http_instance is None
+def test_get_credentials_http_failure(google_api_instance):
+    with pytest.raises(ValueError) as e:
+        google_api_instance.get_credentials_http()
+    assert "Cannot get authorization from google API." in str(e)
 
 
 @patch('google_api.discovery.build')
@@ -56,8 +57,9 @@ def test_get_service_with_http(mock_build, google_api_instance):
 
 def test_get_service_without_http(google_api_instance):
     google_api_instance.http = None
-    service = google_api_instance.get_service('calendar', 'v3')
-    assert service is None
+    with pytest.raises(ValueError) as e:
+        google_api_instance.get_service('calendar', 'v3')
+    assert "Google API is not authorized" in str(e)
 
 
 def test_service_undefined(google_api_instance, capsys):

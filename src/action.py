@@ -67,8 +67,8 @@ class Action:
             try:
                 if 0 <= int(i) < 60:
                     valid_parts.append(i)
-            except ValueError:
-                raise ValueError('Between ":" in `before` param should be numbers.')
+            except ValueError as e:
+                raise ValueError('Between ":" in `before` param should be numbers.') from e
         if len(valid_parts) != 3:
             raise ValueError(
                 f'`before` param should be "HH:MM:SS", for example 10:00:00. Got `{time_str}` instead.'
@@ -110,7 +110,7 @@ class Action:
         return actions
 
     def action(self, button, dry_run=False):
-        """Registers event from the button."""
+        """Register event from the button."""
         ACTION_HANDLERS = {
             "sheet": self.sheet_action,
             "calendar": self.calendar_action,

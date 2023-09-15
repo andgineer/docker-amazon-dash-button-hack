@@ -1,5 +1,6 @@
 pytest
 types-requests
+types-python-dateutil
 coverage
 pytest-mock
 requests-mock

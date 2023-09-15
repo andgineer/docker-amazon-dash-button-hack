@@ -173,14 +173,14 @@ class Sheet(GoogleApi):
 
         row 0-based
         """
-        request = (
+        _ = (
             self.service()
             .spreadsheets()
             .values()
             .append(
                 spreadsheetId=self.spreadSheetId,
                 range=f"{sheet}!A{row + 1}:{chr(ord('A') + len(values) - 1)}",
-                valueInputOption="RAW",  #'USER_ENTERED',
+                valueInputOption="RAW",  # 'USER_ENTERED',
                 insertDataOption="INSERT_ROWS",
                 body={"majorDimension": "ROWS", "values": [values]},
             )
