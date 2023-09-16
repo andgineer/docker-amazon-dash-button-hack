@@ -1,7 +1,7 @@
 """Register Amazon Dash Button events in Google Sheets using Google Sheets API."""
 
 import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from google_api import GoogleApi
 
@@ -262,8 +262,13 @@ class Sheet(GoogleApi):
         values = result.get("values", [])
         return values  # type: ignore
 
-    def from_serial_time(self, serial: float) -> datetime.datetime:
+    def from_serial_time(self, serial: Union[float, str]) -> datetime.datetime:
         """Convert google 'serial number' date-time to datetime."""
+        if isinstance(serial, str):
+            try:
+                serial = float(serial)
+            except ValueError:
+                raise ValueError(f"Invalid serial value: {serial}. Expected a float or numeric string.")
         return datetime.datetime(year=1899, month=12, day=30) + datetime.timedelta(days=serial)
 
 

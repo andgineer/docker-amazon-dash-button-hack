@@ -1,4 +1,3 @@
-# tests/test_google_calendar.py
 import time
 
 import pytest
@@ -7,7 +6,7 @@ import datetime
 from google_calendar import Calendar
 from freezegun import freeze_time
 
-# Mock GoogleApi.get_credentials_http
+
 @pytest.fixture
 def mock_get_credentials_http():
     with patch("google_calendar.GoogleApi.get_credentials_http") as mock_method:
