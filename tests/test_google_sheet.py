@@ -40,6 +40,54 @@ def test_get_file_id(mock_sheet):
     assert mock_sheet.get_file_id("Test Sheet Name") == "test_id"
 
 
+def test_get_file_id_with_pagination(mock_sheet):
+    # Given
+    # Mocked responses to simulate pagination
+    first_response = {
+        "nextPageToken": "some_token",
+        "files": [{"id": "not_the_file_we_want", "name": "Other File"}],
+    }
+    second_response = {
+        "files": [{"id": "test_id", "name": "Test Sheet Name"}],
+    }
+
+    # Setup mock to return first_response on the first call and second_response on the second
+    mock_sheet.drive_service.files().list().execute.side_effect = [first_response, second_response]
+
+    # When
+    file_id = mock_sheet.get_file_id("Test Sheet Name")
+
+    # Then
+    assert file_id == "test_id"
+
+    # Assert that the mock was called twice (once for each page)
+    assert mock_sheet.drive_service.files().list().execute.call_count == 2
+
+
+def test_get_file_id_no_such_file(mock_sheet):
+    # Given
+    # Mocked responses to simulate pagination
+    first_response = {
+        "nextPageToken": "some_token",
+        "files": [{"id": "not_the_file_we_want", "name": "Other File"}],
+    }
+    second_response = {
+        "files": [{"id": "test_id", "name": "Test Sheet Name"}],
+    }
+
+    # Setup mock to return first_response on the first call and second_response on the second
+    mock_sheet.drive_service.files().list().execute.side_effect = [first_response, second_response]
+
+    # When
+    file_id = mock_sheet.get_file_id("-unexisted-")
+
+    # Then
+    assert file_id is None
+
+    # Assert that the mock was called twice (once for each page)
+    assert mock_sheet.drive_service.files().list().execute.call_count == 2
+
+
 def serial_to_datetime(serial: float) -> datetime:
     """Convert google 'serial number' date-time to datetime."""
     return datetime(year=1899, month=12, day=30) + timedelta(days=serial)
@@ -62,6 +110,19 @@ def test_get_last_event(mock_sheet):
                       serial_to_datetime(mock_serial_for_start_date),
                       serial_to_datetime(mock_serial_for_end_date)]
     assert event == expected_event
+
+
+def test_get_last_event_not_found(mock_sheet):
+    # Given
+    # Mocking find_last_row method to return None for both row and event
+    mock_sheet.find_last_row = Mock(return_value=(None, None))
+
+    # When
+    row, event = mock_sheet.get_last_event("summary")
+
+    # Then
+    assert row is None
+    assert event is None
 
 
 def test_start_event(mock_sheet):
@@ -167,6 +228,17 @@ def test_get_sheets(mock_sheet):
 
     result = mock_sheet.get_sheets("press_sheet", "event_sheet")
     assert result == {"press_sheet": "123", "event_sheet": "456"}
+
+
+def test_get_sheets_no_service(mock_sheet):
+    # Mock the service method to return None
+    mock_sheet.service = Mock(return_value=None)
+
+    # When
+    result = mock_sheet.get_sheets("press_sheet", "event_sheet")
+
+    # Then
+    assert result == {"press_sheet": None, "event_sheet": None}
 
 
 def test_update_cells(mock_sheet):

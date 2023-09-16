@@ -99,7 +99,8 @@ class Sheet(GoogleApi):
                     .execute()
                 )
                 for file in response.get("files", []):
-                    return file.get("id")  # type: ignore
+                    if file.get("name") == name:
+                        return file.get("id")  # type: ignore
                 page_token = response.get("nextPageToken", None)
                 if page_token is None:
                     break
@@ -262,13 +263,8 @@ class Sheet(GoogleApi):
         values = result.get("values", [])
         return values  # type: ignore
 
-    def from_serial_time(self, serial: Union[float, str]) -> datetime.datetime:
+    def from_serial_time(self, serial: float) -> datetime.datetime:
         """Convert google 'serial number' date-time to datetime."""
-        if isinstance(serial, str):
-            try:
-                serial = float(serial)
-            except ValueError:
-                raise ValueError(f"Invalid serial value: {serial}. Expected a float or numeric string.")
         return datetime.datetime(year=1899, month=12, day=30) + datetime.timedelta(days=serial)
 
 
