@@ -148,10 +148,50 @@ def test_copy_row_formatting(mock_sheet):
 
 def test_get_rows(mock_sheet):
     # Given
-    mock_sheet.service().spreadsheets().values().get().execute = Mock(return_value={"values": [["A1", "B1", "C1"]]})
+    mock_sheet._service.spreadsheets().values().get().execute = Mock(return_value={"values": [["A1", "B1", "C1"]]})
 
     # When
     rows = mock_sheet.get_rows("TestSheet", 1, 3, 3)
 
     # Then
     assert rows == [["A1", "B1", "C1"]]
+
+
+def test_get_sheets(mock_sheet):
+    mock_sheet._service.spreadsheets().get.return_value.execute.return_value = {
+        "sheets": [
+            {"properties": {"title": "press_sheet", "sheetId": "123"}},
+            {"properties": {"title": "event_sheet", "sheetId": "456"}},
+        ]
+    }
+
+    result = mock_sheet.get_sheets("press_sheet", "event_sheet")
+    assert result == {"press_sheet": "123", "event_sheet": "456"}
+
+
+def test_update_cells(mock_sheet):
+    mock_spreadsheet_values = Mock()
+    mock_sheet._service.spreadsheets().values.return_value = mock_spreadsheet_values
+
+    mock_sheet.update_cells("TestSheet", ["value1", "value2"], 0, 0)
+
+    mock_spreadsheet_values.update.assert_called_once()
+
+
+def test_append_row(mock_sheet):
+    mock_spreadsheet_values = Mock()
+    mock_sheet._service.spreadsheets().values.return_value = mock_spreadsheet_values
+
+    mock_sheet.append_row("TestSheet", ["value1", "value2"], 0)
+
+    mock_spreadsheet_values.append.assert_called_once()
+
+
+def test_insert_row(mock_sheet):
+    mock_spreadsheet_values = Mock()
+    mock_sheet._service.spreadsheets().values.return_value = mock_spreadsheet_values
+
+    mock_sheet.sheets = {"TestSheet": "12345"}  # Mocking sheetId for the sheet name "TestSheet"
+    mock_sheet.insert_row("TestSheet", 1)
+
+    assert mock_sheet.service().spreadsheets().batchUpdate.called
