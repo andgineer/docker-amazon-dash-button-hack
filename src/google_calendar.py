@@ -3,7 +3,7 @@
 import datetime
 import os
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import dateutil.parser
 
@@ -45,7 +45,7 @@ class Calendar(GoogleApi):
 
     def parse_time(self, s: str) -> datetime.datetime:
         """Parse Google Calendar time format to datetime."""
-        return dateutil.parser.parse(s)
+        return dateutil.parser.parse(s)  # type: ignore
 
     def time_to_str(self, t: datetime.datetime) -> str:
         """Convert datetime to Google Calendar time format."""
@@ -76,7 +76,7 @@ class Calendar(GoogleApi):
         )
         # print('Calendar event created: %s' % (event.get('htmlLink')))
 
-    def get_last_event(self, summary: str) -> Optional[List[Any]]:
+    def get_last_event(self, summary: str) -> Tuple[Optional[str], Optional[List[Any]]]:
         """Get last event from Google Calendar.
 
         :param summary: text to search
@@ -123,7 +123,7 @@ class Calendar(GoogleApi):
             calendarId=self.calendarId, eventId=event_id  # 'primary',
         ).execute()
 
-    def close_event(self, event_id: str, close_time: datetime.datetime) -> None:
+    def close_event(self, event_id: Union[int, str], close_time: datetime.datetime) -> None:
         """Close event in Google Calendar."""
         event = (
             self.service()

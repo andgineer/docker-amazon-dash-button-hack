@@ -1,5 +1,6 @@
 """Google API class."""
-from typing import Any, Dict, Optional
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import httplib2
 from googleapiclient import discovery
@@ -42,9 +43,22 @@ class GoogleApi:
 
         return discovery.build(api, version, http=self.http)
 
-    def service(self) -> Optional[discovery.Resource]:
+    def service(self) -> discovery.Resource:
         """Get service."""
         if self._service:
             return self._service
-        print("!" * 5 + " Google API service undefined.")
-        return None
+        raise ValueError("!" * 5 + " Google API service undefined.")
+
+    def get_last_event(
+        self, summary: str
+    ) -> Tuple[Optional[Union[int, str]], Optional[List[Any]]]:
+        """Get last event."""
+        raise NotImplementedError
+
+    def start_event(self, summary: str) -> None:
+        """Start event."""
+        raise NotImplementedError
+
+    def close_event(self, event_id: Union[int, str], close_time: datetime) -> None:
+        """Close event."""
+        raise NotImplementedError

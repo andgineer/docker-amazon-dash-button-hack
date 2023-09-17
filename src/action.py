@@ -7,6 +7,7 @@ import copy
 from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
+from google_api import GoogleApi
 from google_calendar import Calendar
 from google_sheet import Sheet
 from ifttt import Ifttt
@@ -19,7 +20,7 @@ class Action:
     def __init__(self, settings: Dict[str, Any]) -> None:
         """Init."""
         self.settings = settings
-        self.actions: List[Dict[str, Any]] = settings["actions"]
+        self.actions: Dict[str, Any] = settings["actions"]
 
     def set_summary_by_time(self, button_actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Set even summary according now().
@@ -75,29 +76,25 @@ class Action:
             )
         return time_parts
 
-    def preprocess_actions(self, button, button_settings):
+    def preprocess_actions(
+        self, button: str, button_settings: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
         """Add summary (with button name value) if there is no one.
 
         Substitutes {button} with button name in parameters.
         """
 
-        def subst(param):
+        def subst(param: Any) -> Any:
             """Substitute {button} with button name in parameters."""
             if isinstance(param, str):
                 return param.format(button=button)
             if isinstance(param, collections.abc.Mapping):
-                result = {}
-                for item in param:
-                    result[item] = subst(param[item])
-                return result
+                return {key: subst(value) for key, value in param.items()}
             if isinstance(param, collections.abc.Iterable):
-                result = []
-                for item in param:
-                    result.append(subst(item))
-                return result
+                return [subst(item) for item in param]
             return param
 
-        actions = copy.deepcopy(button_settings["actions"])
+        actions: List[Dict[str, Any]] = copy.deepcopy(button_settings["actions"])
         for action in actions:
             if "summary" not in action:
                 if "summary" in button_settings:
@@ -109,7 +106,7 @@ class Action:
         print(actions)
         return actions
 
-    def action(self, button, dry_run=False):
+    def action(self, button: str, dry_run: bool = False) -> None:
         """Register event from the button."""
         ACTION_HANDLERS = {
             "sheet": self.sheet_action,
@@ -131,7 +128,9 @@ class Action:
                 except Exception as e:
                     print("!" * 5, f"Event handling error:\n{e}")
 
-    def ifttt_action(self, button, action_params):  # pylint: disable=unused-argument
+    def ifttt_action(
+        self, button: str, action_params: Dict[str, Any]  # pylint: disable=unused-argument
+    ) -> None:
         """Register event in IFTTT."""
         ifttt = Ifttt(self.settings)
         ifttt.press(
@@ -141,17 +140,23 @@ class Action:
             action_params.get("value3", ""),
         )
 
-    def openhab_action(self, button, action_params):  # pylint: disable=unused-argument
+    def openhab_action(
+        self, button: str, action_params: Dict[str, Any]  # pylint: disable=unused-argument
+    ) -> None:
         """Register event in OpenHab."""
         openhab = OpenHab(self.settings)
         openhab.press(action_params)
 
-    def calendar_action(self, button, action_params):  # pylint: disable=unused-argument
+    def calendar_action(
+        self, button: str, action_params: Dict[str, Any]  # pylint: disable=unused-argument
+    ) -> None:
         """Register event in Google Calendar."""
         calendar = Calendar(self.settings, action_params["calendar_id"])
         self.event(calendar, action_params)
 
-    def sheet_action(self, button, action_params):  # pylint: disable=unused-argument
+    def sheet_action(
+        self, button: str, action_params: Dict[str, Any]  # pylint: disable=unused-argument
+    ) -> None:
         """Register event in Google Sheet."""
         sheet = Sheet(
             self.settings,
@@ -162,10 +167,11 @@ class Action:
         sheet.press(action_params["summary"])
         self.event(sheet, action_params)
 
-    def event(self, target, action_params):
+    def event(self, target: GoogleApi, action_params: Dict[str, Any]) -> None:
         """Event registration common logic."""
         last_event_row, last_event = target.get_last_event(action_params["summary"])
         if last_event:
+            assert last_event_row is not None
             last_start = last_event[1]
             last_end = last_event[2] if len(last_event) > 2 else None
             nowtz = datetime.now(last_start.tzinfo)

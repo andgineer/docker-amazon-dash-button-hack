@@ -53,18 +53,23 @@ class Sheet(GoogleApi):
             values=[summary, datetime.datetime.now().strftime(GSHEET_TIME_FORMAT)],
         )
 
-    def close_event(self, event_row: int, close_time: datetime.datetime) -> None:
+    def close_event(  # pylint: disable=arguments-renamed
+        self,
+        event_row: Union[int, str],
+        close_time: datetime.datetime,
+    ) -> None:
         """Close event in Google Sheet.
 
         row 0-based
         """
+        row_num = int(event_row)
         self.update_cells(
             sheet=self.event_sheet,
-            row=event_row,
+            row=row_num,
             col=2,
             values=[
                 close_time.strftime(GSHEET_TIME_FORMAT),
-                "=C{row}-B{row}".format(row=event_row + 1),
+                "=C{row}-B{row}".format(row=row_num + 1),
             ],
         )
 

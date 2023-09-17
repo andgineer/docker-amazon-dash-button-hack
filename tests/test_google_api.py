@@ -64,8 +64,7 @@ def test_get_service_without_http(google_api_instance):
 
 def test_service_undefined(google_api_instance, capsys):
     google_api_instance._service = None
-    service = google_api_instance.service()
+    with pytest.raises(ValueError) as e:
+        service = google_api_instance.service()
+        assert "Google API service undefined." in str(e)
 
-    captured = capsys.readouterr()
-    assert "Google API service undefined." in captured.out
-    assert service is None
