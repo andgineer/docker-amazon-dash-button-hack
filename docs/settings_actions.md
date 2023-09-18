@@ -7,19 +7,19 @@ Each button links to a set of specified actions and, optionally, a summarized pu
 
 ## Structure
 
-    ```json
-      "actions": [
-        "button1" " {
-          "summary": [...],
-          "actions": [...]
-        },
-        "button2" " {
-          "summary": [...],
-          "actions": [...]
-        },
-        ...
-      ]
-    ```
+```json
+  "actions": [
+    "button1" " {
+      "summary": [...],
+      "actions": [...]
+    },
+    "button2" " {
+      "summary": [...],
+      "actions": [...]
+    },
+    ...
+  ]
+```
 
 Each button corresponds to a key within the `actions` dictionary.
 This key holds actions executed upon the button's press and can be detailed as follows:
@@ -38,100 +38,100 @@ This key holds actions executed upon the button's press and can be detailed as f
 ## Action Types and Their Parameters:
 
 1. **sheet** - Logs button presses in a Google Sheet.
-    ```json
-    {
-      "type": "sheet",
-      "name": "amazon_dash",
-      "press_sheet": "press",
-      "event_sheet": "event",
-      "restart": 15,
-      "autoclose": 10800,
-      "default": 900
-    }
-    ```
+```json
+{
+  "type": "sheet",
+  "name": "amazon_dash",
+  "press_sheet": "press",
+  "event_sheet": "event",
+  "restart": 15,
+  "autoclose": 10800,
+  "default": 900
+}
+```
 
 2. **calendar** - Creates an event in a Google Calendar.
-    ```json
-    {
-      "type": "calendar",
-      "calendar_id": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
-      "dashboard": "anna_work_out",
-      "restart": 15,
-      "autoclose": 10800,
-      "default": 900
-    }
-    ```
+```json
+{
+  "type": "calendar",
+  "calendar_id": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
+  "dashboard": "anna_work_out",
+  "restart": 15,
+  "autoclose": 10800,
+  "default": 900
+}
+```
 
 3. **ifttt** - Initiates an IFTTT applet.
-    ```json
-    {
-      "type": "ifttt",
-      "summary": "{button}_amazon_dash",
-      "value1": "",
-      "value2": "",
-      "value3": ""
-    }
-    ```
+```json
+{
+  "type": "ifttt",
+  "summary": "{button}_amazon_dash",
+  "value1": "",
+  "value2": "",
+  "value3": ""
+}
+```
 
 4. **openhab** - Sends commands to an openHAB item.
-    ```json
-    {
-      "type": "openhab",
-      "path": "http://localhost:8080",
-      "item": "{button}_amazon_dash",
-      "command": "ON;OFF"
-    }
-    ```
+```json
+{
+  "type": "openhab",
+  "path": "http://localhost:8080",
+  "item": "{button}_amazon_dash",
+  "command": "ON;OFF"
+}
+```
 
 ---
 
 ## Example
 
-    ```json
-    {
-      "actions": {
-        "white": {
-          "summary": [
-            {
-              "summary": "Morning work-out",
-              "before": "12:00:00",
-              "image": "morning.png"
-            },
-            {
-              "summary": "Physiotherapy",
-              "image": "evening2.png"
-            }
-          ],
-          "actions": [
-            {
-              "type": "sheet",
-              "name": "amazon_dash",
-              "press_sheet": "press",
-              "event_sheet": "event",
-              "restart": 15,
-              "autoclose": 10800,
-              "default": 900
-            },
-            {
-              "type": "calendar",
-              "calendar_id": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
-              "dashboard": "anna_work_out",
-              "restart": 15,
-              "autoclose": 10800,
-              "default": 900
-            },
-            {
-              "type": "ifttt",
-              "summary": "white_amazon_dash",
-              "value1": "",
-              "value2": "",
-              "value3": ""
-            }
-          ]
+```json
+{
+  "actions": {
+    "white": {
+      "summary": [
+        {
+          "summary": "Morning work-out",
+          "before": "12:00:00",
+          "image": "morning.png"
+        },
+        {
+          "summary": "Physiotherapy",
+          "image": "evening2.png"
         }
-      }
+      ],
+      "actions": [
+        {
+          "type": "sheet",
+          "name": "amazon_dash",
+          "press_sheet": "press",
+          "event_sheet": "event",
+          "restart": 15,
+          "autoclose": 10800,
+          "default": 900
+        },
+        {
+          "type": "calendar",
+          "calendar_id": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
+          "dashboard": "anna_work_out",
+          "restart": 15,
+          "autoclose": 10800,
+          "default": 900
+        },
+        {
+          "type": "ifttt",
+          "summary": "white_amazon_dash",
+          "value1": "",
+          "value2": "",
+          "value3": ""
+        }
+      ]
     }
-    ```
+  }
+}
+```
 
 ### "white" button:
 
@@ -156,44 +156,44 @@ The actions executed:
 If a button isn't uniquely configured, the "__DEFAULT__" configuration activates.
 This offers a standard set of actions for any non-specific button.
 
-    ```json
-    {
-      "actions": {
-        ...
-        "__DEFAULT__": {
-          "summary": "{button}",
-          "actions": [
-            {
-              "type": "sheet",
-              "name": "amazon_dash",
-              "press_sheet": "press",
-              "event_sheet": "event",
-              "restart": 60,
-              "autoclose": 10800,
-              "default": 900
-            },
-            {
-              "type": "calendar",
-              "calendar_id": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
-              "restart": 15,
-              "autoclose": 10800,
-              "default": 900
-            },
-            {
-              "type": "ifttt",
-              "summary": "{button}_amazon_dash",
-              "value1": "",
-              "value2": "",
-              "value3": ""
-            },
-            {
-              "type": "openhab",
-              "path": "http://localhost:8080",
-              "item": "{button}_amazon_dash",
-              "command": "ON;OFF"
-            }
-          ]
+```json
+{
+  "actions": {
+    ...
+    "__DEFAULT__": {
+      "summary": "{button}",
+      "actions": [
+        {
+          "type": "sheet",
+          "name": "amazon_dash",
+          "press_sheet": "press",
+          "event_sheet": "event",
+          "restart": 60,
+          "autoclose": 10800,
+          "default": 900
+        },
+        {
+          "type": "calendar",
+          "calendar_id": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
+          "restart": 15,
+          "autoclose": 10800,
+          "default": 900
+        },
+        {
+          "type": "ifttt",
+          "summary": "{button}_amazon_dash",
+          "value1": "",
+          "value2": "",
+          "value3": ""
+        },
+        {
+          "type": "openhab",
+          "path": "http://localhost:8080",
+          "item": "{button}_amazon_dash",
+          "command": "ON;OFF"
         }
-      }
+      ]
     }
-    ```
+  }
+}
+```

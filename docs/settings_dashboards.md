@@ -3,15 +3,15 @@
 
 ## Structure
 
-    ```json
-      "dashboards": [
-        "dashboard1" " {
-          "summary": [...],
-          "actions": [...]
-        },
-        ...
-      ]
-    ```
+```json
+  "dashboards": [
+    "dashboard1" " {
+      "summary": [...],
+      "actions": [...]
+    },
+    ...
+  ]
+```
 
 - **Type**: Object
 - **Description**: Contains configurations for different dashboards.
