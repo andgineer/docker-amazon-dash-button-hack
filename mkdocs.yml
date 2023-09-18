@@ -1,0 +1,16 @@
+site_name: docker-amazon-dash-button-hack
+site_url: https://andgineer.github.io/docker-amazon-dash-button-hack
+site_author: Andrey Sorokin
+
+# Repository
+repo_name: docker-amazon-dash-button-hack
+repo_url: https://github.com/andgineer/docker-amazon-dash-button-hack
+edit_uri: edit/master/docs
+docs_dir: docs
+
+plugins:
+  - awesome-pages
+  - search
+
+theme:
+  name: readthedocs

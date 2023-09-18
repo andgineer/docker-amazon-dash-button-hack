@@ -1,3 +1,4 @@
+# dependencies list to build requirements.dev.txt with pip-compile (from pip-tools package)
 pytest
 types-requests
 types-python-dateutil
@@ -5,3 +6,10 @@ coverage
 pytest-mock
 requests-mock
 freezegun
+pydocstyle
+pre-commit
+pip-tools
+
+lazydocs
+mkdocs
+mkdocs-awesome-pages-plugin

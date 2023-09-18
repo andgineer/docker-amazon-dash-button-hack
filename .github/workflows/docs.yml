@@ -1,0 +1,27 @@
+# build docs from docstrings and markdown-file in folder docs
+# publish them as github pages
+#
+#note for myself
+#
+# Do not forget to set git branch `gh-pages` as source for github pages.
+# This branch auto-updated by `mkdocs gh-deploy`
+#
+name: docs
+on:
+  push:
+    branches:
+      - main
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.x
+      - run: |
+          pip install -r requirements.dev.txt
+          pip install -r requirements.txt
+      - run: scripts/build-docs.sh
+      - run: mkdocs gh-deploy --force

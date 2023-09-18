@@ -8,3 +8,4 @@ secrets/
 .coverage
 .dmypy.json
 venv/
+site/
