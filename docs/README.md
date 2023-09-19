@@ -1,0 +1,3 @@
+## Configyration
+
+[settings](settings.md)

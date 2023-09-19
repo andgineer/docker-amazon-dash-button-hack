@@ -23,7 +23,7 @@ docker run \
 
 In folder `../amazone-dash-private` you should have:
 
-* settings `settings.json`
+* settings [`settings.json`](https://andgineer.github.io/docker-amazon-dash-button-hack/settings/)
 * buttons list `buttons.json`
 * `amazon-dash-hack.json` with google API credentials [Google Sheets](https://console.developers.google.com/start/api?id=sheets.googleapis.com), [Google Calendar](https://console.developers.google.com/start/api?id=calendar)
 * `ifttt-key.json` with [Maker Webhook key](https://ifttt.com/services/maker_webhooks/settings)
