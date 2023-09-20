@@ -1,5 +1,7 @@
 # dependencies list to build requirements.dev.txt with pip-compile (from pip-tools package)
--r requirements.in
+
+# to test exactly the same versions as in Docker
+-r requirements.txt
 
 pip-tools
 
