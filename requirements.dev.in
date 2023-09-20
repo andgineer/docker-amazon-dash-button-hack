@@ -1,5 +1,5 @@
 # dependencies list to build requirements.dev.txt with pip-compile (from pip-tools package)
--r requirements.txt
+-r requirements.in
 
 pytest
 types-requests
