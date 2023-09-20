@@ -1,4 +1,6 @@
 # dependencies list to build requirements.dev.txt with pip-compile (from pip-tools package)
+-r requirements.txt
+
 pytest
 types-requests
 types-python-dateutil
