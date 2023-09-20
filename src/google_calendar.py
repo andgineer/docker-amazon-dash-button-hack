@@ -45,7 +45,7 @@ class Calendar(GoogleApi):
 
     def parse_time(self, s: str) -> datetime.datetime:
         """Parse Google Calendar time format to datetime."""
-        return dateutil.parser.parse(s)  # type: ignore
+        return dateutil.parser.parse(s)
 
     def time_to_str(self, t: datetime.datetime) -> str:
         """Convert datetime to Google Calendar time format."""
