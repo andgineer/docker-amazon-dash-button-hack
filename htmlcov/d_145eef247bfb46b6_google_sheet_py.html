@@ -57,7 +57,7 @@
             <span class="text">79 statements &nbsp;</span>
             <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">76<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">3<span class="text"> missing</span></button>
-            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">6<span class="text"> excluded</span></button>
+            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">7<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="d_145eef247bfb46b6_google_calendar_py.html">&#xab; prev</a> &nbsp; &nbsp;
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_145eef247bfb46b6_ifttt_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.3.1">coverage.py v7.3.1</a>,
-            created at 2023-09-20 18:02 +0000
+            created at 2023-09-21 04:47 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -356,12 +356,13 @@
     <p class="pln"><span class="n"><a id="t274" href="#t274">274</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t275" href="#t275">275</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t276" href="#t276">276</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">"__main__"</span><span class="op">:</span>  <span class="com"># pragma: no cover</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">    <span class="key">from</span> <span class="nam">amazon_dash</span> <span class="key">import</span> <span class="nam">load_settings</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">    <span class="key">from</span> <span class="nam">amazon_dash</span> <span class="key">import</span> <span class="nam">AmazonDash</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">    <span class="nam">settings</span> <span class="op">=</span> <span class="nam">load_settings</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">    <span class="nam">sheet</span> <span class="op">=</span> <span class="nam">Sheet</span><span class="op">(</span><span class="nam">settings</span><span class="op">,</span> <span class="str">"amazon_dash"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">    <span class="nam">row</span><span class="op">,</span> <span class="nam">event</span> <span class="op">=</span> <span class="nam">sheet</span><span class="op">.</span><span class="nam">get_last_event</span><span class="op">(</span><span class="str">"white"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="nam">event</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">    <span class="nam">amazon_dash</span> <span class="op">=</span> <span class="nam">AmazonDash</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">    <span class="nam">settings</span> <span class="op">=</span> <span class="nam">amazon_dash</span><span class="op">.</span><span class="nam">load_settings</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">    <span class="nam">sheet</span> <span class="op">=</span> <span class="nam">Sheet</span><span class="op">(</span><span class="nam">settings</span><span class="op">,</span> <span class="str">"amazon_dash"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">    <span class="nam">row</span><span class="op">,</span> <span class="nam">event</span> <span class="op">=</span> <span class="nam">sheet</span><span class="op">.</span><span class="nam">get_last_event</span><span class="op">(</span><span class="str">"white"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t283" href="#t283">283</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="nam">event</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -371,7 +372,7 @@
             <a id="nextFileLink" class="nav" href="d_145eef247bfb46b6_ifttt_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.3.1">coverage.py v7.3.1</a>,
-            created at 2023-09-20 18:02 +0000
+            created at 2023-09-21 04:47 +0000
         </p>
     </div>
 </footer>
