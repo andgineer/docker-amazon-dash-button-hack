@@ -25,4 +25,4 @@ docs:
 	bash ./scripts/build-docs.sh
 
 check:
-	python ./scripts/sniff_check.py
+	sudo python ./scripts/sniff_check.py
