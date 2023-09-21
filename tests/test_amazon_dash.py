@@ -1,78 +1,75 @@
-# test_amazon_dash.py
-
 import pytest
-
-import amazon_dash
 import json
-from datetime import datetime
 import os
+from datetime import datetime
+from amazon_dash import CHATTER_DELAY
 
 
-def test_button_file_name():
-    result = amazon_dash.button_file_name(os.path.join("", "test"))
+def test_button_file_name(dash):
+    result = dash.button_file_name(os.path.join("", "test"))
     expected = os.path.join("", "test", "amazon-dash-private", "buttons.json")
     assert result == expected
 
 
-def test_setting_file_name():
-    result = amazon_dash.setting_file_name(os.path.join("", "test"))
+def test_setting_file_name(dash):
+    result = dash.setting_file_name(os.path.join("", "test"))
     expected = os.path.join("", "test", "amazon-dash-private", "settings.json")
     assert result == expected
 
 
-def test_json_safe_loads_valid():
+def test_json_safe_loads_valid(dash):
     data = '{"key": "value"}'
-    result = amazon_dash.json_safe_loads(data)
+    result = dash.json_safe_loads(data)
     assert result == {"key": "value"}
 
 
-def test_json_safe_loads_invalid():
+def test_json_safe_loads_invalid(dash):
     data = '{"key": "value"'
     with pytest.raises(json.decoder.JSONDecodeError):
-        amazon_dash.json_safe_loads(data)
+        dash.json_safe_loads(data)
 
 
-def test_load_settings_valid(mocker):
+def test_load_settings_valid(mocker, dash):
     mocker.patch('os.path.isfile', return_value=True)
     mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps({"key": "value"})))
-    result = amazon_dash.load_settings()
+    result = dash.load_settings()
     assert result == {"key": "value"}
 
 
-def test_load_settings_no_file(mocker):
+def test_load_settings_no_file(mocker, dash):
     mocker.patch('os.path.isfile', return_value=False)
     with pytest.raises(SystemExit):
-        amazon_dash.load_settings()
+        dash.load_settings()
 
 
-def test_load_buttons_valid(mocker):
+def test_load_buttons_valid(mocker, dash):
     mocker.patch('os.path.isfile', return_value=True)
     mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps({"MAC1": "Button1"})))
-    result = amazon_dash.load_buttons()
+    result = dash.load_buttons()
     assert result == {"MAC1": "Button1"}
 
 
-def test_load_buttons_no_file(mocker):
+def test_load_buttons_no_file(mocker, dash):
     mocker.patch('os.path.isfile', return_value=False)
     with pytest.raises(SystemExit):
-        amazon_dash.load_buttons()
+        dash.load_buttons()
 
 
 @pytest.mark.parametrize(
     "current_time, chatter_time, expected",
     [
-        (datetime(2023, 9, 13, 12, 0, amazon_dash.chatter_delay - 1), datetime(2023, 9, 13, 12, 0, 0), False),
+        (datetime(2023, 9, 13, 12, 0, CHATTER_DELAY - 1), datetime(2023, 9, 13, 12, 0, 0), False),
         (datetime(2023, 9, 13, 12, 0, 0), datetime(2023, 9, 13, 11, 54, 0), True),
     ],
 )
-def test_trigger_chatter_protection(mocker, current_time, chatter_time, expected):
-    amazon_dash.de_chatter = {"button1": {"time": chatter_time}}
+def test_trigger_chatter_protection(mocker, dash, current_time, chatter_time, expected):
+    dash.de_chatter = {"button1": {"time": chatter_time}}
     mocker.patch('amazon_dash.datetime', MockDateTime(current_time))
 
     mock_action = mocker.patch('amazon_dash.Action')
 
     call_action = mock_action.return_value.action
-    amazon_dash.trigger("button1")
+    dash.trigger("button1")
 
     if expected:
         call_action.assert_called_once()
@@ -89,7 +86,7 @@ class MockDateTime:
         MockDateTime.current_time = current_time
 
 
-def test_arp_handler_known_mac(mocker):
+def test_arp_handler_known_mac(mocker, dash):
     # Create a fake packet instance
     pkt = mocker.MagicMock()
     known_mac = "00:11:22:33:44:55"
@@ -98,20 +95,18 @@ def test_arp_handler_known_mac(mocker):
     pkt["ARP"].op = 1  # Mocking the who_has_request as True
 
     # Set up your test scenario
-    amazon_dash.buttons = {known_mac: "TestButton"}
-    mock_trigger = mocker.patch('amazon_dash.trigger')
+    dash.buttons = {known_mac: "TestButton"}
+    mock_trigger = mocker.patch('amazon_dash.AmazonDash.trigger')
 
-    amazon_dash.arp_handler(pkt)
+    dash.arp_handler(pkt)
     mock_trigger.assert_called_once_with("TestButton")
 
 
-def test_run(mocker):
+def test_run(mocker, dash):
     # Mock necessary functions
-    mocker.patch('amazon_dash.load_buttons', return_value={})
-    mocker.patch('amazon_dash.load_settings', return_value={})
+    mocker.patch.object(dash, 'load_buttons', return_value={})
+    mocker.patch.object(dash, 'load_settings', return_value={})
     mock_sniff = mocker.patch('amazon_dash.sniff')
 
-    amazon_dash.run()
+    dash.run()
     mock_sniff.assert_called_once()
-
-

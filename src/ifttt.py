@@ -42,8 +42,9 @@ class Ifttt:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    from amazon_dash import load_settings
+    from amazon_dash import AmazonDash
 
-    settings = load_settings()
+    amazon_dash = AmazonDash()
+    settings = amazon_dash.load_settings()
     ifttt = Ifttt(settings)
     ifttt.press("white_amazon_dash", "1", "2", "3")

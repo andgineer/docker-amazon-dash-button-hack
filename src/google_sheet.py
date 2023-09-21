@@ -274,9 +274,10 @@ class Sheet(GoogleApi):
 
 
 if __name__ == "__main__":  # pragma: no cover
-    from amazon_dash import load_settings
+    from amazon_dash import AmazonDash
 
-    settings = load_settings()
+    amazon_dash = AmazonDash()
+    settings = amazon_dash.load_settings()
     sheet = Sheet(settings, "amazon_dash")
     row, event = sheet.get_last_event("white")
     print(event)

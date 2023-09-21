@@ -2,14 +2,13 @@ from datetime import datetime, timedelta
 from unittest.mock import Mock, patch, MagicMock
 
 from action import Action
-from amazon_dash import load_settings
 import pytest
 
 
 @patch("action.datetime")
-def test_action(fake_datetime):
+def test_action(fake_datetime, dash):
     fake_datetime.now = Mock(return_value=datetime.strptime("19:00:00", "%H:%M:%S"))
-    settings = load_settings(
+    settings = dash.load_settings(
         "."
     )  # we run tests from outside src folder so we have to change path to settings file
     act = Action(settings)
