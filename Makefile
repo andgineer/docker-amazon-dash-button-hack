@@ -23,3 +23,6 @@ reqs:
 
 docs:
 	bash ./scripts/build-docs.sh
+
+check:
+	python ./scripts/sniff_check.py
