@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for src/google_sheet.py: 96%</title>
+    <title>Coverage for src/google_sheet.py: 90%</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="coverage_html.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>src/google_sheet.py</b>:
-            <span class="pc_cov">96%</span>
+            <span class="pc_cov">90%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -54,10 +54,10 @@
             </div>
         </aside>
         <h2>
-            <span class="text">79 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">76<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">3<span class="text"> missing</span></button>
-            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">7<span class="text"> excluded</span></button>
+            <span class="text">86 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">77<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">9<span class="text"> missing</span></button>
+            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">2<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="d_145eef247bfb46b6_google_calendar_py.html">&#xab; prev</a> &nbsp; &nbsp;
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_145eef247bfb46b6_ifttt_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.3.1">coverage.py v7.3.1</a>,
-            created at 2023-09-21 09:21 +0000
+            created at 2023-09-22 04:39 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -355,14 +355,19 @@
     <p class="run"><span class="n"><a id="t273" href="#t273">273</a></span><span class="t">        <span class="key">return</span> <span class="nam">datetime</span><span class="op">.</span><span class="nam">datetime</span><span class="op">(</span><span class="nam">year</span><span class="op">=</span><span class="num">1899</span><span class="op">,</span> <span class="nam">month</span><span class="op">=</span><span class="num">12</span><span class="op">,</span> <span class="nam">day</span><span class="op">=</span><span class="num">30</span><span class="op">)</span> <span class="op">+</span> <span class="nam">datetime</span><span class="op">.</span><span class="nam">timedelta</span><span class="op">(</span><span class="nam">days</span><span class="op">=</span><span class="nam">serial</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t274" href="#t274">274</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t275" href="#t275">275</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t276" href="#t276">276</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">"__main__"</span><span class="op">:</span>  <span class="com"># pragma: no cover</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">    <span class="key">from</span> <span class="nam">amazon_dash</span> <span class="key">import</span> <span class="nam">AmazonDash</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">    <span class="nam">amazon_dash</span> <span class="op">=</span> <span class="nam">AmazonDash</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">    <span class="nam">settings</span> <span class="op">=</span> <span class="nam">amazon_dash</span><span class="op">.</span><span class="nam">load_settings</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">    <span class="nam">sheet</span> <span class="op">=</span> <span class="nam">Sheet</span><span class="op">(</span><span class="nam">settings</span><span class="op">,</span> <span class="str">"amazon_dash"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">    <span class="nam">row</span><span class="op">,</span> <span class="nam">event</span> <span class="op">=</span> <span class="nam">sheet</span><span class="op">.</span><span class="nam">get_last_event</span><span class="op">(</span><span class="str">"white"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t283" href="#t283">283</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="nam">event</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t276" href="#t276">276</a></span><span class="t"><span class="key">def</span> <span class="nam">check</span><span class="op">(</span><span class="op">)</span> <span class="op">-></span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">    <span class="str">"""Check."""</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">    <span class="key">from</span> <span class="nam">amazon_dash</span> <span class="key">import</span> <span class="nam">AmazonDash</span>  <span class="com"># pylint: disable=import-outside-toplevel</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">    <span class="nam">dash</span> <span class="op">=</span> <span class="nam">AmazonDash</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">    <span class="nam">settings</span> <span class="op">=</span> <span class="nam">dash</span><span class="op">.</span><span class="nam">load_settings</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">    <span class="nam">sheet</span> <span class="op">=</span> <span class="nam">Sheet</span><span class="op">(</span><span class="nam">settings</span><span class="op">,</span> <span class="str">"amazon_dash"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t283" href="#t283">283</a></span><span class="t">    <span class="nam">row</span><span class="op">,</span> <span class="nam">event</span> <span class="op">=</span> <span class="nam">sheet</span><span class="op">.</span><span class="nam">get_last_event</span><span class="op">(</span><span class="str">"white"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t284" href="#t284">284</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="nam">event</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t285" href="#t285">285</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t286" href="#t286">286</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t287" href="#t287">287</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">"__main__"</span><span class="op">:</span>  <span class="com"># pragma: no cover</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t288" href="#t288">288</a></span><span class="t">    <span class="nam">check</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -372,7 +377,7 @@
             <a id="nextFileLink" class="nav" href="d_145eef247bfb46b6_ifttt_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.3.1">coverage.py v7.3.1</a>,
-            created at 2023-09-21 09:21 +0000
+            created at 2023-09-22 04:39 +0000
         </p>
     </div>
 </footer>
