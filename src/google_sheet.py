@@ -273,11 +273,16 @@ class Sheet(GoogleApi):
         return datetime.datetime(year=1899, month=12, day=30) + datetime.timedelta(days=serial)
 
 
-if __name__ == "__main__":  # pragma: no cover
-    from amazon_dash import AmazonDash
+def check() -> None:
+    """Check."""
+    from amazon_dash import AmazonDash  # pylint: disable=import-outside-toplevel
 
-    amazon_dash = AmazonDash()
-    settings = amazon_dash.load_settings()
+    dash = AmazonDash()
+    settings = dash.load_settings()
     sheet = Sheet(settings, "amazon_dash")
     row, event = sheet.get_last_event("white")
     print(event)
+
+
+if __name__ == "__main__":  # pragma: no cover
+    check()

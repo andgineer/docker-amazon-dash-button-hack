@@ -15,8 +15,6 @@ freezegun
 # code quality
 pylint
 mypy
-types-requests
-types-python-dateutil
 pydocstyle
 pre-commit
 

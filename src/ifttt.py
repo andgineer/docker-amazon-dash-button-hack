@@ -41,10 +41,15 @@ class Ifttt:
             print("*" * 10, "IFTTT request fail:\n", url, "\n", e)
 
 
-if __name__ == "__main__":  # pragma: no cover
-    from amazon_dash import AmazonDash
+def check() -> None:
+    """Check IFTTT."""
+    from amazon_dash import AmazonDash  # pylint: disable=import-outside-toplevel
 
-    amazon_dash = AmazonDash()
-    settings = amazon_dash.load_settings()
+    dash = AmazonDash()
+    settings = dash.load_settings()
     ifttt = Ifttt(settings)
     ifttt.press("white_amazon_dash", "1", "2", "3")
+
+
+if __name__ == "__main__":  # pragma: no cover
+    check()

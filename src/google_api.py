@@ -10,6 +10,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 class GoogleApi:
     """Google API class."""
 
+    settings: Dict[str, Any]
+
     def __init__(self, settings: Dict[str, Any], api: str, version: str) -> None:
         """Init."""
         self.settings = settings

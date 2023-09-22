@@ -158,11 +158,12 @@ class Calendar(GoogleApi):
         )
 
 
-if __name__ == "__main__":  # pragma: no cover
-    from amazon_dash import AmazonDash
+def check() -> None:
+    """Check."""
+    from amazon_dash import AmazonDash  # pylint: disable=import-outside-toplevel,cyclic-import
 
-    amazon_dash = AmazonDash()
-    settings = amazon_dash.load_settings()
+    dash = AmazonDash()
+    settings = dash.load_settings()
     calendar = Calendar(settings, settings["actions"]["white"]["actions"][1]["calendar_id"])
     calendar.get_calendar_id("Anna")
     # while True:
@@ -175,3 +176,7 @@ if __name__ == "__main__":  # pragma: no cover
     # print(calendar.get_last_event("Google"))
     # id, event = calendar.get_last_event("Google")
     # calendar.close_event(id, (datetime.datetime.now() + datetime.timedelta(minutes=5)))
+
+
+if __name__ == "__main__":  # pragma: no cover
+    check()
