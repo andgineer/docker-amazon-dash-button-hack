@@ -7,12 +7,12 @@
 | src/action.py           |      109 |       15 |     86% |71-72, 74, 103, 120, 128-129, 135-136, 147-148, 179-182, 186-189 |
 | src/amazon\_dash.py     |       72 |        6 |     92% |     87-92 |
 | src/google\_api.py      |       32 |        3 |     91% |58, 62, 66 |
-| src/google\_calendar.py |       64 |        9 |     86% |43-44, 115, 118, 163-168 |
+| src/google\_calendar.py |       73 |       26 |     64% |33-44, 115, 118, 163-184 |
 | src/google\_sheet.py    |       86 |        9 |     90% |133-136, 278-284 |
 | src/ifttt.py            |       27 |        5 |     81% |     46-51 |
 | src/openhab.py          |       20 |        0 |    100% |           |
 | src/version.py          |        1 |        0 |    100% |           |
-|               **TOTAL** |  **411** |   **47** | **89%** |           |
+|               **TOTAL** |  **420** |   **64** | **85%** |           |
 
 
 ## Setup coverage badge
