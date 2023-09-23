@@ -165,17 +165,23 @@ def check() -> None:
     dash = AmazonDash()
     settings = dash.load_settings()
     calendar = Calendar(settings, settings["actions"]["white"]["actions"][1]["calendar_id"])
-    calendar.get_calendar_id("Anna")
-    # while True:
-    #     id, event = calendar.get_last_event('Google')
-    #     if id:
-    #         calendar.delete_event(id)
-    #     else:
-    #         break
-    # calendar.start_event("Google")
-    # print(calendar.get_last_event("Google"))
-    # id, event = calendar.get_last_event("Google")
-    # calendar.close_event(id, (datetime.datetime.now() + datetime.timedelta(minutes=5)))
+
+    # Delete Google event if existed
+    while True:
+        id, event = calendar.get_last_event("Google")
+        if id:
+            calendar.delete_event(id)
+        else:
+            break
+
+    # Create Google event
+    calendar.start_event("Google")
+    print(calendar.get_last_event("Google"))
+
+    # Get it from Calendar and "close" (set end as + 5 minutes)
+    id, event = calendar.get_last_event("Google")
+    assert id
+    calendar.close_event(id, (datetime.datetime.now() + datetime.timedelta(minutes=5)))
 
 
 if __name__ == "__main__":  # pragma: no cover
