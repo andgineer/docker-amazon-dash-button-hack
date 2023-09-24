@@ -5,7 +5,7 @@
   "ifttt_key_file_name": "../amazon-dash-private/ifttt-key.json",
   "openweathermap_key_file_name": "../amazon-dash-private/openweathermap-key.json",
   "images_folder": "../amazon-dash-private/images/",
-  "chatter_delay": 5,
+  "bounce_delay": 5,
   "dashboards": {
     "anna_work_out": {
       "summary": "Anna work-out",

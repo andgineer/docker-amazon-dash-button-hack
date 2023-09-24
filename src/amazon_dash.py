@@ -16,7 +16,7 @@ from scapy.layers.l2 import ARP
 
 from action import Action
 
-CHATTER_DELAY = 5
+BOUNCE_DELAY = 5
 NO_SETTINGS_FILE = """\nNo {} found. \nIf you run application in docker container you
 should connect volume with setting files, like
     -v $PWD/amazon-dash-private:/amazon-dash-private:ro"""
@@ -31,10 +31,10 @@ class AmazonDash:
         self.settings: Dict[str, Any] = {}
         self.seen_macs: Set[str] = set()
         self.seen_dhcp: Set[str] = set()
-        self.de_chatter: Dict[  # chatter protection (multiple packets less that chatter_delay)
+        self.debounce: Dict[  # bounce protection (repeated packets in less than bounce_delay from last event)
             str, Dict[str, Any]
         ] = {}
-        self.chatter_delay = CHATTER_DELAY
+        self.bounce_delay = BOUNCE_DELAY
 
     @staticmethod
     def button_file_name(root: str) -> str:
@@ -91,18 +91,29 @@ class AmazonDash:
                     print(f"Network request from unknown MAC {mac}")
                     self.seen_macs.add(mac)
 
+    def is_bounced(self, button: str) -> bool:
+        """Check if the button is pressed too recently and the press should be ignored.
+
+        If this is not bouncing we register the press in debounce dict.
+        """
+        now = datetime.now()
+
+        if (
+            button in self.debounce
+            and self.debounce[button]["time"] + timedelta(seconds=self.bounce_delay) > now
+        ):
+            return True
+
+        self.debounce[button] = {"time": now}
+        return False
+
     def trigger(self, button: str) -> None:
         """Button press action."""
-        if (
-            button in self.de_chatter
-            and self.de_chatter[button]["time"] + timedelta(seconds=self.chatter_delay)
-            > datetime.now()
-        ):
+        if self.is_bounced(button):
             print(
-                f'Chatter protection. Skip this network request from "{button}" as duplicate (see "chatter_delay" in settings).'
+                f'Bounce protection. Skip this network request from "{button}" as duplicate (see "bounce_delay" in settings).'
             )
             return
-        self.de_chatter[button] = {"time": datetime.now()}
         print(f'button "{button}" pressed')
         Action(self.settings).action(button)
 
@@ -114,7 +125,7 @@ class AmazonDash:
         """Run server."""
         self.buttons = self.load_buttons()
         self.settings = self.load_settings()
-        self.chatter_delay = int(self.settings.get("chatter_delay", self.chatter_delay))
+        self.bounce_delay = int(self.settings.get("bounce_delay", self.bounce_delay))
         print(f"amazon_dash started, loaded {len(self.buttons)} buttons")
         self.sniff_arp()
 

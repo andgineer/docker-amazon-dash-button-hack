@@ -60,15 +60,15 @@
 "images_folder": "../amazon-dash-private/images/"
 ```
 
-### `chatter_delay`
+### `bounce_delay`
 
 - **Type**: Integer
-- **Description**: The delay (in seconds) before the system will respond or react to a subsequent trigger. This can prevent rapid, repeated triggers from overloading the system.
+- **Description**: The delay (in seconds) before the system will respond or react to a subsequent trigger. This can prevent from unintendent multiple presses.
 
 **Example**:
 
 ```json
-"chatter_delay": 5
+"bounce_delay": 5
 ```
 
 ### `dashboards`

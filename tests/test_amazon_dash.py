@@ -2,7 +2,7 @@ import pytest
 import json
 import os
 from datetime import datetime
-from amazon_dash import CHATTER_DELAY
+from amazon_dash import BOUNCE_DELAY
 
 
 def test_button_file_name(dash):
@@ -58,12 +58,12 @@ def test_load_buttons_no_file(mocker, dash):
 @pytest.mark.parametrize(
     "current_time, chatter_time, expected",
     [
-        (datetime(2023, 9, 13, 12, 0, CHATTER_DELAY - 1), datetime(2023, 9, 13, 12, 0, 0), False),
+        (datetime(2023, 9, 13, 12, 0, BOUNCE_DELAY - 1), datetime(2023, 9, 13, 12, 0, 0), False),
         (datetime(2023, 9, 13, 12, 0, 0), datetime(2023, 9, 13, 11, 54, 0), True),
     ],
 )
-def test_trigger_chatter_protection(mocker, dash, current_time, chatter_time, expected):
-    dash.de_chatter = {"button1": {"time": chatter_time}}
+def test_trigger_debouncing(mocker, dash, current_time, chatter_time, expected):
+    dash.debounce = {"button1": {"time": chatter_time}}
     mocker.patch('amazon_dash.datetime', MockDateTime(current_time))
 
     mock_action = mocker.patch('amazon_dash.Action')
