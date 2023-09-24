@@ -11,8 +11,7 @@
 | src/google\_sheet.py    |       86 |        9 |     90% |133-136, 278-284 |
 | src/ifttt.py            |       27 |        5 |     81% |     46-51 |
 | src/openhab.py          |       20 |        0 |    100% |           |
-| src/version.py          |        1 |        0 |    100% |           |
-|               **TOTAL** |  **420** |   **64** | **85%** |           |
+|               **TOTAL** |  **419** |   **64** | **85%** |           |
 
 
 ## Setup coverage badge
