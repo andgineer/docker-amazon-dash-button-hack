@@ -30,7 +30,7 @@ jobs:
         python -m pip install -r requirements.dev.txt
     - name: Test with pytest
       run: |
-        coverage run -m pytest -m "not benchmark"
+        coverage run -m pytest tests -m "not benchmark"
 
     - name: Upload Coverage to Codecov
       if: ${{ matrix.python-version == 3.11 && matrix.platform == 'ubuntu-latest' }}
