@@ -64,12 +64,10 @@ def test_load_buttons_no_file(mocker, dash):
 )
 def test_trigger_debouncing(mocker, dash, current_time, chatter_time, expected):
     dash.debounce = {"button1": {"time": chatter_time}}
-    mocker.patch('amazon_dash.datetime', MockDateTime(current_time))
-
     mock_action = mocker.patch('amazon_dash.Action')
 
     call_action = mock_action.return_value.action
-    dash.trigger("button1")
+    dash.trigger("button1", current_time)
 
     if expected:
         call_action.assert_called_once()
@@ -92,6 +90,7 @@ def test_arp_handler_known_mac(mocker, dash):
     known_mac = "00:11:22:33:44:55"
     pkt.src = known_mac
     pkt.haslayer.return_value = True
+    pkt.time = 1234567890
     pkt["ARP"].op = 1  # Mocking the who_has_request as True
 
     # Set up your test scenario
@@ -99,7 +98,7 @@ def test_arp_handler_known_mac(mocker, dash):
     mock_trigger = mocker.patch('amazon_dash.AmazonDash.trigger')
 
     dash.arp_handler(pkt)
-    mock_trigger.assert_called_once_with("TestButton")
+    mock_trigger.assert_called_once_with("TestButton", datetime.fromtimestamp(pkt.time))
 
 
 def test_run(mocker, dash):

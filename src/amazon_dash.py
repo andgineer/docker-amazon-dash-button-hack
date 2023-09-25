@@ -82,7 +82,7 @@ class AmazonDash:
         if pkt.haslayer(ARP) and pkt[ARP].op == who_has_request or pkt.haslayer(DHCP):
             mac = pkt.src  # pkt[layer].hwsrc
             if mac in self.buttons:
-                self.trigger(self.buttons[mac])
+                self.trigger(self.buttons[mac], datetime.fromtimestamp(pkt.time))
             else:
                 if pkt.haslayer(DHCP) and mac not in self.seen_dhcp:
                     print(f"DHCP request from unknown MAC {mac}:\n{pkt[DHCP].options}")
@@ -91,25 +91,23 @@ class AmazonDash:
                     print(f"Network request from unknown MAC {mac}")
                     self.seen_macs.add(mac)
 
-    def is_bounced(self, button: str) -> bool:
+    def is_bounced(self, button: str, press_time: datetime) -> bool:
         """Check if the button is pressed too recently and the press should be ignored.
 
         If this is not bouncing we register the press in debounce dict.
         """
-        now = datetime.now()
-
         if (
             button in self.debounce
-            and self.debounce[button]["time"] + timedelta(seconds=self.bounce_delay) > now
+            and self.debounce[button]["time"] + timedelta(seconds=self.bounce_delay) > press_time
         ):
             return True
 
-        self.debounce[button] = {"time": now}
+        self.debounce[button] = {"time": press_time}
         return False
 
-    def trigger(self, button: str) -> None:
+    def trigger(self, button: str, press_time: datetime) -> None:
         """Button press action."""
-        if self.is_bounced(button):
+        if self.is_bounced(button, press_time):
             print(
                 f'Bounce protection. Skip this network request from "{button}" as duplicate (see "bounce_delay" in settings).'
             )
