@@ -6,9 +6,9 @@ import pytest
 
 
 @patch("action.datetime")
-def test_action(fake_datetime, settings):
+def test_action(fake_datetime, settings_dict):
     fake_datetime.now = Mock(return_value=datetime.strptime("19:00:00", "%H:%M:%S"))
-    act = Action(settings)
+    act = Action(settings_dict)
     act.ifttt_action = Mock()
     act.calendar_action = Mock()
     act.sheet_action = Mock()
@@ -51,8 +51,8 @@ def test_action(fake_datetime, settings):
 
 
 @pytest.fixture
-def action_instance(settings):
-    return Action(settings)
+def action_instance(settings_dict):
+    return Action(settings_dict)
 
 
 def test_set_summary_by_time(action_instance):

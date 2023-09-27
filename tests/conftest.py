@@ -28,8 +28,11 @@ def dash() -> AmazonDash:
 
 
 @pytest.fixture
-def settings() -> Dict[str, Any]:
-    """Read settings from tests/resources/settings.json."""
+def settings_dict() -> Dict[str, Any]:
+    """Read settings from tests/resources/settings.json.
+
+    Return as dict for gradually moving to use models instead of dicts.
+    """
     return load_settings().model_dump(exclude_unset=True)
 
 
