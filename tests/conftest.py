@@ -1,3 +1,5 @@
+import json
+from typing import Any, Dict
 from unittest.mock import Mock
 import sys
 import pytest
@@ -17,8 +19,23 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../src"))
 
 # We need to import amazon_dash after mocking scapy
 from amazon_dash import AmazonDash
+from models import Settings, ButtonActions
 
 
 @pytest.fixture(scope="function")
-def dash():
+def dash() -> AmazonDash:
     return AmazonDash()
+
+
+@pytest.fixture
+def settings() -> Dict[str, Any]:
+    """Read settings from tests/resources/settings.json."""
+    return load_settings().model_dump(exclude_unset=True)
+
+
+def load_settings() -> Settings:
+    print("*" * 10, "load_settings")
+    with open("tests/resources/settings.json", "r", encoding="utf-8") as settings_file:
+        settings = Settings(**json.loads(settings_file.read()))
+    return settings
+

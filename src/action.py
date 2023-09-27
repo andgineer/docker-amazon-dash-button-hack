@@ -23,7 +23,7 @@ class Action:
         self.actions: Dict[str, Any] = settings["actions"]
 
     def set_summary_by_time(self, button_actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Set even summary according now().
+        """Set event summary according now().
 
         If summary is a list like
 

@@ -6,3 +6,4 @@ google-api-python-client
 requests
 cffi
 httplib2
+pydantic

@@ -1,0 +1,142 @@
+{
+  "latitude": "60.002228",
+  "longitude": "30.296947",
+  "credentials_file_name": "../amazon-dash-private/amazon-dash-hack.json",
+  "ifttt_key_file_name": "../amazon-dash-private/ifttt-key.json",
+  "openweathermap_key_file_name": "../amazon-dash-private/openweathermap-key.json",
+  "images_folder": "../amazon-dash-private/images/",
+  "bounce_delay": 5,
+  "dashboards": {
+    "anna_work_out": {
+      "summary": "Anna work-out",
+      "empty_image": "old-woman.png",
+      "absent": [
+        {
+          "summary": "Sick",
+          "image_grid": "absent_ill_grid.png",
+          "image_plot": "absent_ill_plot.png"
+        },
+        {
+          "summary": "Vacation",
+          "image_grid": "absent_vacation_grid.png",
+          "image_plot": "absent_vacation_plot.png"
+        }
+      ]
+    },
+    "anna_english": {
+      "summary": "Anna English",
+      "empty_image": "old-woman.png",
+      "absent": [
+        {
+          "summary": "Sick",
+          "image_grid": "absent_ill_grid.png",
+          "image_plot": "absent_ill_plot.png"
+        },
+        {
+          "summary": "Vacation",
+          "image_grid": "absent_vacation_grid.png",
+          "image_plot": "absent_vacation_plot.png"
+        }
+      ]
+    }
+  },
+  "actions": {
+    "white": {
+      "summary": [
+        {"summary": "Morning work-out", "before": "12:00:00", "image": "morning.png"},
+        {"summary": "Physiotherapy", "image": "evening2.png"}
+      ],
+      "actions": [
+        {
+          "type": "sheet",
+          "name": "amazon_dash",
+          "press_sheet": "press",
+          "event_sheet": "event",
+          "restart": 15,
+          "autoclose": 10800,
+          "default": 900
+        },
+        {
+          "type": "calendar",
+          "calendar_id": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
+          "dashboard": "anna_work_out",
+          "restart": 15,
+          "autoclose": 10800,
+          "default": 900
+        },
+        {
+          "type": "ifttt",
+          "summary": "{button}_amazon_dash",
+          "value1": "",
+          "value2": "",
+          "value3": ""
+        }
+      ]
+    },
+    "violet": {
+      "summary": [
+        {"summary": "English", "image": "evening2.png"}
+      ],
+      "actions": [
+        {
+          "type": "sheet",
+          "name": "amazon_dash",
+          "press_sheet": "press",
+          "event_sheet": "event",
+          "restart": 15,
+          "autoclose": 10800,
+          "default": 900
+        },
+        {
+          "type": "calendar",
+          "calendar_id": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
+          "dashboard": "anna_english",
+          "restart": 15,
+          "autoclose": 10800,
+          "default": 900
+        },
+        {
+          "type": "ifttt",
+          "summary": "{button}_amazon_dash",
+          "value1": "",
+          "value2": "",
+          "value3": ""
+        }
+      ]
+    },
+    "__DEFAULT__": {
+      "summary": "{button}",
+      "actions": [
+        {
+          "type": "sheet",
+          "name": "amazon_dash",
+          "press_sheet": "press",
+          "event_sheet": "event",
+          "restart": 60,
+          "autoclose": 10800,
+          "default": 900
+        },
+        {
+          "type": "calendar",
+          "calendar_id": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
+          "restart": 15,
+          "autoclose": 10800,
+          "default": 900
+        },
+        {
+          "type": "ifttt",
+          "summary": "{button}_amazon_dash",
+          "value1": "",
+          "value2": "",
+          "value3": ""
+        },
+        {
+          "type": "openhab",
+          "path": "http://localhost:8080",
+          "item": "{button}_amazon_dash",
+          "command": "ON;OFF"
+        }
+      ]
+    }
+  }
+}

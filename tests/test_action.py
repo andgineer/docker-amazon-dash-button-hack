@@ -6,11 +6,8 @@ import pytest
 
 
 @patch("action.datetime")
-def test_action(fake_datetime, dash):
+def test_action(fake_datetime, settings):
     fake_datetime.now = Mock(return_value=datetime.strptime("19:00:00", "%H:%M:%S"))
-    settings = dash.load_settings(
-        "."
-    )  # we run tests from outside src folder so we have to change path to settings file
     act = Action(settings)
     act.ifttt_action = Mock()
     act.calendar_action = Mock()
@@ -54,16 +51,7 @@ def test_action(fake_datetime, dash):
 
 
 @pytest.fixture
-def action_instance():
-    settings = {
-        "actions": {
-            "test_button": {
-                "actions": [
-                    {"type": "sheet", "name": "test", "press_sheet": "sheet1", "event_sheet": "sheet2", "summary": "test_summary"},
-                ]
-            }
-        }
-    }
+def action_instance(settings):
     return Action(settings)
 
 
@@ -88,15 +76,40 @@ def test_set_summary_by_time(action_instance):
 
 
 def test_preprocess_actions(action_instance):
-    result = action_instance.preprocess_actions("test_button", action_instance.actions["test_button"])
+    result = action_instance.preprocess_actions("violet", action_instance.actions["violet"])
     expected_result = [
-        {"type": "sheet", "name": "test", "press_sheet": "sheet1", "event_sheet": "sheet2", "summary": "test_summary"}
+        {
+          "type": "sheet",
+          "name": "amazon_dash",
+          "press_sheet": "press",
+          "event_sheet": "event",
+          "restart": 15,
+          "autoclose": 10800,
+          "default": 900,
+          'summary': [{'image': 'evening2.png', 'summary': 'English'}],
+        },
+        {
+          "type": "calendar",
+          "calendar_id": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
+          "dashboard": "anna_english",
+          "restart": 15,
+          "autoclose": 10800,
+          "default": 900,
+          'summary': [{'image': 'evening2.png', 'summary': 'English'}],
+        },
+        {
+          "type": "ifttt",
+          "summary": "violet_amazon_dash",
+          "value1": "",
+          "value2": "",
+          "value3": ""
+        }
     ]
     assert result == expected_result
 
 
 @patch.object(Action, "sheet_action")
-def test_action(mock_sheet_action, action_instance):
+def test_mocked_sheet_action(mock_sheet_action, action_instance):
     action_instance.action("test_button", dry_run=False)
     mock_sheet_action.assert_called()
 

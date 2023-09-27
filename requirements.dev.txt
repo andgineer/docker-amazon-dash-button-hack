@@ -4,7 +4,11 @@
 #
 #    pip-compile requirements.dev.in
 #
-astroid==2.15.6
+annotated-types==0.5.0
+    # via
+    #   -r requirements.txt
+    #   pydantic
+astroid==2.15.7
     # via pylint
 bracex==2.4
     # via wcmatch
@@ -43,11 +47,11 @@ freezegun==1.2.2
     # via -r requirements.dev.in
 ghp-import==2.1.0
     # via mkdocs
-google-api-core==2.11.1
+google-api-core==2.12.0
     # via
     #   -r requirements.txt
     #   google-api-python-client
-google-api-python-client==2.100.0
+google-api-python-client==2.101.0
     # via -r requirements.txt
 google-auth==2.23.0
     # via
@@ -149,9 +153,15 @@ pycparser==2.21
     # via
     #   -r requirements.txt
     #   cffi
+pydantic==2.4.0
+    # via -r requirements.txt
+pydantic-core==2.10.0
+    # via
+    #   -r requirements.txt
+    #   pydantic
 pydocstyle==6.3.0
     # via -r requirements.dev.in
-pylint==2.17.5
+pylint==2.17.6
     # via -r requirements.dev.in
 pyparsing==3.1.1
     # via
@@ -205,7 +215,10 @@ typer==0.9.0
     # via lazydocs
 typing-extensions==4.8.0
     # via
+    #   -r requirements.txt
     #   mypy
+    #   pydantic
+    #   pydantic-core
     #   typer
 uritemplate==4.1.1
     # via

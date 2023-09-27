@@ -4,6 +4,8 @@
 #
 #    pip-compile requirements.in
 #
+annotated-types==0.5.0
+    # via pydantic
 cachetools==5.3.1
     # via google-auth
 certifi==2023.7.22
@@ -12,9 +14,9 @@ cffi==1.15.1
     # via -r requirements.in
 charset-normalizer==3.2.0
     # via requests
-google-api-core==2.11.1
+google-api-core==2.12.0
     # via google-api-python-client
-google-api-python-client==2.100.0
+google-api-python-client==2.101.0
     # via -r requirements.in
 google-auth==2.23.0
     # via
@@ -50,6 +52,10 @@ pyasn1-modules==0.3.0
     #   oauth2client
 pycparser==2.21
     # via cffi
+pydantic==2.4.0
+    # via -r requirements.in
+pydantic-core==2.10.0
+    # via pydantic
 pyparsing==3.1.1
     # via httplib2
 python-dateutil==2.8.2
@@ -68,6 +74,10 @@ six==1.16.0
     # via
     #   oauth2client
     #   python-dateutil
+typing-extensions==4.8.0
+    # via
+    #   pydantic
+    #   pydantic-core
 uritemplate==4.1.1
     # via google-api-python-client
 urllib3==1.26.16
