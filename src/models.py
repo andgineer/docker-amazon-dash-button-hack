@@ -55,9 +55,9 @@ class IftttAction(BaseModel):  # type: ignore
 
     type: str
     summary: str
-    value1: Optional[str] = ""
-    value2: Optional[str] = ""
-    value3: Optional[str] = ""
+    value1: str = ""
+    value2: str = ""
+    value3: str = ""
 
 
 class OpenhabAction(BaseModel):  # type: ignore

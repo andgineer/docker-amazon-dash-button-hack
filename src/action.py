@@ -7,6 +7,7 @@ import copy
 from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
+import models
 from google_api import GoogleApi
 from google_calendar import Calendar
 from google_sheet import Sheet
@@ -132,12 +133,14 @@ class Action:
         self, button: str, action_params: Dict[str, Any]  # pylint: disable=unused-argument
     ) -> None:
         """Register event in IFTTT."""
+        act = models.IftttAction(**action_params)
         ifttt = Ifttt(self.settings)
+
         ifttt.press(
-            action_params["summary"],
-            action_params.get("value1", ""),
-            action_params.get("value2", ""),
-            action_params.get("value3", ""),
+            act.summary,
+            act.value1,
+            act.value2,
+            act.value3,
         )
 
     def openhab_action(
