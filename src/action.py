@@ -4,8 +4,10 @@ Supports google sheet (google_sheet.py), google calendar (google_calendar.py) an
 """
 import collections.abc
 import copy
+import sys
+import traceback
 from datetime import datetime, timedelta
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 import models
 from google_api import GoogleApi
@@ -110,10 +112,10 @@ class Action:
     def action(self, button: str, dry_run: bool = False) -> None:
         """Register event from the button."""
         ACTION_HANDLERS = {
-            "sheet": self.sheet_action,
-            "calendar": self.calendar_action,
-            "ifttt": self.ifttt_action,
-            "openhab": self.openhab_action,
+            "sheet": self.sheet_action,  # type: ignore
+            "calendar": self.calendar_action,  # type: ignore
+            "ifttt": self.ifttt_action,  # type: ignore
+            "openhab": self.openhab_action,  # type: ignore
         }
         if button in self.actions:
             button_settings = self.actions[button]
@@ -121,85 +123,101 @@ class Action:
             button_settings = self.actions["__DEFAULT__"]
         actions = self.preprocess_actions(button, button_settings)
         actions = self.set_summary_by_time(actions)
-        for act in actions:
-            print(f"Event for {act['type']}: ({act})")
+        for act_dict in actions:
+            action_map = {
+                "sheet": models.SheetAction,
+                "calendar": models.CalendarAction,
+                "ifttt": models.IftttAction,
+                "openhab": models.OpenhabAction,
+            }
+            try:
+                act = action_map[act_dict["type"]](**act_dict)
+            except KeyError as e:
+                raise ValueError(
+                    f"Unknown action type {act_dict['type']}, known types: {list(action_map.keys())}"
+                ) from e
+            print(f"Event for {act.type}: ({act})")  # type: ignore
             if not dry_run:
                 try:
-                    ACTION_HANDLERS[act["type"]](button, act)
+                    ACTION_HANDLERS[act.type](button, act)  # type: ignore
                 except Exception as e:
                     print("!" * 5, f"Event handling error:\n{e}")
+                    traceback.print_exception(*sys.exc_info())
 
     def ifttt_action(
-        self, button: str, action_params: Dict[str, Any]  # pylint: disable=unused-argument
+        self, button: str, action_params: models.IftttAction  # pylint: disable=unused-argument
     ) -> None:
         """Register event in IFTTT."""
-        act = models.IftttAction(**action_params)
         ifttt = Ifttt(self.settings)
-
+        assert action_params.summary is not None
         ifttt.press(
-            act.summary,
-            act.value1,
-            act.value2,
-            act.value3,
+            action_params.summary,
+            action_params.value1,
+            action_params.value2,
+            action_params.value3,
         )
 
     def openhab_action(
-        self, button: str, action_params: Dict[str, Any]  # pylint: disable=unused-argument
+        self, button: str, action_params: models.OpenhabAction  # pylint: disable=unused-argument
     ) -> None:
         """Register event in OpenHab."""
         openhab = OpenHab(self.settings)
-        act = models.OpenhabAction(**action_params)
-        openhab.press(act)
+        openhab.press(action_params)
 
     def calendar_action(
-        self, button: str, action_params: Dict[str, Any]  # pylint: disable=unused-argument
+        self, button: str, action_params: models.CalendarAction  # pylint: disable=unused-argument
     ) -> None:
         """Register event in Google Calendar."""
-        calendar = Calendar(self.settings, action_params["calendar_id"])
+        calendar = Calendar(self.settings, action_params.calendar_id)
         self.event(calendar, action_params)
 
     def sheet_action(
-        self, button: str, action_params: Dict[str, Any]  # pylint: disable=unused-argument
+        self, button: str, action_params: models.SheetAction  # pylint: disable=unused-argument
     ) -> None:
         """Register event in Google Sheet."""
         sheet = Sheet(
             self.settings,
-            action_params["name"],
-            press_sheet=action_params["press_sheet"],
-            event_sheet=action_params["event_sheet"],
+            action_params.name,
+            press_sheet=action_params.press_sheet,
+            event_sheet=action_params.event_sheet,
         )
-        sheet.press(action_params["summary"])
+        assert action_params.summary is not None
+        sheet.press(action_params.summary)
         self.event(sheet, action_params)
 
-    def event(self, target: GoogleApi, action_params: Dict[str, Any]) -> None:
+    def event(
+        self, target: GoogleApi, action_params: Union[models.CalendarAction, models.SheetAction]
+    ) -> None:
         """Event registration common logic."""
-        last_event_row, last_event = target.get_last_event(action_params["summary"])
+        assert action_params.summary is not None
+        last_event_row, last_event = target.get_last_event(action_params.summary)
         if last_event:
             assert last_event_row is not None
             last_start = last_event[1]
             last_end = last_event[2] if len(last_event) > 2 else None
             nowtz = datetime.now(last_start.tzinfo)
-            if last_end and abs(nowtz - last_end) < timedelta(seconds=action_params["restart"]):
+            if last_end and abs(nowtz - last_end) < timedelta(seconds=action_params.restart):
                 print(
                     "Button press ignored because previuos event closed and it is too early to start new one"
                 )
                 return
             if last_start <= nowtz and (nowtz - last_start) < timedelta(
-                seconds=action_params["restart"]
+                seconds=action_params.restart
             ):
                 print(
                     "Button press ignored because event in progress and it is too early to close it"
                 )
                 return
             if not last_end:
-                if abs(nowtz - last_start) > timedelta(seconds=action_params["autoclose"]):
+                if abs(nowtz - last_start) > timedelta(seconds=action_params.autoclose):
                     target.close_event(
-                        last_event_row, (last_start + timedelta(seconds=action_params["default"]))
+                        last_event_row, (last_start + timedelta(seconds=action_params.default))
                     )
                     print("Auto close previous event")
                 else:
                     target.close_event(last_event_row, datetime.now())
                     print("Close previous event")
                     return
-        target.start_event(action_params["summary"])
+        assert action_params.summary is not None
+        target.start_event(action_params.summary)
         print("New event started")

@@ -31,6 +31,7 @@ class SheetAction(BaseModel):  # type: ignore
     """Action for a google sheet."""
 
     type: str
+    summary: Optional[str] = None
     name: str
     press_sheet: str
     event_sheet: str
@@ -43,6 +44,7 @@ class CalendarAction(BaseModel):  # type: ignore
     """Action for a google calendar."""
 
     type: str
+    summary: Optional[str] = None
     calendar_id: str
     dashboard: Optional[str] = None
     restart: int
@@ -54,7 +56,7 @@ class IftttAction(BaseModel):  # type: ignore
     """Action for a IFTTT."""
 
     type: str
-    summary: str
+    summary: Optional[str] = None
     value1: str = ""
     value2: str = ""
     value3: str = ""
@@ -64,6 +66,7 @@ class OpenhabAction(BaseModel):  # type: ignore
     """Action for a OpenHab.""" ""
 
     type: str
+    summary: Optional[str] = None
     path: str
     item: str
     command: str
