@@ -8,6 +8,8 @@ from typing import Any, Dict
 
 import requests
 
+import models
+
 
 class OpenHab:
     """Action for OpenHAB item."""
@@ -16,10 +18,10 @@ class OpenHab:
         """Init."""
         self.settings = settings
 
-    def press(self, action_params: Dict[str, Any]) -> None:
+    def press(self, action_params: models.OpenhabAction) -> None:
         """Get current item state and changes it to opposite status."""
-        base_url = f"{action_params['path']}/items/{action_params['item']}"
-        commands = action_params["command"].upper().split(";")
+        base_url = f"{action_params.path}/items/{action_params.item}"
+        commands = action_params.command.upper().split(";")
         if len(commands) != 2:
             print(
                 '\nWrong "command" setting in openhab action. '
@@ -35,8 +37,8 @@ class OpenHab:
             current_idx = commands.index(state.text.upper())
         except ValueError:
             print(
-                f'Item {action_params["item"]} now in state {state.text}. '
-                f'But in "command" settings ({action_params["command"]}) there is no such state.'
+                f"Item {action_params.item} now in state {state.text}. "
+                f'But in "command" settings ({action_params.command}) there is no such state.'
             )
             return
 

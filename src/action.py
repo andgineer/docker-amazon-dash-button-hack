@@ -148,7 +148,8 @@ class Action:
     ) -> None:
         """Register event in OpenHab."""
         openhab = OpenHab(self.settings)
-        openhab.press(action_params)
+        act = models.OpenhabAction(**action_params)
+        openhab.press(act)
 
     def calendar_action(
         self, button: str, action_params: Dict[str, Any]  # pylint: disable=unused-argument
