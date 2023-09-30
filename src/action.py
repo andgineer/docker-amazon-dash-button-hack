@@ -124,22 +124,11 @@ class Action:
         actions = self.preprocess_actions(button, button_settings)
         actions = self.set_summary_by_time(actions)
         for act_dict in actions:
-            action_map = {
-                "sheet": models.SheetAction,
-                "calendar": models.CalendarAction,
-                "ifttt": models.IftttAction,
-                "openhab": models.OpenhabAction,
-            }
-            try:
-                act = action_map[act_dict["type"]](**act_dict)
-            except KeyError as e:
-                raise ValueError(
-                    f"Unknown action type {act_dict['type']}, known types: {list(action_map.keys())}"
-                ) from e
-            print(f"Event for {act.type}: ({act})")  # type: ignore
+            act = models.ActionItemLoad(act_dict)
+            print(f"Event for {act.type}: ({act})")
             if not dry_run:
                 try:
-                    ACTION_HANDLERS[act.type](button, act)  # type: ignore
+                    ACTION_HANDLERS[act.type](button, act)
                 except Exception as e:
                     print("!" * 5, f"Event handling error:\n{e}")
                     traceback.print_exception(*sys.exc_info())

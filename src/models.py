@@ -1,6 +1,6 @@
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Literal, Optional, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, TypeAdapter
 
 
 class TimeSummary(BaseModel):  # type: ignore
@@ -30,7 +30,7 @@ class DashboardItem(BaseModel):  # type: ignore
 class SheetAction(BaseModel):  # type: ignore
     """Action for a google sheet."""
 
-    type: str
+    type: Literal["sheet"]
     summary: Optional[str] = None
     name: str
     press_sheet: str
@@ -43,7 +43,7 @@ class SheetAction(BaseModel):  # type: ignore
 class CalendarAction(BaseModel):  # type: ignore
     """Action for a google calendar."""
 
-    type: str
+    type: Literal["calendar"]
     summary: Optional[str] = None
     calendar_id: str
     dashboard: Optional[str] = None
@@ -55,7 +55,7 @@ class CalendarAction(BaseModel):  # type: ignore
 class IftttAction(BaseModel):  # type: ignore
     """Action for a IFTTT."""
 
-    type: str
+    type: Literal["ifttt"]
     summary: Optional[str] = None
     value1: str = ""
     value2: str = ""
@@ -65,7 +65,7 @@ class IftttAction(BaseModel):  # type: ignore
 class OpenhabAction(BaseModel):  # type: ignore
     """Action for a OpenHab.""" ""
 
-    type: str
+    type: Literal["openhab"]
     summary: Optional[str] = None
     path: str
     item: str
@@ -73,6 +73,7 @@ class OpenhabAction(BaseModel):  # type: ignore
 
 
 ActionItem = Union[SheetAction, CalendarAction, IftttAction, OpenhabAction]
+ActionItemLoad = TypeAdapter(ActionItem).validate_python
 
 
 class ButtonActions(BaseModel):  # type: ignore
