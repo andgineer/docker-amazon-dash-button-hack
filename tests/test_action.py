@@ -77,7 +77,7 @@ def test_set_summary_by_time(action_instance):
 
 
 def test_preprocess_actions(action_instance):
-    result = action_instance.preprocess_actions("violet", action_instance.actions["violet"])
+    result = action_instance.preprocess_actions("violet", action_instance.events["violet"])
     expected_result = [
         {
           "type": "sheet",

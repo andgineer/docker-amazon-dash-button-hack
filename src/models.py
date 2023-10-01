@@ -76,9 +76,10 @@ ActionItem = Union[SheetAction, CalendarAction, IftttAction, OpenhabAction]
 ActionItemLoad = TypeAdapter(ActionItem).validate_python
 
 
-class ButtonActions(BaseModel):  # type: ignore
-    """Actions for a button."""
+class EventActions(BaseModel):  # type: ignore
+    """Actions for an event."""
 
+    # todo: flag that this is button event to have other types of events
     summary: Union[str, List[TimeSummary]]
     actions: List[ActionItem]
 
@@ -94,4 +95,4 @@ class Settings(BaseModel):  # type: ignore
     images_folder: str
     bounce_delay: int
     dashboards: Dict[str, DashboardItem]
-    actions: Dict[str, ButtonActions]
+    events: Dict[str, EventActions]

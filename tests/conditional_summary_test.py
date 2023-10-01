@@ -17,7 +17,7 @@ BUTTON_ACTIONS = [
 
 class ConditionalSummary(TestCase):
     def setUp(self):
-        self.action = Action({"actions": []})
+        self.action = Action({"events": []})
 
     @patch("action.datetime")
     def test_first_interval(self, fake_datetime):

@@ -23,7 +23,7 @@ class Action:
     def __init__(self, settings: Dict[str, Any]) -> None:
         """Init."""
         self.settings = settings
-        self.actions: Dict[str, Any] = settings["actions"]
+        self.events: Dict[str, Any] = settings["events"]
 
     def set_summary_by_time(self, button_actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Set event summary according now().
@@ -117,10 +117,10 @@ class Action:
             "ifttt": self.ifttt_action,  # type: ignore
             "openhab": self.openhab_action,  # type: ignore
         }
-        if button in self.actions:
-            button_settings = self.actions[button]
+        if button in self.events:
+            button_settings = self.events[button]
         else:
-            button_settings = self.actions["__DEFAULT__"]
+            button_settings = self.events["__DEFAULT__"]
         actions = self.preprocess_actions(button, button_settings)
         actions = self.set_summary_by_time(actions)
         for act_dict in actions:

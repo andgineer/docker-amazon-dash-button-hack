@@ -40,7 +40,7 @@
       ]
     }
   },
-  "actions": {
+  "events": {
     "white": {
       "summary": [
         {"summary": "Morning work-out", "before": "12:00:00", "image": "morning.png"},

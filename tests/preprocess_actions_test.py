@@ -35,7 +35,7 @@ ACTIONS = {
 
 
 def test_preprocess_actions():
-    action = Action({"actions": []})
+    action = Action({"events": []})
     assert action.preprocess_actions("white", ACTIONS) == [
         {
             "type": "sheet",

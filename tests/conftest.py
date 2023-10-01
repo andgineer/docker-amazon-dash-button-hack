@@ -19,7 +19,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../src"))
 
 # We need to import amazon_dash after mocking scapy
 from amazon_dash import AmazonDash
-from models import Settings, ButtonActions
+from models import Settings, EventActions
 
 
 @pytest.fixture(scope="function")
