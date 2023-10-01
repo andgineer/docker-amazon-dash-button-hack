@@ -1,6 +1,6 @@
 # Amazon Dash Actions Configuration
 
-In the configuration file, actions are defined that dictate the response to different Amazon Dash button presses.
+In the configuration file, events are defined that dictate the response to different Amazon Dash button presses.
 Each button links to a set of specified actions and, optionally, a summarized purpose.
 
 ---
@@ -8,7 +8,7 @@ Each button links to a set of specified actions and, optionally, a summarized pu
 ## Structure
 
 ```json
-  "actions": [
+  "events": [
     "button1" " {
       "summary": [...],
       "actions": [...]
@@ -21,7 +21,7 @@ Each button links to a set of specified actions and, optionally, a summarized pu
   ]
 ```
 
-Each button corresponds to a key within the `actions` dictionary.
+Each button corresponds to a key within the `events` dictionary.
 This key holds actions executed upon the button's press and can be detailed as follows:
 
 - **Summary** (Optional):
@@ -89,7 +89,7 @@ This key holds actions executed upon the button's press and can be detailed as f
 
 ```json
 {
-  "actions": {
+  "events": {
     "white": {
       "summary": [
         {
@@ -158,7 +158,7 @@ This offers a standard set of actions for any non-specific button.
 
 ```json
 {
-  "actions": {
+  "events": {
     ...
     "__DEFAULT__": {
       "summary": "{button}",

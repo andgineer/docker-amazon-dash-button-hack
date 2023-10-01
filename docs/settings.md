@@ -75,6 +75,6 @@
 
 [Dasboards settings](settings_dashboards.md)
 
-### `actions`
+### `events`
 
-[Actions settings](settings_actions.md)
+[Events settings](settings_events.md)
