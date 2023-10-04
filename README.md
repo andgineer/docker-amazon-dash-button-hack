@@ -48,3 +48,6 @@ So to debug on MacOS and Windows:
 We use `collections.abc` so min Python3.10
 
 [API docs](https://andgineer.github.io/docker-amazon-dash-button-hack/docstrings/)
+
+# Scripts
+    make help

@@ -1,5 +1,4 @@
 #!make
-.PHONY: docs
 
 VERSION := $(shell cat src/version.py | cut -d= -f2 | sed 's/\"//g; s/ //')
 export VERSION
