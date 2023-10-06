@@ -1,6 +1,6 @@
-from typing import Dict, List, Literal, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union
 
-from pydantic import BaseModel, TypeAdapter
+from pydantic import BaseModel, TypeAdapter, model_validator
 
 
 class TimeSummary(BaseModel):  # type: ignore
@@ -27,11 +27,31 @@ class DashboardItem(BaseModel):  # type: ignore
     absent: List[DashBoardAbsent]
 
 
-class SheetAction(BaseModel):  # type: ignore
+SummaryType = Union[str, List[TimeSummary]]
+
+
+class CustomBaseModel(BaseModel):  # type: ignore
+    """Base model with custom validators."""
+
+    @model_validator(mode="before")  # type: ignore
+    def check_summary_type_fields(  # pylint: disable=no-self-argument
+        cls, values: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Check summary type fields."""
+        for field, value in values.items():
+            expected_type = cls.__annotations__.get(field)
+            if expected_type is SummaryType and isinstance(value, list):
+                assert (
+                    len(value) > 0
+                ), """summary param must be string or array like [{"summary":"summary1", "before":"10:00:00"}, {"summary": "summary2", "before":"19:00:00"}, ...]"""
+        return values
+
+
+class SheetAction(CustomBaseModel):
     """Action for a google sheet."""
 
     type: Literal["sheet"]
-    summary: Optional[Union[str, List[TimeSummary]]] = None
+    summary: Optional[SummaryType] = None
     name: str
     press_sheet: str
     event_sheet: str
@@ -40,11 +60,11 @@ class SheetAction(BaseModel):  # type: ignore
     default: int
 
 
-class CalendarAction(BaseModel):  # type: ignore
+class CalendarAction(CustomBaseModel):
     """Action for a google calendar."""
 
     type: Literal["calendar"]
-    summary: Optional[Union[str, List[TimeSummary]]] = None
+    summary: Optional[SummaryType] = None
     calendar_id: str
     dashboard: Optional[str] = None
     restart: int
@@ -52,21 +72,21 @@ class CalendarAction(BaseModel):  # type: ignore
     default: int
 
 
-class IftttAction(BaseModel):  # type: ignore
+class IftttAction(CustomBaseModel):
     """Action for a IFTTT."""
 
     type: Literal["ifttt"]
-    summary: Optional[Union[str, List[TimeSummary]]] = None
+    summary: Optional[SummaryType] = None
     value1: str = ""
     value2: str = ""
     value3: str = ""
 
 
-class OpenhabAction(BaseModel):  # type: ignore
+class OpenhabAction(CustomBaseModel):
     """Action for a OpenHab.""" ""
 
     type: Literal["openhab"]
-    summary: Optional[Union[str, List[TimeSummary]]] = None
+    summary: Optional[SummaryType] = None
     path: str
     item: str
     command: str
@@ -76,11 +96,11 @@ ActionItem = Union[SheetAction, CalendarAction, IftttAction, OpenhabAction]
 ActionItemLoad = TypeAdapter(ActionItem).validate_python
 
 
-class EventActions(BaseModel):  # type: ignore
+class EventActions(CustomBaseModel):
     """Actions for an event."""
 
     # todo: flag that this is button event to have other types of events
-    summary: Union[str, List[TimeSummary]]
+    summary: SummaryType
     actions: List[ActionItem]
 
 
