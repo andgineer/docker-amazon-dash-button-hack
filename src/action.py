@@ -113,10 +113,10 @@ class Action:
     def action(self, button: str, dry_run: bool = False) -> None:
         """Register event from the button."""
         ACTION_HANDLERS = {
-            "sheet": self.sheet_action,  # type: ignore
-            "calendar": self.calendar_action,  # type: ignore
-            "ifttt": self.ifttt_action,  # type: ignore
-            "openhab": self.openhab_action,  # type: ignore
+            "sheet": self.sheet_action,
+            "calendar": self.calendar_action,
+            "ifttt": self.ifttt_action,
+            "openhab": self.openhab_action,
         }
         if button in self.events:
             button_settings = self.events[button]
