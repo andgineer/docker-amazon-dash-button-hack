@@ -58,22 +58,26 @@ def action_instance(settings_dict):
 
 def test_set_summary_by_time(action_instance):
     button_actions = [
-        {
+        models.ActionItemLoad({
             "summary": [
-                {"summary": "morning", "before": "12:00:00"},
-                {"summary": "evening"}
-            ]
-        }
+                {"summary": "morning", "before": "12:00:00", "image": "morning.png"},
+                {"summary": "evening", "image": "evening2.png"}
+            ],
+            "type": "openhab",
+            "path": "path",
+            "item": "item",
+            "command": "command",
+        })
     ]
 
     with patch("action.datetime") as mock_datetime:
         mock_datetime.now = Mock(return_value=datetime(2023, 9, 9, 10, 0, 0))
         result = action_instance.set_summary_by_time(button_actions)
-        assert result[0]["summary"] == "morning"
+        assert result[0] == models.OpenhabAction(summary="morning", type="openhab", path="path", item="item", command="command")
 
         mock_datetime.now = Mock(return_value=datetime(2023, 9, 9, 13, 0, 0))
         result = action_instance.set_summary_by_time(button_actions)
-        assert result[0]["summary"] == "evening"
+        assert result[0] == models.OpenhabAction(summary="evening", type="openhab", path="path", item="item", command="command")
 
 
 def test_preprocess_actions(action_instance):

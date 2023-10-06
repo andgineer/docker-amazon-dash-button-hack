@@ -25,7 +25,9 @@ class Action:
         self.settings = settings
         self.events: Dict[str, Any] = settings["events"]
 
-    def set_summary_by_time(self, button_actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def set_summary_by_time(
+        self, button_actions: List[models.ActionItem]
+    ) -> List[models.ActionItem]:
         """Set event summary according now().
 
         If summary is a list like
@@ -39,28 +41,27 @@ class Action:
         if summary of any action in button_actions is a list, then select only one summary from the list
         in accordance with the current time
         """
-        result_actions = copy.deepcopy(button_actions)
+        result_actions = [action.model_copy(deep=True) for action in button_actions]
         for action in result_actions:
-            if isinstance(action["summary"], list):
-                assert (
-                    len(action["summary"]) > 0
+            if isinstance(action.summary, list):
+                assert (  # todo: put into pydantic validation
+                    len(action.summary) > 0
                 ), """summary param must be string or array like
         [{"summary":"summary1", "before":"10:00:00"}, {"summary": "summary2", "before":"19:00:00"}, ...]"""
                 time = datetime.now()
-                for interval_idx, interval in enumerate(action["summary"]):
-                    if "before" in interval:
-                        time_parts = self.get_time_parts(interval["before"])
-                        interval_end_parts = [int(s) for s in time_parts]
+                for interval_idx, interval in enumerate(action.summary):
+                    if interval.before is not None:
+                        interval_end_parts = [int(s) for s in self.get_time_parts(interval.before)]
                         interval_end = time.replace(
                             hour=interval_end_parts[0],
                             minute=interval_end_parts[1],
                             second=interval_end_parts[2],
                         )
                         if time < interval_end:
-                            action["summary"] = interval["summary"]
+                            action.summary = interval.summary
                             break
                 else:
-                    action["summary"] = interval["summary"]
+                    action.summary = interval.summary
         return result_actions
 
     def get_time_parts(self, time_str: str) -> List[str]:
@@ -122,7 +123,10 @@ class Action:
         else:
             button_settings = self.events["__DEFAULT__"]
         actions = self.preprocess_actions(button, button_settings)
-        actions = self.set_summary_by_time(actions)
+        actions_object = self.set_summary_by_time(
+            [models.ActionItemLoad(action) for action in actions]
+        )
+        actions = [action.model_dump() for action in actions_object]
         for act_dict in actions:
             act = models.ActionItemLoad(act_dict)
             print(f"Event for {act.type}: ({act})")
@@ -138,7 +142,7 @@ class Action:
     ) -> None:
         """Register event in IFTTT."""
         ifttt = Ifttt(self.settings)
-        assert action_params.summary is not None
+        assert isinstance(action_params.summary, str)
         ifttt.press(
             action_params.summary,
             action_params.value1,
@@ -170,7 +174,7 @@ class Action:
             press_sheet=action_params.press_sheet,
             event_sheet=action_params.event_sheet,
         )
-        assert action_params.summary is not None
+        assert isinstance(action_params.summary, str)
         sheet.press(action_params.summary)
         self.event(sheet, action_params)
 
@@ -178,7 +182,7 @@ class Action:
         self, target: GoogleApi, action_params: Union[models.CalendarAction, models.SheetAction]
     ) -> None:
         """Event registration common logic."""
-        assert action_params.summary is not None
+        assert isinstance(action_params.summary, str)
         last_event_row, last_event = target.get_last_event(action_params.summary)
         if last_event:
             assert last_event_row is not None
@@ -207,6 +211,6 @@ class Action:
                     target.close_event(last_event_row, datetime.now())
                     print("Close previous event")
                     return
-        assert action_params.summary is not None
+        assert isinstance(action_params.summary, str)
         target.start_event(action_params.summary)
         print("New event started")
