@@ -80,10 +80,10 @@ def test_set_summary_by_time(action_instance):
         assert result[0] == models.OpenhabAction(summary="evening", type="openhab", path="path", item="item", command="command")
 
 
-def test_preprocess_actions(action_instance):
-    result = action_instance.preprocess_actions("violet", action_instance.events["violet"])
+def test_actions_preprocess_actions(action_instance):
+    result = action_instance.preprocess_actions("violet", models.EventActions(**action_instance.events["violet"]))
     expected_result = [
-        {
+        models.ActionItemLoad({
           "type": "sheet",
           "name": "amazon_dash",
           "press_sheet": "press",
@@ -92,8 +92,8 @@ def test_preprocess_actions(action_instance):
           "autoclose": 10800,
           "default": 900,
           'summary': [{'image': 'evening2.png', 'summary': 'English'}],
-        },
-        {
+        }),
+        models.ActionItemLoad({
           "type": "calendar",
           "calendar_id": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
           "dashboard": "anna_english",
@@ -101,14 +101,14 @@ def test_preprocess_actions(action_instance):
           "autoclose": 10800,
           "default": 900,
           'summary': [{'image': 'evening2.png', 'summary': 'English'}],
-        },
-        {
+        }),
+        models.ActionItemLoad({
           "type": "ifttt",
           "summary": "violet_amazon_dash",
           "value1": "",
           "value2": "",
           "value3": ""
-        }
+        })
     ]
     assert result == expected_result
 

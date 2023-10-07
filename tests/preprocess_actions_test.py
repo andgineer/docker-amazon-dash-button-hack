@@ -1,6 +1,7 @@
+import models
 from action import Action
 
-ACTIONS = {
+ACTIONS = models.EventActions(**{
     "summary": [
         {"summary": "Morning work-out", "before": "12:00:00", "image": "morning.png"},
         {"summary": "Physiotherapy", "image": "evening2.png"},
@@ -31,13 +32,13 @@ ACTIONS = {
             "value3": "",
         },
     ],
-}
+})
 
 
 def test_preprocess_actions():
     action = Action({"events": []})
     assert action.preprocess_actions("white", ACTIONS) == [
-        {
+        models.ActionItemLoad({
             "type": "sheet",
             "name": "amazon_dash",
             "press_sheet": "press",
@@ -49,8 +50,8 @@ def test_preprocess_actions():
                 {"summary": "Morning work-out", "before": "12:00:00", "image": "morning.png"},
                 {"summary": "Physiotherapy", "image": "evening2.png"},
             ],
-        },
-        {
+        }),
+        models.ActionItemLoad({
             "type": "calendar",
             "calendar_id": "eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com",
             "dashboard": "anna_work_out",
@@ -61,12 +62,12 @@ def test_preprocess_actions():
                 {"summary": "Morning work-out", "before": "12:00:00", "image": "morning.png"},
                 {"summary": "Physiotherapy", "image": "evening2.png"},
             ],
-        },
-        {
+        }),
+        models.ActionItemLoad({
             "type": "ifttt",
             "summary": "white_amazon_dash",
             "value1": "",
             "value2": "",
             "value3": "",
-        },
+        }),
     ]

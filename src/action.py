@@ -3,7 +3,6 @@
 Supports google sheet (google_sheet.py), google calendar (google_calendar.py) and ifttt (ifttt.py)
 """
 import collections.abc
-import copy
 import sys
 import traceback
 from datetime import datetime, timedelta
@@ -81,9 +80,12 @@ class Action:
         return time_parts
 
     def preprocess_actions(
-        self, button: str, button_settings: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
-        """Add summary (with button name value) if there is no one.
+        self, button: str, button_settings: models.EventActions
+    ) -> List[models.ActionItem]:
+        """Add to all actions summary.
+
+        From button settings or just button name,
+        if there is no summary in the action or in button settings respectively.
 
         Substitutes {button} with button name in parameters.
         """
@@ -98,17 +100,23 @@ class Action:
                 return [subst(item) for item in param]
             return param
 
-        actions: List[Dict[str, Any]] = copy.deepcopy(button_settings["actions"])
-        for action in actions:
-            if "summary" not in action:
-                if "summary" in button_settings:
-                    action["summary"] = button_settings["summary"]
-                else:
-                    action["summary"] = button
-            for param in action:
-                action[param] = subst(action[param])
-        print(actions)
-        return actions
+        result = [
+            models.ActionItemLoad(
+                subst(
+                    (
+                        action
+                        if action.summary or not button_settings.summary and not button
+                        else action.model_copy(
+                            update={"summary": button_settings.summary or button}
+                        )
+                    ).model_dump()
+                )
+            )
+            for action in button_settings.actions
+        ]
+
+        print(result)
+        return result
 
     def action(self, button: str, dry_run: bool = False) -> None:
         """Register event from the button."""
@@ -122,10 +130,8 @@ class Action:
             button_settings = self.events[button]
         else:
             button_settings = self.events["__DEFAULT__"]
-        actions = self.preprocess_actions(button, button_settings)
-        actions_object = self.set_summary_by_time(
-            [models.ActionItemLoad(action) for action in actions]
-        )
+        actions_object = self.preprocess_actions(button, models.EventActions(**button_settings))
+        actions_object = self.set_summary_by_time(actions_object)
         actions = [action.model_dump() for action in actions_object]
         for act_dict in actions:
             act = models.ActionItemLoad(act_dict)
