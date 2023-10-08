@@ -4,15 +4,15 @@
 
 | Name                    |    Stmts |     Miss |   Cover |   Missing |
 |------------------------ | -------: | -------: | ------: | --------: |
-| src/action.py           |      110 |       16 |     85% |74-75, 77, 132, 142-144, 150-152, 163-164, 199-202, 206-209 |
-| src/amazon\_dash.py     |       76 |        6 |     92% |     87-92 |
-| src/google\_api.py      |       32 |        3 |     91% |58, 62, 66 |
-| src/google\_calendar.py |       73 |       26 |     64% |33-44, 115, 118, 163-184 |
-| src/google\_sheet.py    |       86 |        9 |     90% |133-136, 278-284 |
-| src/ifttt.py            |       27 |        5 |     81% |     46-51 |
-| src/models.py           |       67 |        0 |    100% |           |
-| src/openhab.py          |       21 |        0 |    100% |           |
-|               **TOTAL** |  **492** |   **65** | **87%** |           |
+| src/action.py           |      108 |       16 |     85% |74-75, 77, 132, 140-142, 148-150, 161-162, 197-200, 204-207 |
+| src/amazon\_dash.py     |       76 |        6 |     92% |     86-91 |
+| src/google\_api.py      |       33 |        3 |     91% |60, 64, 68 |
+| src/google\_calendar.py |       74 |       26 |     65% |34-45, 116, 119, 164-185 |
+| src/google\_sheet.py    |       87 |        9 |     90% |134-137, 279-285 |
+| src/ifttt.py            |       28 |        5 |     82% |     48-53 |
+| src/models.py           |       68 |        0 |    100% |           |
+| src/openhab.py          |       20 |        0 |    100% |           |
+|               **TOTAL** |  **494** |   **65** | **87%** |           |
 
 
 ## Setup coverage badge
