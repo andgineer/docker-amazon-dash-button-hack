@@ -8,11 +8,13 @@ from typing import Any, Dict
 import requests
 from requests import RequestException
 
+import models
+
 
 class Ifttt:
     """Register Amazon Dash Button events in IFTTT Maker Webhook."""
 
-    def __init__(self, settings: Dict[str, Any]) -> None:
+    def __init__(self, settings: models.Settings) -> None:
         """Init."""
         self.settings = settings
         self.key_file = self.load_key()
@@ -20,7 +22,7 @@ class Ifttt:
 
     def load_key(self) -> Dict[str, Any]:
         """Load IFTTT key from file."""
-        with open(self.settings["ifttt_key_file_name"], "r", encoding="utf-8-sig") as key_file:
+        with open(self.settings.ifttt_key_file_name, "r", encoding="utf-8-sig") as key_file:
             return json.loads(key_file.read())  # type: ignore
 
     def press(self, summary: str, v1: str, v2: str, v3: str) -> None:

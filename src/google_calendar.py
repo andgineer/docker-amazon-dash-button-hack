@@ -3,10 +3,11 @@
 import datetime
 import os
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 
 import dateutil.parser
 
+import models
 from google_api import GoogleApi
 
 # GCAL_TIME_PARSE = '%Y-%m-%dT%H:%M:%S%z'
@@ -15,7 +16,7 @@ from google_api import GoogleApi
 class Calendar(GoogleApi):
     """Google Calendar API wrapper."""
 
-    def __init__(self, settings: Dict[str, Any], calendar_id: str) -> None:
+    def __init__(self, settings: models.Settings, calendar_id: str) -> None:
         """Init."""
         super().__init__(settings, api="calendar", version="v3")
         self.tz = os.environ.get("TZ", "Europe/Moscow")

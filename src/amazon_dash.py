@@ -8,15 +8,15 @@ import json
 import os.path
 import sys
 from datetime import datetime, timedelta
-from typing import Any, Dict, Set
+from typing import Any, Dict, Optional, Set
 
 from scapy.all import Packet, sniff
 from scapy.layers.dhcp import DHCP
 from scapy.layers.l2 import ARP
 
+import models
 from action import Action
 
-BOUNCE_DELAY = 5
 NO_SETTINGS_FILE = """\nNo {} found. \nIf you run application in docker container you
 should connect volume with setting files, like
     -v $PWD/amazon-dash-private:/amazon-dash-private:ro"""
@@ -28,13 +28,12 @@ class AmazonDash:
     def __init__(self) -> None:
         """Init."""
         self.buttons: Dict[str, Any] = {}
-        self.settings: Dict[str, Any] = {}
+        self.settings: Optional[models.Settings] = None
         self.seen_macs: Set[str] = set()
         self.seen_dhcp: Set[str] = set()
         self.debounce: Dict[  # bounce protection (repeated packets in less than bounce_delay from last event)
             str, Dict[str, Any]
         ] = {}
-        self.bounce_delay = BOUNCE_DELAY
 
     @staticmethod
     def button_file_name(root: str) -> str:
@@ -55,7 +54,7 @@ class AmazonDash:
             print("\n", "!" * 5, "Wrong json:\n", text)
             raise
 
-    def load_settings(self, settings_folder: str = "..") -> Dict[str, Any]:
+    def load_settings(self, settings_folder: str = "..") -> models.Settings:
         """Load settings."""
         if not os.path.isfile(self.setting_file_name(settings_folder)):
             print(NO_SETTINGS_FILE.format(self.setting_file_name(settings_folder)))
@@ -63,7 +62,7 @@ class AmazonDash:
         with open(
             self.setting_file_name(settings_folder), "r", encoding="utf-8-sig"
         ) as settings_file:
-            return self.json_safe_loads(settings_file.read())
+            return models.Settings(**self.json_safe_loads(settings_file.read()))
 
     def load_buttons(self, settings_folder: str = "..") -> Dict[str, Any]:
         """Load known buttons."""
@@ -96,9 +95,11 @@ class AmazonDash:
 
         If this is not bouncing we register the press in debounce dict.
         """
+        assert self.settings is not None
         if (
             button in self.debounce
-            and self.debounce[button]["time"] + timedelta(seconds=self.bounce_delay) > press_time
+            and self.debounce[button]["time"] + timedelta(seconds=self.settings.bounce_delay)
+            > press_time
         ):
             return True
 
@@ -107,6 +108,7 @@ class AmazonDash:
 
     def trigger(self, button: str, press_time: datetime) -> None:
         """Button press action."""
+        assert self.settings is not None
         if self.is_bounced(button, press_time):
             print(
                 f'Bounce protection. Skip this network request from "{button}" as duplicate (see "bounce_delay" in settings).'
@@ -123,7 +125,6 @@ class AmazonDash:
         """Run server."""
         self.buttons = self.load_buttons()
         self.settings = self.load_settings()
-        self.bounce_delay = int(self.settings.get("bounce_delay", self.bounce_delay))
         print(f"amazon_dash started, loaded {len(self.buttons)} buttons")
         self.sniff_arp()
 

@@ -1,18 +1,20 @@
 """Google API class."""
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 
 import httplib2
 from googleapiclient import discovery
 from oauth2client.service_account import ServiceAccountCredentials
 
+import models
+
 
 class GoogleApi:
     """Google API class."""
 
-    settings: Dict[str, Any]
+    settings: models.Settings
 
-    def __init__(self, settings: Dict[str, Any], api: str, version: str) -> None:
+    def __init__(self, settings: models.Settings, api: str, version: str) -> None:
         """Init."""
         self.settings = settings
         self.http = self.get_credentials_http()
@@ -22,7 +24,7 @@ class GoogleApi:
         """Get credentials for http."""
         try:
             credentials = ServiceAccountCredentials.from_json_keyfile_name(
-                self.settings["credentials_file_name"],
+                self.settings.credentials_file_name,
                 [
                     "https://www.googleapis.com/auth/calendar",
                     "https://www.googleapis.com/auth/spreadsheets",
@@ -32,7 +34,7 @@ class GoogleApi:
         except Exception as e:
             error_message = (
                 f"\n!!!!! Cannot get authorization from google API. "
-                f"Maybe the API Key is invalid ({self.settings['credentials_file_name']}):\n\n{e}"
+                f"Maybe the API Key is invalid ({self.settings.credentials_file_name}):\n\n{e}"
             )
             raise ValueError(error_message) from e
 

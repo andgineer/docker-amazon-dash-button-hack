@@ -4,18 +4,12 @@ from google_api import GoogleApi
 from unittest.mock import Mock, patch
 
 
-@pytest.fixture
-def google_api_settings():
-    return {
-        'credentials_file_name': 'path_to_credentials.json'
-    }
-
 
 @pytest.fixture
-def google_api_instance(google_api_settings):
+def google_api_instance(settings):
     # Temporarily mock the `get_credentials_http` and `get_service` for instantiation
     with patch.object(GoogleApi, 'get_credentials_http', return_value=Mock()), patch.object(GoogleApi, 'get_service', return_value=Mock()):
-        instance = GoogleApi(google_api_settings, Mock(), Mock())
+        instance = GoogleApi(settings, Mock(), Mock())
 
     # Once the instance is created, the original methods are restored
     return instance
@@ -37,6 +31,7 @@ def test_get_credentials_http_success(google_api_instance):
 
 def test_get_credentials_http_failure(google_api_instance):
     with pytest.raises(ValueError) as e:
+        google_api_instance.settings.credentials_file_name = "invalid_file_name"
         google_api_instance.get_credentials_http()
     assert "Cannot get authorization from google API." in str(e)
 

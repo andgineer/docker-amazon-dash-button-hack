@@ -3,6 +3,7 @@
 import datetime
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+import models
 from google_api import GoogleApi
 
 GSHEET_TIME_FORMAT = "%d/%m/%Y %H:%M:%S"
@@ -13,7 +14,7 @@ class Sheet(GoogleApi):
 
     def __init__(
         self,
-        settings: Dict[str, Any],
+        settings: models.Settings,
         name: str,
         press_sheet: str = "press",
         event_sheet: str = "event",

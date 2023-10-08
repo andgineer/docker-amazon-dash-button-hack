@@ -7,9 +7,9 @@ import pytest
 
 
 @patch("action.datetime")
-def test_action(fake_datetime, settings_dict):
+def test_action(fake_datetime, action):
     fake_datetime.now = Mock(return_value=datetime.strptime("19:00:00", "%H:%M:%S"))
-    act = Action(settings_dict)
+    act = action
     act.ifttt_action = Mock()
     act.calendar_action = Mock()
     act.sheet_action = Mock()
@@ -51,12 +51,8 @@ def test_action(fake_datetime, settings_dict):
     )
 
 
-@pytest.fixture
-def action_instance(settings_dict):
-    return Action(settings_dict)
 
-
-def test_set_summary_by_time(action_instance):
+def test_set_summary_by_time(action):
     button_actions = [
         models.ActionItemLoad({
             "summary": [
@@ -72,16 +68,16 @@ def test_set_summary_by_time(action_instance):
 
     with patch("action.datetime") as mock_datetime:
         mock_datetime.now = Mock(return_value=datetime(2023, 9, 9, 10, 0, 0))
-        result = action_instance.set_summary_by_time(button_actions)
+        result = action.set_summary_by_time(button_actions)
         assert result[0] == models.OpenhabAction(summary="morning", type="openhab", path="path", item="item", command="command")
 
         mock_datetime.now = Mock(return_value=datetime(2023, 9, 9, 13, 0, 0))
-        result = action_instance.set_summary_by_time(button_actions)
+        result = action.set_summary_by_time(button_actions)
         assert result[0] == models.OpenhabAction(summary="evening", type="openhab", path="path", item="item", command="command")
 
 
-def test_actions_preprocess_actions(action_instance):
-    result = action_instance.preprocess_actions("violet", models.EventActions(**action_instance.events["violet"]))
+def test_actions_preprocess_actions(action):
+    result = action.preprocess_actions("violet", action.events["violet"])
     expected_result = [
         models.ActionItemLoad({
           "type": "sheet",
@@ -117,8 +113,8 @@ def test_actions_preprocess_actions(action_instance):
 @patch.object(Action, "ifttt_action")
 @patch.object(Action, "openhab_action")
 @patch.object(Action, "sheet_action")
-def test_mocked_actions(mock_sheet_action, mock_openhub_action, mock_ifttt_action, mock_calendar_action, action_instance):
-    action_instance.action("violet", dry_run=False)
+def test_mocked_actions(mock_sheet_action, mock_openhub_action, mock_ifttt_action, mock_calendar_action, action):
+    action.action("violet", dry_run=False)
     mock_sheet_action.assert_called()
     mock_calendar_action.assert_called()
     mock_ifttt_action.assert_called()
@@ -126,7 +122,7 @@ def test_mocked_actions(mock_sheet_action, mock_openhub_action, mock_ifttt_actio
 
 
 @patch("action.Sheet")
-def test_sheet_action(mock_sheet, action_instance):
+def test_sheet_action(mock_sheet, action):
     mock_sheet_instance = MagicMock()
     mock_sheet.return_value = mock_sheet_instance
 
@@ -148,12 +144,12 @@ def test_sheet_action(mock_sheet, action_instance):
 
     with patch("action.datetime") as mock_datetime:
         mock_datetime.now = Mock(return_value=datetime(2023, 9, 9, 11, 0, 0))
-        action_instance.sheet_action("test_button", action_params)
+        action.sheet_action("test_button", action_params)
     mock_sheet_instance.press.assert_called_with("test_summary")
 
 
 @patch("action.Calendar")
-def test_calendar_action(mock_calendar, action_instance):
+def test_calendar_action(mock_calendar, action):
     mock_calendar_instance = MagicMock()
     mock_calendar.return_value = mock_calendar_instance
 
@@ -176,12 +172,12 @@ def test_calendar_action(mock_calendar, action_instance):
     mocked_now = datetime(2023, 9, 9, 11, 0, 0)
     with patch("action.datetime") as mock_datetime:
         mock_datetime.now = Mock(return_value=mocked_now)
-        action_instance.calendar_action("test_button", action_params)
+        action.calendar_action("test_button", action_params)
     mock_calendar_instance.start_event.assert_called_with('test_summary')
 
 
 @patch("action.Calendar")
-def test_calendar_close_event(mock_calendar, action_instance):
+def test_calendar_close_event(mock_calendar, action):
     mock_calendar_instance = MagicMock()
     mock_calendar.return_value = mock_calendar_instance
 
@@ -203,12 +199,12 @@ def test_calendar_close_event(mock_calendar, action_instance):
     mocked_now = datetime(2023, 9, 9, 11, 0, 0)
     with patch("action.datetime") as mock_datetime:
         mock_datetime.now = Mock(return_value=mocked_now)
-        action_instance.calendar_action("test_button", action_params)
+        action.calendar_action("test_button", action_params)
     mock_calendar_instance.close_event.assert_called_with(prev_even_id, mocked_now)
 
 
 @patch("action.Calendar")
-def test_calendar_auto_close_event(mock_calendar, action_instance):
+def test_calendar_auto_close_event(mock_calendar, action):
     mock_calendar_instance = MagicMock()
     mock_calendar.return_value = mock_calendar_instance
 
@@ -231,5 +227,5 @@ def test_calendar_auto_close_event(mock_calendar, action_instance):
     mocked_now = datetime(2023, 9, 9, 11, 0, 0)
     with patch("action.datetime") as mock_datetime:
         mock_datetime.now = Mock(return_value=mocked_now)
-        action_instance.calendar_action("test_button", action_params)
+        action.calendar_action("test_button", action_params)
     mock_calendar_instance.close_event.assert_called_with(prev_even_id, prev_event_start + timedelta(seconds=auto_closed_event_lenth_seconds))

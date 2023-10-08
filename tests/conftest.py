@@ -20,6 +20,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../src"))
 # We need to import amazon_dash after mocking scapy
 from amazon_dash import AmazonDash
 from models import Settings, EventActions
+from action import Action
 
 
 @pytest.fixture(scope="function")
@@ -28,17 +29,13 @@ def dash() -> AmazonDash:
 
 
 @pytest.fixture
-def settings_dict() -> Dict[str, Any]:
-    """Read settings from tests/resources/settings.json.
-
-    Return as dict for gradually moving to use models instead of dicts.
-    """
-    return load_settings().model_dump(exclude_unset=True)
-
-
-def load_settings() -> Settings:
+def settings() -> Settings:
     print("*" * 10, "load_settings")
     with open("tests/resources/settings.json", "r", encoding="utf-8") as settings_file:
         settings = Settings(**json.loads(settings_file.read()))
     return settings
 
+
+@pytest.fixture
+def action(settings):
+    return Action(settings)

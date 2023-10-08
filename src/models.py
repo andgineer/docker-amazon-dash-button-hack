@@ -2,6 +2,8 @@ from typing import Any, Dict, List, Literal, Optional, Union
 
 from pydantic import BaseModel, TypeAdapter, model_validator
 
+BOUNCE_DELAY = 5
+
 
 class TimeSummary(BaseModel):  # type: ignore
     """Summary for a time interval."""
@@ -113,6 +115,6 @@ class Settings(BaseModel):  # type: ignore
     ifttt_key_file_name: str
     openweathermap_key_file_name: str
     images_folder: str
-    bounce_delay: int
+    bounce_delay: int = BOUNCE_DELAY
     dashboards: Dict[str, DashboardItem]
     events: Dict[str, EventActions]

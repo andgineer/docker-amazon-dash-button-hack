@@ -2,7 +2,7 @@ import pytest
 import json
 import os
 from datetime import datetime
-from amazon_dash import BOUNCE_DELAY
+from models import BOUNCE_DELAY
 
 
 def test_button_file_name(dash):
@@ -29,11 +29,11 @@ def test_json_safe_loads_invalid(dash):
         dash.json_safe_loads(data)
 
 
-def test_load_settings_valid(mocker, dash):
+def test_load_settings_valid(mocker, dash, settings):
     mocker.patch('os.path.isfile', return_value=True)
-    mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps({"key": "value"})))
+    mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps(settings.model_dump())))
     result = dash.load_settings()
-    assert result == {"key": "value"}
+    assert result == settings
 
 
 def test_load_settings_no_file(mocker, dash):
@@ -62,11 +62,12 @@ def test_load_buttons_no_file(mocker, dash):
         (datetime(2023, 9, 13, 12, 0, 0), datetime(2023, 9, 13, 11, 54, 0), True),
     ],
 )
-def test_trigger_debouncing(mocker, dash, current_time, chatter_time, expected):
+def test_trigger_debouncing(mocker, dash, settings, current_time, chatter_time, expected):
     dash.debounce = {"button1": {"time": chatter_time}}
     mock_action = mocker.patch('amazon_dash.Action')
 
     call_action = mock_action.return_value.action
+    dash.settings = settings
     dash.trigger("button1", current_time)
 
     if expected:

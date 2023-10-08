@@ -35,8 +35,7 @@ ACTIONS = models.EventActions(**{
 })
 
 
-def test_preprocess_actions():
-    action = Action({"events": []})
+def test_preprocess_actions(action):
     assert action.preprocess_actions("white", ACTIONS) == [
         models.ActionItemLoad({
             "type": "sheet",

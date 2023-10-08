@@ -4,7 +4,6 @@ http://demo.openhab.org:8080/doc/index.html
 """
 
 import json
-from typing import Any, Dict
 
 import requests
 
@@ -14,7 +13,7 @@ import models
 class OpenHab:
     """Action for OpenHAB item."""
 
-    def __init__(self, settings: Dict[str, Any]) -> None:
+    def __init__(self, settings: models.Settings) -> None:
         """Init."""
         self.settings = settings
 

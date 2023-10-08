@@ -5,10 +5,9 @@ from ifttt import Ifttt
 from requests.exceptions import RequestException
 
 
-def test_load_key(mocker):
+def test_load_key(mocker, settings):
     mocker.patch("builtins.open", mocker.mock_open(read_data='{"key": "sample_key"}'))
 
-    settings = {"ifttt_key_file_name": "sample_key_file_name"}
     ifttt = Ifttt(settings)
 
     assert ifttt.key == "sample_key"

@@ -19,10 +19,10 @@ from openhab import OpenHab
 class Action:
     """Register events from amazon dash (button)."""
 
-    def __init__(self, settings: Dict[str, Any]) -> None:
+    def __init__(self, settings: models.Settings) -> None:
         """Init."""
         self.settings = settings
-        self.events: Dict[str, Any] = settings["events"]
+        self.events: Dict[str, models.EventActions] = settings.events
 
     def set_summary_by_time(
         self, button_actions: List[models.ActionItem]
@@ -130,11 +130,9 @@ class Action:
             button_settings = self.events[button]
         else:
             button_settings = self.events["__DEFAULT__"]
-        actions_object = self.preprocess_actions(button, models.EventActions(**button_settings))
-        actions_object = self.set_summary_by_time(actions_object)
-        actions = [action.model_dump() for action in actions_object]
-        for act_dict in actions:
-            act = models.ActionItemLoad(act_dict)
+        actions = self.preprocess_actions(button, button_settings)
+        actions = self.set_summary_by_time(actions)
+        for act in actions:
             print(f"Event for {act.type}: ({act})")
             if not dry_run:
                 try:
