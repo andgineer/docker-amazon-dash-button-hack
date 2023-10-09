@@ -5,14 +5,14 @@
 | Name                    |    Stmts |     Miss |   Cover |   Missing |
 |------------------------ | -------: | -------: | ------: | --------: |
 | src/action.py           |      108 |       16 |     85% |74-75, 77, 132, 140-142, 148-150, 161-162, 197-200, 204-207 |
-| src/amazon\_dash.py     |       76 |        6 |     92% |     86-91 |
+| src/amazon\_dash.py     |       68 |        6 |     91% |     78-83 |
 | src/google\_api.py      |       33 |        3 |     91% |60, 64, 68 |
 | src/google\_calendar.py |       74 |       26 |     65% |34-45, 116, 119, 164-185 |
 | src/google\_sheet.py    |       87 |        9 |     90% |134-137, 279-285 |
 | src/ifttt.py            |       28 |        5 |     82% |     48-53 |
-| src/models.py           |       68 |        0 |    100% |           |
+| src/models.py           |       70 |        0 |    100% |           |
 | src/openhab.py          |       20 |        0 |    100% |           |
-|               **TOTAL** |  **494** |   **65** | **87%** |           |
+|               **TOTAL** |  **488** |   **65** | **87%** |           |
 
 
 ## Setup coverage badge
