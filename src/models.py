@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from pydantic import BaseModel, TypeAdapter, model_validator
+from pydantic import BaseModel, RootModel, TypeAdapter, constr, model_validator
 
 BOUNCE_DELAY = 5
 
@@ -118,3 +118,7 @@ class Settings(BaseModel):  # type: ignore
     bounce_delay: int = BOUNCE_DELAY
     dashboards: Dict[str, DashboardItem]
     events: Dict[str, EventActions]
+
+
+MACAddress = constr(pattern="^(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$")
+ButtonMacs = RootModel[Dict[MACAddress, str]]  # type: ignore

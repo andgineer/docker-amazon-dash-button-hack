@@ -4,7 +4,6 @@ Sniff for ARP traffic and detects amazon dash (button) press.
 Register events in class Action
 """
 
-import json
 import os.path
 import sys
 from datetime import datetime, timedelta
@@ -45,15 +44,6 @@ class AmazonDash:
         """Return settings file name."""
         return os.path.join(root, "amazon-dash-private", "settings.json")
 
-    @staticmethod
-    def json_safe_loads(text: str) -> Dict[str, Any]:
-        """Load json from string."""
-        try:
-            return json.loads(text)  # type: ignore
-        except json.decoder.JSONDecodeError:
-            print("\n", "!" * 5, "Wrong json:\n", text)
-            raise
-
     def load_settings(self, settings_folder: str = "..") -> models.Settings:
         """Load settings."""
         if not os.path.isfile(self.setting_file_name(settings_folder)):
@@ -62,7 +52,7 @@ class AmazonDash:
         with open(
             self.setting_file_name(settings_folder), "r", encoding="utf-8-sig"
         ) as settings_file:
-            return models.Settings(**self.json_safe_loads(settings_file.read()))
+            return models.Settings.model_validate_json(settings_file.read())  # type: ignore
 
     def load_buttons(self, settings_folder: str = "..") -> Dict[str, Any]:
         """Load known buttons."""
@@ -72,8 +62,10 @@ class AmazonDash:
         with open(
             self.button_file_name(settings_folder), "r", encoding="utf-8-sig"
         ) as buttons_file:
-            buttons = self.json_safe_loads(buttons_file.read())
-        return buttons
+            buttons = models.ButtonMacs.model_validate_json(buttons_file.read()).model_dump(
+                exclude_none=True
+            )
+        return buttons  # type: ignore
 
     def arp_handler(self, pkt: Packet) -> None:
         """Handle sniffed ARP and DHCP requests."""

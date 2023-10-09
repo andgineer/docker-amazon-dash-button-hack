@@ -17,18 +17,6 @@ def test_setting_file_name(dash):
     assert result == expected
 
 
-def test_json_safe_loads_valid(dash):
-    data = '{"key": "value"}'
-    result = dash.json_safe_loads(data)
-    assert result == {"key": "value"}
-
-
-def test_json_safe_loads_invalid(dash):
-    data = '{"key": "value"'
-    with pytest.raises(json.decoder.JSONDecodeError):
-        dash.json_safe_loads(data)
-
-
 def test_load_settings_valid(mocker, dash, settings):
     mocker.patch('os.path.isfile', return_value=True)
     mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps(settings.model_dump())))
@@ -44,9 +32,9 @@ def test_load_settings_no_file(mocker, dash):
 
 def test_load_buttons_valid(mocker, dash):
     mocker.patch('os.path.isfile', return_value=True)
-    mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps({"MAC1": "Button1"})))
+    mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps({"68:54:fd:27:aa:f1": "Button1"})))
     result = dash.load_buttons()
-    assert result == {"MAC1": "Button1"}
+    assert result == {"68:54:fd:27:aa:f1": "Button1"}
 
 
 def test_load_buttons_no_file(mocker, dash):
