@@ -29,7 +29,6 @@ In folder `../amazone-dash-private` you should have:
 * `ifttt-key.json` with [Maker Webhook key](https://ifttt.com/services/maker_webhooks/settings)
 
 [Examples of this files](https://github.com/andgineer/docker-amazon-dash-button-hack/tree/master/amazon-dash-private).
-- this is folder `amazone-dash-private` of the repo.
 
 See details in [User manual](https://sorokin.engineer/posts/en/amazon_dash_button_hack_install.html).
 
