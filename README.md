@@ -50,4 +50,6 @@ We use `collections.abc` so min Python3.10
 [API docs](https://andgineer.github.io/docker-amazon-dash-button-hack/docstrings/)
 
 # Scripts
+To see list of scripts:
+
     make help
