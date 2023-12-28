@@ -3,7 +3,7 @@
 import datetime
 import os
 import time
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union, cast
 
 import dateutil.parser
 
@@ -165,7 +165,10 @@ def check() -> None:
 
     dash = AmazonDash()
     settings = dash.load_settings()
-    calendar = Calendar(settings, settings["actions"]["white"]["actions"][1]["calendar_id"])
+    calendar_action: models.CalendarAction = cast(
+        models.CalendarAction, settings.events["white"].actions[1]
+    )
+    calendar = Calendar(settings, calendar_action.calendar_id)
 
     # Delete Google event if existed
     while True:

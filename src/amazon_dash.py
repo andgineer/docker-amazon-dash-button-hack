@@ -52,7 +52,7 @@ class AmazonDash:
         with open(
             self.setting_file_name(settings_folder), "r", encoding="utf-8-sig"
         ) as settings_file:
-            return models.Settings.model_validate_json(settings_file.read())  # type: ignore
+            return models.Settings.model_validate_json(settings_file.read())
 
     def load_buttons(self, settings_folder: str = "..") -> Dict[str, Any]:
         """Load known buttons."""
@@ -65,7 +65,7 @@ class AmazonDash:
             buttons = models.ButtonMacs.model_validate_json(buttons_file.read()).model_dump(
                 exclude_none=True
             )
-        return buttons  # type: ignore
+        return buttons
 
     def arp_handler(self, pkt: Packet) -> None:
         """Handle sniffed ARP and DHCP requests."""

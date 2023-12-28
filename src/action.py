@@ -6,7 +6,7 @@ import collections.abc
 import sys
 import traceback
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Union
+from typing import Any, Callable, Dict, List, Union
 
 import models
 from google_api import GoogleApi
@@ -100,8 +100,8 @@ class Action:
                 return [subst(item) for item in param]
             return param
 
-        result = [
-            models.ActionItemLoad(
+        result: List[models.ActionItem] = [
+            models.ActionItemLoad(  # type: ignore # mypy not smart enough to get dynamic type
                 subst(
                     (
                         action
@@ -120,7 +120,7 @@ class Action:
 
     def action(self, button: str, dry_run: bool = False) -> None:
         """Register event from the button."""
-        ACTION_HANDLERS = {
+        ACTION_HANDLERS: Dict[str, Callable[..., None]] = {
             "sheet": self.sheet_action,
             "calendar": self.calendar_action,
             "ifttt": self.ifttt_action,

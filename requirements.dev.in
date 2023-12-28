@@ -15,7 +15,6 @@ freezegun
 # code quality
 pylint
 mypy
-pydocstyle
 pre-commit
 
 # docs

@@ -9,3 +9,4 @@ secrets/
 .dmypy.json
 venv/
 site/
+.mypy_cache/

@@ -5,7 +5,7 @@ from pydantic import BaseModel, RootModel, TypeAdapter, constr, model_validator
 BOUNCE_DELAY = 5
 
 
-class TimeSummary(BaseModel):  # type: ignore
+class TimeSummary(BaseModel):
     """Summary for a time interval."""
 
     summary: str
@@ -13,7 +13,7 @@ class TimeSummary(BaseModel):  # type: ignore
     image: str
 
 
-class DashBoardAbsent(BaseModel):  # type: ignore
+class DashBoardAbsent(BaseModel):
     """Absent images."""
 
     summary: str
@@ -21,7 +21,7 @@ class DashBoardAbsent(BaseModel):  # type: ignore
     image_plot: str
 
 
-class DashboardItem(BaseModel):  # type: ignore
+class DashboardItem(BaseModel):
     """Dashboard item."""
 
     summary: str
@@ -32,10 +32,10 @@ class DashboardItem(BaseModel):  # type: ignore
 SummaryType = Union[str, List[TimeSummary]]
 
 
-class CustomBaseModel(BaseModel):  # type: ignore
+class CustomBaseModel(BaseModel):
     """Base model with custom validators."""
 
-    @model_validator(mode="before")  # type: ignore
+    @model_validator(mode="before")
     def check_summary_type_fields(  # pylint: disable=no-self-argument
         cls, values: Dict[str, Any]
     ) -> Dict[str, Any]:
@@ -106,7 +106,7 @@ class EventActions(CustomBaseModel):
     actions: List[ActionItem]
 
 
-class Settings(BaseModel):  # type: ignore
+class Settings(BaseModel):
     """Settings for the application.""" ""
 
     latitude: str

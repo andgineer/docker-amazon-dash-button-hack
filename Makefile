@@ -24,6 +24,7 @@ reqs:
 	pre-commit autoupdate
 	bash ./scripts/compile_requirements.sh
 	pip install -r requirements.dev.txt
+	pip install -r requirements.txt
 
 .HELP: docs  ## Build the documentation
 docs:
