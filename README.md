@@ -1,4 +1,6 @@
-[![Build Status](https://github.com/andgineer/docker-amazon-dash-button-hack/workflows/ci/badge.svg)](https://github.com/andgineer/docker-amazon-dash-button-hack/actions)[![Docker Automated build](https://img.shields.io/docker/image-size/andgineer/amazon-dash-button-hack)](https://hub.docker.com/r/andgineer/amazon-dash-button-hack)
+[![Build Status](https://github.com/andgineer/docker-amazon-dash-button-hack/workflows/ci/badge.svg)](https://github.com/andgineer/docker-amazon-dash-button-hack/actions)
+[![Coverage](https://raw.githubusercontent.com/andgineer/docker-amazon-dash-button-hack/python-coverage-comment-action-data/badge.svg)](https://htmlpreview.github.io/?https://github.com/andgineer/docker-amazon-dash-button-hack/blob/python-coverage-comment-action-data/htmlcov/index.html)
+[![Docker Automated build](https://img.shields.io/docker/image-size/andgineer/amazon-dash-button-hack)](https://hub.docker.com/r/andgineer/amazon-dash-button-hack)
 
 This is a [Docker Hub container](https://hub.docker.com/r/andgineer/amazon-dash-button-hack)
 for the [Amazon Dash Button hack](https://sorokin.engineer/posts/en/amazon_dash_button_hack.html).
@@ -52,3 +54,7 @@ We use `collections.abc` so min Python3.10
 To see list of scripts:
 
     make help
+
+## Coverage report
+* [Codecov](https://app.codecov.io/gh/andgineer/docker-amazon-dash-button-hack/tree/main/src%2Fgarmin_daily)
+* [Coveralls](https://coveralls.io/github/andgineer/docker-amazon-dash-button-hack)
