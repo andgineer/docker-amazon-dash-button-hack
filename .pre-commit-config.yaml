@@ -97,7 +97,6 @@ repos:
           bash -c 'PYTHONPATH=. pylint \
           --max-line-length=99 \
           --ignore-imports=yes \
-          --load-plugins=pylint_django \
           "$@"' --
         files: \.py$
         language: python

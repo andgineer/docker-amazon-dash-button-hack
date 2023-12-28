@@ -56,5 +56,5 @@ To see list of scripts:
     make help
 
 ## Coverage report
-* [Codecov](https://app.codecov.io/gh/andgineer/docker-amazon-dash-button-hack/tree/main/src%2Fgarmin_daily)
+* [Codecov](https://app.codecov.io/gh/andgineer/docker-amazon-dash-button-hack/tree/master/src)
 * [Coveralls](https://coveralls.io/github/andgineer/docker-amazon-dash-button-hack)
