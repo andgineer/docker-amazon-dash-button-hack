@@ -12,7 +12,8 @@
 | src/ifttt.py            |       28 |        5 |     82% |     48-53 |
 | src/models.py           |       70 |        0 |    100% |           |
 | src/openhab.py          |       20 |        0 |    100% |           |
-|               **TOTAL** |  **489** |   **66** | **87%** |           |
+| src/version.py          |        1 |        1 |      0% |         1 |
+|               **TOTAL** |  **490** |   **67** | **86%** |           |
 
 
 ## Setup coverage badge
