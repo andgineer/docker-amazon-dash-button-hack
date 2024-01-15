@@ -121,7 +121,8 @@ class Calendar(GoogleApi):
     def delete_event(self, event_id: str) -> None:
         """Delete event from Google Calendar."""
         self.service().events().delete(
-            calendarId=self.calendarId, eventId=event_id  # 'primary',
+            calendarId=self.calendarId,
+            eventId=event_id,  # 'primary',
         ).execute()
 
     def close_event(self, event_id: Union[int, str], close_time: datetime.datetime) -> None:

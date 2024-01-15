@@ -142,7 +142,9 @@ class Action:
                     traceback.print_exception(*sys.exc_info())
 
     def ifttt_action(
-        self, button: str, action_params: models.IftttAction  # pylint: disable=unused-argument
+        self,
+        button: str,  # pylint: disable=unused-argument
+        action_params: models.IftttAction,
     ) -> None:
         """Register event in IFTTT."""
         ifttt = Ifttt(self.settings)
@@ -155,21 +157,27 @@ class Action:
         )
 
     def openhab_action(
-        self, button: str, action_params: models.OpenhabAction  # pylint: disable=unused-argument
+        self,
+        button: str,  # pylint: disable=unused-argument
+        action_params: models.OpenhabAction,
     ) -> None:
         """Register event in OpenHab."""
         openhab = OpenHab(self.settings)
         openhab.press(action_params)
 
     def calendar_action(
-        self, button: str, action_params: models.CalendarAction  # pylint: disable=unused-argument
+        self,
+        button: str,  # pylint: disable=unused-argument
+        action_params: models.CalendarAction,
     ) -> None:
         """Register event in Google Calendar."""
         calendar = Calendar(self.settings, action_params.calendar_id)
         self.event(calendar, action_params)
 
     def sheet_action(
-        self, button: str, action_params: models.SheetAction  # pylint: disable=unused-argument
+        self,
+        button: str,  # pylint: disable=unused-argument
+        action_params: models.SheetAction,
     ) -> None:
         """Register event in Google Sheet."""
         sheet = Sheet(

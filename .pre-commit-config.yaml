@@ -4,75 +4,17 @@ exclude: |
         version.py|
         conftest.py
     )
+
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.1.13
     hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-yaml
-        args: ["--unsafe"]
-      - id: check-added-large-files
-
-  - repo: https://github.com/myint/autoflake
-    rev: v2.2.1
-    hooks:
-      - id: autoflake
-        name: Cleanup imports
-        args:
-          - --in-place
-          - --remove-all-unused-imports
-          - --expand-star-imports
-          - --ignore-init-module-imports
-
-  - repo: https://github.com/pre-commit/mirrors-isort
-    rev: v5.10.1
-    hooks:
-      - id: isort
-        name: Sorts imports
-        args: [
-            # Align isort with black formatting
-            "--multi-line=3",
-            "--trailing-comma",
-            "--force-grid-wrap=0",
-            "--use-parentheses",
-            "--line-width=99",
-          ]
-
-  - repo: https://github.com/psf/black
-    rev: 23.12.1
-    hooks:
-      - id: black
-        name: Fixes formatting
-        language_version: python3
-        args: ["--line-length=99"]
-
-  - repo: https://github.com/PyCQA/flake8
-    rev: 6.1.0
-    hooks:
-      - id: flake8
-        name: Checks pep8 style
-        args:
-          - --max-line-length=99
-          # F405 - init imports * from module
-          # F401 - ignore imports used in init
-          # F403 - import * used in init
-          - --exclude=__init__.py
-          # ignore long comments (E501), as long lines are formatted by black
-          # ignore Whitespace before ':' (E203)
-          # ignore Line break occurred before a binary operator (W503)
-          # ignore module level import not at top of file (E402) to skip tests with uninstalled modules (pytest.importorskip)
-          - --ignore=E501,E203,W503,E402
-
-  - repo: https://github.com/PyCQA/pydocstyle
-    rev: 6.3.0
-    hooks:
-      - id: pydocstyle
-        name: docstrings
-        entry: pydocstyle
-        language: python
-        args:
-          - --ignore=D100,D203,D405,D407,D213,D413
+      # Run the linter.
+      - id: ruff
+        args: [ --fix ]
+      # Run the formatter.
+      - id: ruff-format
 
   - repo: local
     hooks:
