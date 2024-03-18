@@ -18,6 +18,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -36,6 +39,9 @@ jobs:
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/amazon-dash-button-hack:latest
           cache-from: type=registry,ref=user/app:latest
           cache-to: type=inline
+          platforms: |-
+            linux/amd64
+            linux/arm64
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
