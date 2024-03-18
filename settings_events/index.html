@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Andrey Sorokin" /><link rel="canonical" href="https://andgineer.github.io/docker-amazon-dash-button-hack/settings_events/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Amazon Dash Actions Configuration - docker-amazon-dash-button-hack</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Amazon Dash Actions Configuration";
+        var mkdocs_page_input_path = "settings_events.md";
+        var mkdocs_page_url = "/docker-amazon-dash-button-hack/settings_events/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> docker-amazon-dash-button-hack
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../settings/">Settings for the Amazon Dash button</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../settings_dashboards/">Amazon Dash Dashboard Configuration</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Amazon Dash Actions Configuration</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#action-types-and-their-parameters">Action Types and Their Parameters:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#example">Example</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#white-button">"white" button:</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#default-configuration">Default Configuration</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../docstrings/">Overview</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">docker-amazon-dash-button-hack</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Amazon Dash Actions Configuration</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/andgineer/docker-amazon-dash-button-hack/edit/master/docs/settings_events.md">Edit on docker-amazon-dash-button-hack</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="amazon-dash-actions-configuration">Amazon Dash Actions Configuration</h1>
+<p>In the configuration file, events are defined that dictate the response to different Amazon Dash button presses.
+Each button links to a set of specified actions and, optionally, a summarized purpose.</p>
+<hr />
+<h2 id="structure">Structure</h2>
+<pre><code class="language-json">  &quot;events&quot;: [
+    &quot;button1&quot; &quot; {
+      &quot;summary&quot;: [...],
+      &quot;actions&quot;: [...]
+    },
+    &quot;button2&quot; &quot; {
+      &quot;summary&quot;: [...],
+      &quot;actions&quot;: [...]
+    },
+    ...
+  ]
+</code></pre>
+<p>Each button corresponds to a key within the <code>events</code> dictionary.
+This key holds actions executed upon the button's press and can be detailed as follows:</p>
+<ul>
+<li>
+<p><strong>Summary</strong> (Optional):</p>
+<ul>
+<li>Describes the button's purpose. Useful for user feedback or logging.</li>
+<li>Can vary depending on time (e.g., actions before 12:00:00).</li>
+</ul>
+</li>
+<li>
+<p><strong>Actions</strong>:</p>
+<ul>
+<li>A list of actions to perform.</li>
+<li>Actions have a specific <code>type</code> which determines their behavior.</li>
+<li>Each action type might require different parameters.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="action-types-and-their-parameters">Action Types and Their Parameters:</h2>
+<ol>
+<li><strong>sheet</strong> - Logs button presses in a Google Sheet.</li>
+</ol>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;sheet&quot;,
+  &quot;name&quot;: &quot;amazon_dash&quot;,
+  &quot;press_sheet&quot;: &quot;press&quot;,
+  &quot;event_sheet&quot;: &quot;event&quot;,
+  &quot;restart&quot;: 15,
+  &quot;autoclose&quot;: 10800,
+  &quot;default&quot;: 900
+}
+</code></pre>
+<ol>
+<li><strong>calendar</strong> - Creates an event in a Google Calendar.</li>
+</ol>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;calendar&quot;,
+  &quot;calendar_id&quot;: &quot;eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com&quot;,
+  &quot;dashboard&quot;: &quot;anna_work_out&quot;,
+  &quot;restart&quot;: 15,
+  &quot;autoclose&quot;: 10800,
+  &quot;default&quot;: 900
+}
+</code></pre>
+<ol>
+<li><strong>ifttt</strong> - Initiates an IFTTT applet.</li>
+</ol>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;ifttt&quot;,
+  &quot;summary&quot;: &quot;{button}_amazon_dash&quot;,
+  &quot;value1&quot;: &quot;&quot;,
+  &quot;value2&quot;: &quot;&quot;,
+  &quot;value3&quot;: &quot;&quot;
+}
+</code></pre>
+<ol>
+<li><strong>openhab</strong> - Sends commands to an openHAB item.</li>
+</ol>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;openhab&quot;,
+  &quot;path&quot;: &quot;http://localhost:8080&quot;,
+  &quot;item&quot;: &quot;{button}_amazon_dash&quot;,
+  &quot;command&quot;: &quot;ON;OFF&quot;
+}
+</code></pre>
+<hr />
+<h2 id="example">Example</h2>
+<pre><code class="language-json">{
+  &quot;events&quot;: {
+    &quot;white&quot;: {
+      &quot;summary&quot;: [
+        {
+          &quot;summary&quot;: &quot;Morning work-out&quot;,
+          &quot;before&quot;: &quot;12:00:00&quot;,
+          &quot;image&quot;: &quot;morning.png&quot;
+        },
+        {
+          &quot;summary&quot;: &quot;Physiotherapy&quot;,
+          &quot;image&quot;: &quot;evening2.png&quot;
+        }
+      ],
+      &quot;actions&quot;: [
+        {
+          &quot;type&quot;: &quot;sheet&quot;,
+          &quot;name&quot;: &quot;amazon_dash&quot;,
+          &quot;press_sheet&quot;: &quot;press&quot;,
+          &quot;event_sheet&quot;: &quot;event&quot;,
+          &quot;restart&quot;: 15,
+          &quot;autoclose&quot;: 10800,
+          &quot;default&quot;: 900
+        },
+        {
+          &quot;type&quot;: &quot;calendar&quot;,
+          &quot;calendar_id&quot;: &quot;eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com&quot;,
+          &quot;dashboard&quot;: &quot;anna_work_out&quot;,
+          &quot;restart&quot;: 15,
+          &quot;autoclose&quot;: 10800,
+          &quot;default&quot;: 900
+        },
+        {
+          &quot;type&quot;: &quot;ifttt&quot;,
+          &quot;summary&quot;: &quot;white_amazon_dash&quot;,
+          &quot;value1&quot;: &quot;&quot;,
+          &quot;value2&quot;: &quot;&quot;,
+          &quot;value3&quot;: &quot;&quot;
+        }
+      ]
+    }
+  }
+}
+</code></pre>
+<h3 id="white-button">"white" button:</h3>
+<p>Upon pressing:</p>
+<ul>
+<li>
+<p><strong>Before 12:00:00</strong>:</p>
+<ul>
+<li>Recognized as <strong>Morning work-out</strong>.</li>
+<li>Image used: <code>morning.png</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>After 12:00:00</strong>:</p>
+<ul>
+<li>Labeled as <strong>Physiotherapy</strong>.</li>
+<li>Image used: <code>evening2.png</code>.</li>
+</ul>
+</li>
+</ul>
+<p>The actions executed:</p>
+<ol>
+<li>Logging in the "amazon_dash" Google Sheet.</li>
+<li>Registering an event in a specific Google Calendar.</li>
+<li>Triggering an IFTTT applet.</li>
+</ol>
+<h3 id="default-configuration">Default Configuration</h3>
+<p>If a button isn't uniquely configured, the "<strong>DEFAULT</strong>" configuration activates.
+This offers a standard set of actions for any non-specific button.</p>
+<pre><code class="language-json">{
+  &quot;events&quot;: {
+    ...
+    &quot;__DEFAULT__&quot;: {
+      &quot;summary&quot;: &quot;{button}&quot;,
+      &quot;actions&quot;: [
+        {
+          &quot;type&quot;: &quot;sheet&quot;,
+          &quot;name&quot;: &quot;amazon_dash&quot;,
+          &quot;press_sheet&quot;: &quot;press&quot;,
+          &quot;event_sheet&quot;: &quot;event&quot;,
+          &quot;restart&quot;: 60,
+          &quot;autoclose&quot;: 10800,
+          &quot;default&quot;: 900
+        },
+        {
+          &quot;type&quot;: &quot;calendar&quot;,
+          &quot;calendar_id&quot;: &quot;eo2n7ip8p1tm6dgseh3e7p19no@group.calendar.google.com&quot;,
+          &quot;restart&quot;: 15,
+          &quot;autoclose&quot;: 10800,
+          &quot;default&quot;: 900
+        },
+        {
+          &quot;type&quot;: &quot;ifttt&quot;,
+          &quot;summary&quot;: &quot;{button}_amazon_dash&quot;,
+          &quot;value1&quot;: &quot;&quot;,
+          &quot;value2&quot;: &quot;&quot;,
+          &quot;value3&quot;: &quot;&quot;
+        },
+        {
+          &quot;type&quot;: &quot;openhab&quot;,
+          &quot;path&quot;: &quot;http://localhost:8080&quot;,
+          &quot;item&quot;: &quot;{button}_amazon_dash&quot;,
+          &quot;command&quot;: &quot;ON;OFF&quot;
+        }
+      ]
+    }
+  }
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../settings_dashboards/" class="btn btn-neutral float-left" title="Amazon Dash Dashboard Configuration"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../docstrings/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../settings_dashboards/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../docstrings/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

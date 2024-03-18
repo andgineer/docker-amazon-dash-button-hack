@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Andrey Sorokin" /><link rel="canonical" href="https://andgineer.github.io/docker-amazon-dash-button-hack/settings/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Settings for the Amazon Dash button - docker-amazon-dash-button-hack</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Settings for the Amazon Dash button";
+        var mkdocs_page_input_path = "settings.md";
+        var mkdocs_page_url = "/docker-amazon-dash-button-hack/settings/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> docker-amazon-dash-button-hack
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Settings for the Amazon Dash button</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#root-keys">Root Keys</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#latitude-and-longitude">latitude and longitude</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#credentials_file_name">credentials_file_name</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ifttt_key_file_name">ifttt_key_file_name</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#openweathermap_key_file_name">openweathermap_key_file_name</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#images_folder">images_folder</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bounce_delay">bounce_delay</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dashboards">dashboards</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#events">events</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../settings_dashboards/">Amazon Dash Dashboard Configuration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../settings_events/">Amazon Dash Actions Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../docstrings/">Overview</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">docker-amazon-dash-button-hack</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Settings for the Amazon Dash button</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/andgineer/docker-amazon-dash-button-hack/edit/master/docs/settings.md">Edit on docker-amazon-dash-button-hack</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="settings-for-the-amazon-dash-button">Settings for the Amazon Dash button</h1>
+<p><a href="https://github.com/andgineer/docker-amazon-dash-button-hack/blob/master/amazon-dash-private/settings.json">settings.json</a></p>
+<h2 id="root-keys">Root Keys</h2>
+<h3 id="latitude-and-longitude"><code>latitude</code> and <code>longitude</code></h3>
+<ul>
+<li><strong>Type</strong>: String (decimal representation)</li>
+<li><strong>Description</strong>: Specifies the geographical coordinates for the location of use. Essential for functionalities dependent on location-based triggers or conditions.</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-json">&quot;latitude&quot;: &quot;60.002228&quot;,
+&quot;longitude&quot;: &quot;30.296947&quot;
+</code></pre>
+<h3 id="credentials_file_name"><code>credentials_file_name</code></h3>
+<ul>
+<li><strong>Type</strong>: String (path)</li>
+<li><strong>Description</strong>: The path to the credentials file that is necessary for accessing certain functionalities or APIs.</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-json">&quot;credentials_file_name&quot;: &quot;../amazon-dash-private/amazon-dash-hack.json&quot;
+</code></pre>
+<h3 id="ifttt_key_file_name"><code>ifttt_key_file_name</code></h3>
+<ul>
+<li><strong>Type</strong>: String (path)</li>
+<li><strong>Description</strong>: The path to the IFTTT (If This Then That) service key file, which enables the integration with IFTTT services.</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-json">&quot;ifttt_key_file_name&quot;: &quot;../amazon-dash-private/ifttt-key.json&quot;
+</code></pre>
+<h3 id="openweathermap_key_file_name"><code>openweathermap_key_file_name</code></h3>
+<ul>
+<li><strong>Type</strong>: String (path)</li>
+<li><strong>Description</strong>: The path to the OpenWeatherMap API key file. This is essential if any functionality uses weather-related triggers or conditions.</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-json">&quot;openweathermap_key_file_name&quot;: &quot;../amazon-dash-private/openweathermap-key.json&quot;
+</code></pre>
+<h3 id="images_folder"><code>images_folder</code></h3>
+<ul>
+<li><strong>Type</strong>: String (path)</li>
+<li><strong>Description</strong>: Path to the directory where the relevant images (icons, graphics) are stored.</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-json">&quot;images_folder&quot;: &quot;../amazon-dash-private/images/&quot;
+</code></pre>
+<h3 id="bounce_delay"><code>bounce_delay</code></h3>
+<ul>
+<li><strong>Type</strong>: Integer</li>
+<li><strong>Description</strong>: The delay (in seconds) before the system will respond or react to a subsequent trigger. This can prevent from unintendent multiple presses.</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-json">&quot;bounce_delay&quot;: 5
+</code></pre>
+<h3 id="dashboards"><code>dashboards</code></h3>
+<p><a href="../settings_dashboards/">Dasboards settings</a></p>
+<h3 id="events"><code>events</code></h3>
+<p><a href="../settings_events/">Events settings</a></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../settings_dashboards/" class="btn btn-neutral float-right" title="Amazon Dash Dashboard Configuration">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../settings_dashboards/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
