@@ -2,6 +2,7 @@
 
 https://ifttt.com/maker_webhooks
 """
+
 import json
 from typing import Any, Dict
 
@@ -45,7 +46,7 @@ class Ifttt:
 
 def check() -> None:
     """Check IFTTT."""
-    from amazon_dash import AmazonDash  # pylint: disable=import-outside-toplevel
+    from amazon_dash import AmazonDash  # pylint: disable=import-outside-toplevel,cyclic-import
 
     dash = AmazonDash()
     settings = dash.load_settings()

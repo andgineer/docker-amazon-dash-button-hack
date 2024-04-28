@@ -2,6 +2,7 @@
 
 Supports google sheet (google_sheet.py), google calendar (google_calendar.py) and ifttt (ifttt.py)
 """
+
 import collections.abc
 import sys
 import traceback
@@ -101,7 +102,7 @@ class Action:
             return param
 
         result: List[models.ActionItem] = [
-            models.ActionItemLoad(  # type: ignore # mypy not smart enough to get dynamic type
+            models.ActionItemLoad(
                 subst(
                     (
                         action

@@ -1,4 +1,5 @@
 """Google API class."""
+
 from datetime import datetime
 from typing import Any, List, Optional, Tuple, Union
 

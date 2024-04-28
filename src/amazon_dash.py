@@ -65,7 +65,7 @@ class AmazonDash:
             buttons = models.ButtonMacs.model_validate_json(buttons_file.read()).model_dump(
                 exclude_none=True
             )
-        return buttons
+        return buttons  # type: ignore
 
     def arp_handler(self, pkt: Packet) -> None:
         """Handle sniffed ARP and DHCP requests."""
