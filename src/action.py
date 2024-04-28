@@ -49,6 +49,7 @@ class Action:
                 ), """summary param must be string or array like
         [{"summary":"summary1", "before":"10:00:00"}, {"summary": "summary2", "before":"19:00:00"}, ...]"""
                 time = datetime.now()
+                interval = None
                 for interval_idx, interval in enumerate(action.summary):
                     if interval.before is not None:
                         interval_end_parts = [int(s) for s in self.get_time_parts(interval.before)]
@@ -61,7 +62,7 @@ class Action:
                             action.summary = interval.summary
                             break
                 else:
-                    action.summary = interval.summary
+                    action.summary = interval.summary if interval else ""
         return result_actions
 
     def get_time_parts(self, time_str: str) -> List[str]:

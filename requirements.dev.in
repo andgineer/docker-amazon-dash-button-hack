@@ -18,6 +18,9 @@ pylint
 mypy
 pre-commit
 
+# type stubs
+google-api-python-client-stubs
+
 # docs
 lazydocs
 mkdocs

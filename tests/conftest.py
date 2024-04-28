@@ -1,6 +1,5 @@
 import json
-from typing import Any, Dict
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 import sys
 import pytest
 
@@ -39,3 +38,10 @@ def settings() -> Settings:
 @pytest.fixture
 def action(settings):
     return Action(settings)
+
+
+@pytest.fixture
+def google_credentials():
+    with patch('google_api.ServiceAccountCredentials.from_json_keyfile_name') as mock_from_json:
+        mock_from_json.return_value = Mock()
+        yield mock_from_json

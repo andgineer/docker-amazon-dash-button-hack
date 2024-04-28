@@ -2,10 +2,11 @@
 
 from datetime import datetime
 from typing import Any, List, Optional, Tuple, Union
+from functools import cached_property
 
 import httplib2
 from googleapiclient import discovery
-from oauth2client.service_account import ServiceAccountCredentials
+from oauth2client.service_account import ServiceAccountCredentials  # pyright: ignore [reportMissingTypeStubs]
 
 import models
 
@@ -19,14 +20,15 @@ class GoogleApi:
         """Init."""
         self.settings = settings
         self.http = self.get_credentials_http()
-        self._service = self.get_service(api=api, version=version)
+        self.api = api
+        self.version = version
 
     def get_credentials_http(self) -> httplib2.Http:
         """Get credentials for http."""
         try:
             credentials = ServiceAccountCredentials.from_json_keyfile_name(
                 self.settings.credentials_file_name,
-                [
+                [  # pyright: ignore [reportArgumentType]
                     "https://www.googleapis.com/auth/calendar",
                     "https://www.googleapis.com/auth/spreadsheets",
                     "https://www.googleapis.com/auth/drive.metadata.readonly",
@@ -41,18 +43,15 @@ class GoogleApi:
 
         return credentials.authorize(httplib2.Http())
 
-    def get_service(self, api: str, version: str) -> discovery.Resource:
-        """Get service."""
+    def get_service(self, api: str, version: str) -> Any:
         if not self.http:
-            raise ValueError(f"Cannot get service `{api}`: Google API is not authorized.")
-
+            raise ValueError(f"Cannot get service `{self.api}`: Google API is not authorized.")
         return discovery.build(api, version, http=self.http)
 
-    def service(self) -> discovery.Resource:
+    @cached_property
+    def service(self) -> Any:  # do not use discovery.Resource as workaround for mypy
         """Get service."""
-        if self._service:
-            return self._service
-        raise ValueError("!" * 5 + " Google API service undefined.")
+        return self.get_service(self.api, self.version)
 
     def get_last_event(
         self, summary: str

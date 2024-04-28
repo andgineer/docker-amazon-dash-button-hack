@@ -40,12 +40,12 @@ def test_start_event(mock_calendar):
         'start': {'dateTime': f'2023-09-14T10:42:01+{tz // 100:02d}:{abs(tz % 100):02d}'},
         'end': {'dateTime': f'2023-09-14T10:42:01+{tz // 100:02d}:{abs(tz % 100):02d}'}
     }
-    mock_calendar.service().events().insert.assert_called_with(calendarId=mock_calendar.calendarId, body=event_body)
-    mock_calendar.service().events().insert().execute.assert_called_once()
+    mock_calendar.service.events().insert.assert_called_with(calendarId=mock_calendar.calendarId, body=event_body)
+    mock_calendar.service.events().insert().execute.assert_called_once()
 
 
 def test_get_last_event(mock_calendar):
-    mock_calendar.service().events().list.return_value.execute.return_value = {
+    mock_calendar.service.events().list.return_value.execute.return_value = {
         'items': [{
             'start': {'dateTime': '2023-01-01T00:00:00Z'},
             'end': {'dateTime': '2023-01-01T01:00:00Z'},
@@ -60,11 +60,11 @@ def test_get_last_event(mock_calendar):
 
 def test_delete_event(mock_calendar):
     mock_calendar.delete_event("123")
-    assert mock_calendar.service().events().delete.call_count == 1
+    assert mock_calendar.service.events().delete.call_count == 1
 
 def test_close_event(mock_calendar):
     mock_calendar.close_event("123", datetime.datetime.now())
-    assert mock_calendar.service().events().update.call_count == 1
+    assert mock_calendar.service.events().update.call_count == 1
 
 def test_google_api_get_credentials_http(mock_get_credentials_http):
     # This test checks if the get_credentials_http method was mocked correctly

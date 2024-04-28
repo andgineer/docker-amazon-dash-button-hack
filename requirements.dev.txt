@@ -35,12 +35,11 @@ click==8.1.7
     #   mkdocs
     #   pip-tools
     #   typer
-coverage[toml]==6.5.0
+coverage[toml]==7.4.4
     # via
-    #   coverage
     #   coveralls
     #   pytest-cov
-coveralls==3.3.1
+coveralls==4.0.0
     # via -r requirements.dev.in
 dill==0.3.8
     # via pylint
@@ -48,18 +47,22 @@ distlib==0.3.8
     # via virtualenv
 docopt==0.6.2
     # via coveralls
-filelock==3.13.4
+filelock==3.14.0
     # via virtualenv
 freezegun==1.5.0
     # via -r requirements.dev.in
 ghp-import==2.1.0
     # via mkdocs
-google-api-core==2.18.0
+google-api-core==2.19.0
     # via
     #   -r requirements.txt
     #   google-api-python-client
 google-api-python-client==2.127.0
-    # via -r requirements.txt
+    # via
+    #   -r requirements.txt
+    #   google-api-python-client-stubs
+google-api-python-client-stubs==1.25.0
+    # via -r requirements.dev.in
 google-auth==2.29.0
     # via
     #   -r requirements.txt
@@ -185,7 +188,7 @@ pyparsing==3.1.2
     # via
     #   -r requirements.txt
     #   httplib2
-pyproject-hooks==1.0.0
+pyproject-hooks==1.1.0
     # via
     #   build
     #   pip-tools
@@ -239,9 +242,12 @@ tomlkit==0.12.4
     # via pylint
 typer==0.12.3
     # via lazydocs
+types-httplib2==0.22.0.20240310
+    # via google-api-python-client-stubs
 typing-extensions==4.11.0
     # via
     #   -r requirements.txt
+    #   google-api-python-client-stubs
     #   mypy
     #   pydantic
     #   pydantic-core
@@ -254,7 +260,7 @@ urllib3==2.2.1
     # via
     #   -r requirements.txt
     #   requests
-virtualenv==20.26.0
+virtualenv==20.26.1
     # via pre-commit
 watchdog==4.0.0
     # via mkdocs

@@ -36,9 +36,7 @@ class CustomBaseModel(BaseModel):
     """Base model with custom validators."""
 
     @model_validator(mode="before")
-    def check_summary_type_fields(  # pylint: disable=no-self-argument
-        cls, values: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def check_summary_type_fields(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         """Check summary type fields."""
         for field, value in values.items():
             expected_type = cls.__annotations__.get(field)

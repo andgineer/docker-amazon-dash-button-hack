@@ -56,14 +56,14 @@ class Sheet(GoogleApi):
 
     def close_event(  # pylint: disable=arguments-renamed
         self,
-        event_row: Union[int, str],
+        event_id: Union[int, str],
         close_time: datetime.datetime,
     ) -> None:
         """Close event in Google Sheet.
 
         row 0-based
         """
-        row_num = int(event_row)
+        row_num = int(event_id)
         self.update_cells(
             sheet=self.event_sheet,
             row=row_num,
@@ -141,11 +141,9 @@ class Sheet(GoogleApi):
 
         Returns {sheet_name: sheet_id}
         """
-        if self.service():
-            request = (
-                self.service()
-                .spreadsheets()
-                .get(spreadsheetId=self.spreadSheetId, ranges=[], includeGridData=False)
+        if self.service:
+            request = self.service.spreadsheets().get(
+                spreadsheetId=self.spreadSheetId, ranges=[], includeGridData=False
             )
             sheets = request.execute()["sheets"]
             # todo check if press_sheet and event_sheet are in the sheets
@@ -160,8 +158,7 @@ class Sheet(GoogleApi):
         row and col 0-based
         """
         request = (
-            self.service()
-            .spreadsheets()
+            self.service.spreadsheets()
             .values()
             .update(
                 spreadsheetId=self.spreadSheetId,
@@ -181,8 +178,7 @@ class Sheet(GoogleApi):
         row 0-based
         """
         _ = (
-            self.service()
-            .spreadsheets()
+            self.service.spreadsheets()
             .values()
             .append(
                 spreadsheetId=self.spreadSheetId,
@@ -210,10 +206,8 @@ class Sheet(GoogleApi):
                 },
             ],
         }
-        request = (
-            self.service()
-            .spreadsheets()
-            .batchUpdate(spreadsheetId=self.spreadSheetId, body=INSERT_ROW_REQUEST)
+        request = self.service.spreadsheets().batchUpdate(
+            spreadsheetId=self.spreadSheetId, body=INSERT_ROW_REQUEST
         )
         request.execute()
 
@@ -243,10 +237,8 @@ class Sheet(GoogleApi):
                 }
             ]
         }
-        request = (
-            self.service()
-            .spreadsheets()
-            .batchUpdate(spreadsheetId=self.spreadSheetId, body=COPY_FORMATTING_REQUEST)
+        request = self.service.spreadsheets().batchUpdate(
+            spreadsheetId=self.spreadSheetId, body=COPY_FORMATTING_REQUEST
         )
         request.execute()
 
@@ -256,8 +248,7 @@ class Sheet(GoogleApi):
         row 0-based
         """
         result = (
-            self.service()
-            .spreadsheets()
+            self.service.spreadsheets()
             .values()
             .get(
                 spreadsheetId=self.spreadSheetId,

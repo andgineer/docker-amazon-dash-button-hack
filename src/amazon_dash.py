@@ -9,9 +9,9 @@ import sys
 from datetime import datetime, timedelta
 from typing import Any, Dict, Optional, Set
 
-from scapy.all import Packet, sniff
-from scapy.layers.dhcp import DHCP
-from scapy.layers.l2 import ARP
+from scapy.all import Packet, sniff  # pyright: ignore [reportMissingTypeStubs]
+from scapy.layers.dhcp import DHCP  # pyright: ignore [reportMissingTypeStubs]
+from scapy.layers.l2 import ARP  # pyright: ignore [reportMissingTypeStubs]
 
 import models
 from action import Action

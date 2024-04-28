@@ -10,6 +10,7 @@ import dateutil.parser
 import models
 from google_api import GoogleApi
 
+
 # GCAL_TIME_PARSE = '%Y-%m-%dT%H:%M:%S%z'
 
 
@@ -33,7 +34,7 @@ class Calendar(GoogleApi):
         """
         page_token = None
         while True:
-            calendar_list = self.service().calendarList().list(pageToken=page_token).execute()
+            calendar_list = self.service.calendarList().list(pageToken=page_token).execute()
             print("Calendar page:", calendar_list)
             if ids := [
                 item["id"] for item in calendar_list.get("items", []) if item["summary"] == name
@@ -70,8 +71,7 @@ class Calendar(GoogleApi):
             },
         }
         _ = (
-            self.service()
-            .events()
+            self.service.events()
             .insert(calendarId=self.calendarId, body=INSERT_EVENT_REQUEST)  # 'primary',
             .execute()
         )
@@ -88,8 +88,7 @@ class Calendar(GoogleApi):
         while True:
             # we need only last event but do not see how to get just it from the API
             events = (
-                self.service()
-                .events()
+                self.service.events()
                 .list(
                     calendarId=self.calendarId,  # 'primary',
                     timeMin=self.google_time_format(
@@ -120,7 +119,7 @@ class Calendar(GoogleApi):
 
     def delete_event(self, event_id: str) -> None:
         """Delete event from Google Calendar."""
-        self.service().events().delete(
+        self.service.events().delete(
             calendarId=self.calendarId,
             eventId=event_id,  # 'primary',
         ).execute()
@@ -128,8 +127,7 @@ class Calendar(GoogleApi):
     def close_event(self, event_id: Union[int, str], close_time: datetime.datetime) -> None:
         """Close event in Google Calendar."""
         event = (
-            self.service()
-            .events()
+            self.service.events()
             .get(calendarId=self.calendarId, eventId=event_id)  # 'primary',
             .execute()
         )
@@ -138,8 +136,7 @@ class Calendar(GoogleApi):
             # 'timeZone': '{tz}'.format(tz=self.tz),
         }
         _ = (
-            self.service()
-            .events()
+            self.service.events()
             .update(calendarId=self.calendarId, eventId=event_id, body=event)  # 'primary',
             .execute()
         )

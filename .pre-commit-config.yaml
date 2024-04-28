@@ -15,30 +15,34 @@ repos:
         args: [ --fix ]
       # Run the formatter.
       - id: ruff-format
-
-  - repo: local
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.360
     hooks:
-      - id: mypy
-        name: MyPy
-        entry: |
-          mypy
-          --ignore-missing-imports
-          --install-types
-          --non-interactive
-          --strict
-          --implicit-reexport
-          --warn-unused-ignores
-          --cache-fine-grained
-          --no-namespace-packages
-        files: \.py$
-        language: python
+    - id: pyright
 
-      - id: pylint
-        name: Pylint
-        entry: |
-          bash -c 'PYTHONPATH=. pylint \
-          --max-line-length=99 \
-          --ignore-imports=yes \
-          "$@"' --
-        files: \.py$
-        language: python
+#  - repo: local
+#    hooks:
+#      - id: mypy
+#        name: MyPy
+#        entry: |
+#          mypy
+#          --ignore-missing-imports
+#          --install-types
+#          --non-interactive
+#          --strict
+#          --implicit-reexport
+#          --warn-unused-ignores
+#          --cache-fine-grained
+#          --no-namespace-packages
+#        files: \.py$
+#        language: python
+#
+#      - id: pylint
+#        name: Pylint
+#        entry: |
+#          bash -c 'PYTHONPATH=. pylint \
+#          --max-line-length=99 \
+#          --ignore-imports=yes \
+#          "$@"' --
+#        files: \.py$
+#        language: python
