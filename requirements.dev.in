@@ -8,7 +8,6 @@ pip-tools
 # tests
 pytest
 pytest-cov
-coveralls
 pytest-mock
 requests-mock
 freezegun

@@ -35,18 +35,12 @@ click==8.1.7
     #   mkdocs
     #   pip-tools
     #   typer
-coverage[toml]==7.4.4
-    # via
-    #   coveralls
-    #   pytest-cov
-coveralls==4.0.0
-    # via -r requirements.dev.in
+coverage[toml]==7.5.0
+    # via pytest-cov
 dill==0.3.8
     # via pylint
 distlib==0.3.8
     # via virtualenv
-docopt==0.6.2
-    # via coveralls
 filelock==3.14.0
     # via virtualenv
 freezegun==1.5.0
@@ -217,7 +211,6 @@ pyyaml-env-tag==0.1
 requests==2.31.0
     # via
     #   -r requirements.txt
-    #   coveralls
     #   google-api-core
     #   requests-mock
 requests-mock==1.12.1

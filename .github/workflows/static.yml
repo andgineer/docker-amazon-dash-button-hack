@@ -20,7 +20,9 @@ jobs:
       - uses: actions/setup-python@v3
         with:
           python-version: 3.x
-      - run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.dev.txt
-      - run: pre-commit run --verbose --all-files
+      - name: Install uv environment
+        uses: andgineer/uv-venv@v1
+      - name: Static source code checks
+        run: |
+          uv pip install -r requirements.dev.txt  
+          pre-commit run --verbose --all-files
