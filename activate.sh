@@ -4,7 +4,7 @@
 #
 
 VENV_FOLDER=".venv"
-PYTHON="python3.11"  # sync with python-version: '3.11' in .github/workflows/docs.yml,static.yml
+PYTHON="python3.12"  # sync with .github/workflows/docs.yml,static.yml
 
 RED='\033[1;31m'
 GREEN='\033[1;32m'
