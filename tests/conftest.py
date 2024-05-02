@@ -18,8 +18,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../src"))
 
 # We need to import amazon_dash after mocking scapy
 from amazon_dash import AmazonDash
-from models import Settings, EventActions
+from models import Settings
 from action import Action
+from google_api import GoogleApi
 
 
 @pytest.fixture(scope="function")
@@ -45,3 +46,8 @@ def google_credentials():
     with patch('google_api.ServiceAccountCredentials.from_json_keyfile_name') as mock_from_json:
         mock_from_json.return_value = Mock()
         yield mock_from_json
+
+
+@pytest.fixture
+def google_api_instance(settings, google_credentials):
+    yield GoogleApi(settings, "mock-api", "mock-ver")

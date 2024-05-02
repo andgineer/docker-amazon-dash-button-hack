@@ -1,12 +1,6 @@
 import pytest
-from google_api import GoogleApi
 from googleapiclient.errors import UnknownApiNameOrVersion
 from unittest.mock import Mock, patch
-
-
-@pytest.fixture
-def google_api_instance(settings, google_credentials):
-    yield GoogleApi(settings, Mock(), Mock())
 
 
 def test_get_credentials_http_success(google_api_instance, google_credentials):
@@ -56,8 +50,6 @@ def test_get_service_without_http(google_api_instance):
     assert "Google API is not authorized" in str(e)
 
 
-def test_service_undefined(google_api_instance, capsys, monkeypatch):
-    with pytest.raises(UnknownApiNameOrVersion) as e:
+def test_service_undefined(google_api_instance):
+    with pytest.raises(UnknownApiNameOrVersion):
         google_api_instance.service
-
-
