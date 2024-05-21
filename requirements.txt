@@ -63,7 +63,7 @@ pyparsing==3.1.2
     # via httplib2
 python-dateutil==2.9.0.post0
     # via -r requirements.in
-requests==2.31.0
+requests==2.32.0
     # via
     #   -r requirements.in
     #   google-api-core
