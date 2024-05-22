@@ -5,8 +5,8 @@ from typing import Any, List, Optional, Tuple, Union
 from functools import cached_property
 
 import httplib2
-from googleapiclient import discovery
-from oauth2client.service_account import ServiceAccountCredentials  # pyright: ignore [reportMissingTypeStubs]
+from googleapiclient import discovery  # pyright: ignore [reportMissingImports]
+from oauth2client.service_account import ServiceAccountCredentials  # pyright: ignore [reportMissingImports]
 
 import models
 

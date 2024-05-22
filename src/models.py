@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from pydantic import BaseModel, RootModel, TypeAdapter, constr, model_validator
+from pydantic import BaseModel, RootModel, TypeAdapter, constr, model_validator  # pyright: ignore [reportMissingImports]
 
 BOUNCE_DELAY = 5
 
