@@ -6,7 +6,7 @@ from functools import cached_property
 
 import httplib2
 from googleapiclient import discovery  # pyright: ignore [reportMissingImports]
-from oauth2client.service_account import ServiceAccountCredentials  # pyright: ignore [reportMissingImports]
+from oauth2client.service_account import ServiceAccountCredentials  # pyright: ignore [reportMissingImports, reportMissingTypeStubs]
 
 import models
 
