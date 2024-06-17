@@ -10,3 +10,4 @@ secrets/
 venv/
 site/
 .mypy_cache/
+.venv/

@@ -32,7 +32,7 @@ def dash() -> AmazonDash:
 def settings() -> Settings:
     print("*" * 10, "load_settings")
     with open("tests/resources/settings.json", "r", encoding="utf-8") as settings_file:
-        settings = Settings(**json.loads(settings_file.read()))
+        settings = Settings.model_validate_json(settings_file.read())
     return settings
 
 
