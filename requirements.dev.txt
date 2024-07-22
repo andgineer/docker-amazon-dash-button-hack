@@ -8,17 +8,17 @@ annotated-types==0.7.0
     # via
     #   -r requirements.txt
     #   pydantic
-astroid==3.2.2
+astroid==3.2.4
     # via pylint
 bracex==2.4
     # via wcmatch
 build==1.2.1
     # via pip-tools
-cachetools==5.3.3
+cachetools==5.4.0
     # via
     #   -r requirements.txt
     #   google-auth
-certifi==2024.6.2
+certifi==2024.7.4
     # via
     #   -r requirements.txt
     #   requests
@@ -35,29 +35,29 @@ click==8.1.7
     #   mkdocs
     #   pip-tools
     #   typer
-coverage[toml]==7.5.3
+coverage[toml]==7.6.0
     # via pytest-cov
 dill==0.3.8
     # via pylint
 distlib==0.3.8
     # via virtualenv
-filelock==3.15.1
+filelock==3.15.4
     # via virtualenv
 freezegun==1.5.1
     # via -r requirements.dev.in
 ghp-import==2.1.0
     # via mkdocs
-google-api-core==2.19.0
+google-api-core==2.19.1
     # via
     #   -r requirements.txt
     #   google-api-python-client
-google-api-python-client==2.133.0
+google-api-python-client==2.137.0
     # via
     #   -r requirements.txt
     #   google-api-python-client-stubs
 google-api-python-client-stubs==1.26.0
     # via -r requirements.dev.in
-google-auth==2.30.0
+google-auth==2.32.0
     # via
     #   -r requirements.txt
     #   google-api-core
@@ -67,7 +67,7 @@ google-auth-httplib2==0.2.0
     # via
     #   -r requirements.txt
     #   google-api-python-client
-googleapis-common-protos==1.63.1
+googleapis-common-protos==1.63.2
     # via
     #   -r requirements.txt
     #   google-api-core
@@ -77,7 +77,7 @@ httplib2==0.22.0
     #   google-api-python-client
     #   google-auth-httplib2
     #   oauth2client
-identify==2.5.36
+identify==2.6.0
     # via pre-commit
 idna==3.7
     # via
@@ -115,7 +115,7 @@ mkdocs-awesome-pages-plugin==2.9.2
     # via -r requirements.dev.in
 mkdocs-get-deps==0.2.0
     # via mkdocs
-mypy==1.10.0
+mypy==1.11.0
     # via -r requirements.dev.in
 mypy-extensions==1.0.0
     # via mypy
@@ -143,11 +143,11 @@ pluggy==1.5.0
     # via pytest
 pre-commit==3.7.1
     # via -r requirements.dev.in
-proto-plus==1.23.0
+proto-plus==1.24.0
     # via
     #   -r requirements.txt
     #   google-api-core
-protobuf==4.25.3
+protobuf==5.27.2
     # via
     #   -r requirements.txt
     #   google-api-core
@@ -168,15 +168,15 @@ pycparser==2.22
     # via
     #   -r requirements.txt
     #   cffi
-pydantic==2.7.4
+pydantic==2.8.2
     # via -r requirements.txt
-pydantic-core==2.18.4
+pydantic-core==2.20.1
     # via
     #   -r requirements.txt
     #   pydantic
 pygments==2.18.0
     # via rich
-pylint==3.2.3
+pylint==3.2.6
     # via -r requirements.dev.in
 pyparsing==3.1.2
     # via
@@ -186,7 +186,7 @@ pyproject-hooks==1.1.0
     # via
     #   build
     #   pip-tools
-pytest==8.2.2
+pytest==8.3.1
     # via
     #   -r requirements.dev.in
     #   pytest-cov
@@ -231,7 +231,7 @@ six==1.16.0
     #   -r requirements.txt
     #   oauth2client
     #   python-dateutil
-tomlkit==0.12.5
+tomlkit==0.13.0
     # via pylint
 typer==0.12.3
     # via lazydocs
@@ -253,7 +253,7 @@ urllib3==2.2.2
     # via
     #   -r requirements.txt
     #   requests
-virtualenv==20.26.2
+virtualenv==20.26.3
     # via pre-commit
 watchdog==4.0.1
     # via mkdocs
