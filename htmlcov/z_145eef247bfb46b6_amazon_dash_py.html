@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_145eef247bfb46b6_google_api_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.1">coverage.py v7.6.1</a>,
-            created at 2024-09-07 06:09 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
+            created at 2025-01-15 05:25 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -155,7 +155,7 @@
     <p class="run"><span class="n"><a id="t73" href="#t73">73</a></span><span class="t">        <span class="key">if</span> <span class="nam">pkt</span><span class="op">.</span><span class="nam">haslayer</span><span class="op">(</span><span class="nam">ARP</span><span class="op">)</span> <span class="key">and</span> <span class="nam">pkt</span><span class="op">[</span><span class="nam">ARP</span><span class="op">]</span><span class="op">.</span><span class="nam">op</span> <span class="op">==</span> <span class="nam">who_has_request</span> <span class="key">or</span> <span class="nam">pkt</span><span class="op">.</span><span class="nam">haslayer</span><span class="op">(</span><span class="nam">DHCP</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t74" href="#t74">74</a></span><span class="t">            <span class="nam">mac</span> <span class="op">=</span> <span class="nam">pkt</span><span class="op">.</span><span class="nam">src</span>  <span class="com"># pkt[layer].hwsrc</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t75" href="#t75">75</a></span><span class="t">            <span class="key">if</span> <span class="nam">mac</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">buttons</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t76" href="#t76">76</a></span><span class="t">                <span class="nam">self</span><span class="op">.</span><span class="nam">trigger</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">buttons</span><span class="op">[</span><span class="nam">mac</span><span class="op">]</span><span class="op">,</span> <span class="nam">datetime</span><span class="op">.</span><span class="nam">fromtimestamp</span><span class="op">(</span><span class="nam">pkt</span><span class="op">.</span><span class="nam">time</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t76" href="#t76">76</a></span><span class="t">                <span class="nam">self</span><span class="op">.</span><span class="nam">trigger</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">buttons</span><span class="op">[</span><span class="nam">mac</span><span class="op">]</span><span class="op">,</span> <span class="nam">datetime</span><span class="op">.</span><span class="nam">fromtimestamp</span><span class="op">(</span><span class="nam">float</span><span class="op">(</span><span class="nam">pkt</span><span class="op">.</span><span class="nam">time</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t77" href="#t77">77</a></span><span class="t">            <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t78" href="#t78">78</a></span><span class="t">                <span class="key">if</span> <span class="nam">pkt</span><span class="op">.</span><span class="nam">haslayer</span><span class="op">(</span><span class="nam">DHCP</span><span class="op">)</span> <span class="key">and</span> <span class="nam">mac</span> <span class="key">not</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">seen_dhcp</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t79" href="#t79">79</a></span><span class="t">                    <span class="nam">print</span><span class="op">(</span><span class="fst">f"</span><span class="fst">DHCP request from unknown MAC </span><span class="op">{</span><span class="nam">mac</span><span class="op">}</span><span class="fst">:\n</span><span class="op">{</span><span class="nam">pkt</span><span class="op">[</span><span class="nam">DHCP</span><span class="op">]</span><span class="op">.</span><span class="nam">options</span><span class="op">}</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -214,8 +214,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_145eef247bfb46b6_google_api_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.1">coverage.py v7.6.1</a>,
-            created at 2024-09-07 06:09 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
+            created at 2025-01-15 05:25 +0000
         </p>
     </div>
 </footer>
