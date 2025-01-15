@@ -41,9 +41,9 @@ class CustomBaseModel(BaseModel):
         for field, value in values.items():
             expected_type = cls.__annotations__.get(field)
             if expected_type is SummaryType and isinstance(value, list):
-                assert (
-                    len(value) > 0
-                ), """summary param must be string or array like [{"summary":"summary1", "before":"10:00:00"}, {"summary": "summary2", "before":"19:00:00"}, ...]"""
+                assert len(value) > 0, (
+                    """summary param must be string or array like [{"summary":"summary1", "before":"10:00:00"}, {"summary": "summary2", "before":"19:00:00"}, ...]"""
+                )
         return values
 
 

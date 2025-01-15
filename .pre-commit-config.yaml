@@ -8,7 +8,7 @@ exclude: |
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.5.4
+    rev: v0.9.1
     hooks:
       # Run the linter.
       - id: ruff
@@ -16,7 +16,7 @@ repos:
       # Run the formatter.
       - id: ruff-format
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.372
+    rev: v1.1.391
     hooks:
     - id: pyright
 

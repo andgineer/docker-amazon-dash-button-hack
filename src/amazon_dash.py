@@ -73,7 +73,7 @@ class AmazonDash:
         if pkt.haslayer(ARP) and pkt[ARP].op == who_has_request or pkt.haslayer(DHCP):
             mac = pkt.src  # pkt[layer].hwsrc
             if mac in self.buttons:
-                self.trigger(self.buttons[mac], datetime.fromtimestamp(pkt.time))
+                self.trigger(self.buttons[mac], datetime.fromtimestamp(float(pkt.time)))
             else:
                 if pkt.haslayer(DHCP) and mac not in self.seen_dhcp:
                     print(f"DHCP request from unknown MAC {mac}:\n{pkt[DHCP].options}")
