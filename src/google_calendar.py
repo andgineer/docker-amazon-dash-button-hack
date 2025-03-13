@@ -3,13 +3,12 @@
 import datetime
 import os
 import time
-from typing import Any, List, Optional, Tuple, Union, cast
+from typing import Any, Optional, Union, cast
 
 import dateutil.parser
 
 import models
 from google_api import GoogleApi
-
 
 # GCAL_TIME_PARSE = '%Y-%m-%dT%H:%M:%S%z'
 
@@ -29,7 +28,8 @@ class Calendar(GoogleApi):
         Does not work for some unclear reasons.
         returns empty `items` array in response.
 
-        And if I access calendar 'primary' events created in some other calendar invisible for other accounts.
+        And if I access calendar 'primary' events created in some other calendar invisible
+        for other accounts.
         So we have to specify calendarId implicitly and cannot find it by name.
         """
         page_token = None
@@ -51,14 +51,14 @@ class Calendar(GoogleApi):
 
     def time_to_str(self, t: datetime.datetime) -> str:
         """Convert datetime to Google Calendar time format."""
-        GCAL_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
+        gcal_time_format = "%Y-%m-%dT%H:%M:%S"
         tz_minutes = -time.timezone // 60
         tz_hours, tz_minutes = divmod(tz_minutes, 60)
-        return f"{t.strftime(GCAL_TIME_FORMAT)}{tz_hours:+03d}:{abs(tz_minutes):02d}"
+        return f"{t.strftime(gcal_time_format)}{tz_hours:+03d}:{abs(tz_minutes):02d}"
 
     def start_event(self, summary: str) -> None:
         """Start event in Google Calendar."""
-        INSERT_EVENT_REQUEST = {
+        insert_event_request = {
             "summary": summary,
             "description": "Event created by amazon dash (button) click.",
             "start": {
@@ -72,12 +72,12 @@ class Calendar(GoogleApi):
         }
         _ = (
             self.service.events()
-            .insert(calendarId=self.calendarId, body=INSERT_EVENT_REQUEST)  # 'primary',
+            .insert(calendarId=self.calendarId, body=insert_event_request)  # 'primary',
             .execute()
         )
         # print('Calendar event created: %s' % (event.get('htmlLink')))
 
-    def get_last_event(self, summary: str) -> Tuple[Optional[str], Optional[List[Any]]]:
+    def get_last_event(self, summary: str) -> tuple[Optional[str], Optional[list[Any]]]:
         """Get last event from Google Calendar.
 
         :param summary: text to search
@@ -92,7 +92,7 @@ class Calendar(GoogleApi):
                 .list(
                     calendarId=self.calendarId,  # 'primary',
                     timeMin=self.google_time_format(
-                        datetime.datetime.now() - datetime.timedelta(days=100)
+                        datetime.datetime.now() - datetime.timedelta(days=100),
                     ),  # better limit than sorry
                     q=summary,
                     # timeZone='UTC',
@@ -153,26 +153,27 @@ class Calendar(GoogleApi):
     def google_today(self) -> str:
         """Get today's date in Google Calendar time format."""
         return self.google_time_format(
-            datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0),
         )
 
 
 def check() -> None:
     """Check."""
-    from amazon_dash import AmazonDash  # pylint: disable=import-outside-toplevel,cyclic-import
+    from amazon_dash import AmazonDash
 
     dash = AmazonDash()
     settings = dash.load_settings()
     calendar_action: models.CalendarAction = cast(
-        models.CalendarAction, settings.events["white"].actions[1]
+        models.CalendarAction,
+        settings.events["white"].actions[1],
     )
     calendar = Calendar(settings, calendar_action.calendar_id)
 
     # Delete Google event if existed
     while True:
-        id, event = calendar.get_last_event("Google")
-        if id:
-            calendar.delete_event(id)
+        _id, event = calendar.get_last_event("Google")
+        if _id:
+            calendar.delete_event(_id)
         else:
             break
 
@@ -181,9 +182,9 @@ def check() -> None:
     print(calendar.get_last_event("Google"))
 
     # Get it from Calendar and "close" (set end as + 5 minutes)
-    id, event = calendar.get_last_event("Google")
-    assert id
-    calendar.close_event(id, (datetime.datetime.now() + datetime.timedelta(minutes=5)))
+    _id, event = calendar.get_last_event("Google")
+    assert _id
+    calendar.close_event(_id, (datetime.datetime.now() + datetime.timedelta(minutes=5)))
 
 
 if __name__ == "__main__":  # pragma: no cover

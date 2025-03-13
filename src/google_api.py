@@ -1,12 +1,14 @@
 """Google API class."""
 
 from datetime import datetime
-from typing import Any, List, Optional, Tuple, Union
 from functools import cached_property
+from typing import Any, Optional, Union
 
 import httplib2
 from googleapiclient import discovery  # pyright: ignore [reportMissingImports]
-from oauth2client.service_account import ServiceAccountCredentials  # pyright: ignore [reportMissingImports, reportMissingTypeStubs]
+from oauth2client.service_account import (
+    ServiceAccountCredentials,  # pyright: ignore [reportMissingImports, reportMissingTypeStubs]
+)
 
 import models
 
@@ -54,8 +56,9 @@ class GoogleApi:
         return self.get_service(self.api, self.version)
 
     def get_last_event(
-        self, summary: str
-    ) -> Tuple[Optional[Union[int, str]], Optional[List[Any]]]:
+        self,
+        summary: str,
+    ) -> tuple[Optional[Union[int, str]], Optional[list[Any]]]:
         """Get last event."""
         raise NotImplementedError
 

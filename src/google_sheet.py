@@ -1,7 +1,7 @@
 """Register Amazon Dash Button events in Google Sheets using Google Sheets API."""
 
 import datetime
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 import models
 from google_api import GoogleApi
@@ -31,7 +31,7 @@ class Sheet(GoogleApi):
         self.spreadSheetId = self.get_file_id(name)
         self.sheets = self.get_sheets(press_sheet, event_sheet)
 
-    def get_last_event(self, summary: str) -> Tuple[Optional[int], Optional[List[Any]]]:
+    def get_last_event(self, summary: str) -> tuple[Optional[int], Optional[list[Any]]]:
         """Get last event from Google Sheet.
 
         :param summary: text to search
@@ -54,7 +54,7 @@ class Sheet(GoogleApi):
             values=[summary, datetime.datetime.now().strftime(GSHEET_TIME_FORMAT)],
         )
 
-    def close_event(  # pylint: disable=arguments-renamed
+    def close_event(
         self,
         event_id: Union[int, str],
         close_time: datetime.datetime,
@@ -70,7 +70,7 @@ class Sheet(GoogleApi):
             col=2,
             values=[
                 close_time.strftime(GSHEET_TIME_FORMAT),
-                "=C{row}-B{row}".format(row=row_num + 1),
+                f"=C{row_num + 1}-B{row_num + 1}",
             ],
         )
 
@@ -113,20 +113,25 @@ class Sheet(GoogleApi):
         return None
 
     def find_last_row(
-        self, sheet: str, search_string: str, search_in_col: int = 0
-    ) -> Tuple[Optional[int], Optional[List[Any]]]:
+        self,
+        sheet: str,
+        search_string: str,
+        search_in_col: int = 0,
+    ) -> tuple[Optional[int], Optional[list[Any]]]:
         """Find last row with search_string in search_in_col column.
 
         Very stupid implementation, but:
-        The Sheets API v4 does not currently have a direct equivalent for the Sheets API v3 structured queries.
-        However, you can retrieve the relevant data and sort through it as needed in your application.
+        The Sheets API v4 does not currently have a direct equivalent for the Sheets API v3
+        structured queries.
+        However, you can retrieve the relevant data and sort through it as needed
+        in your application.
         """
-        ROWS_TO_FETCH = (
+        rows_to_fetch = (
             1000  # well, we have to stop somewhere and 1000 looks as good as any other limit
         )
-        FIRST_ROW_TO_FETCH = 1
-        rows = self.get_rows(sheet=sheet, row=FIRST_ROW_TO_FETCH, rows=ROWS_TO_FETCH, cols=3)
-        row_idx = FIRST_ROW_TO_FETCH
+        first_row_to_fetch = 1
+        rows = self.get_rows(sheet=sheet, row=first_row_to_fetch, rows=rows_to_fetch, cols=3)
+        row_idx = first_row_to_fetch
         for row in rows:
             if len(row) >= search_in_col + 1 and row[search_in_col]:
                 if row[search_in_col] == search_string:
@@ -136,14 +141,16 @@ class Sheet(GoogleApi):
                 return None, None
         return None, None
 
-    def get_sheets(self, press_sheet: str, event_sheet: str) -> Dict[str, Any]:
+    def get_sheets(self, press_sheet: str, event_sheet: str) -> dict[str, Any]:
         """Get sheets ids.
 
         Returns {sheet_name: sheet_id}
         """
         if self.service:
             request = self.service.spreadsheets().get(
-                spreadsheetId=self.spreadSheetId, ranges=[], includeGridData=False
+                spreadsheetId=self.spreadSheetId,
+                ranges=[],
+                includeGridData=False,
             )
             sheets = request.execute()["sheets"]
             # todo check if press_sheet and event_sheet are in the sheets
@@ -152,7 +159,7 @@ class Sheet(GoogleApi):
             }
         return {press_sheet: None, event_sheet: None}
 
-    def update_cells(self, sheet: str, values: List[Any], row: int = 1, col: int = 0) -> None:
+    def update_cells(self, sheet: str, values: list[Any], row: int = 1, col: int = 0) -> None:
         """Update cells in Google Sheet.
 
         row and col 0-based
@@ -162,7 +169,10 @@ class Sheet(GoogleApi):
             .values()
             .update(
                 spreadsheetId=self.spreadSheetId,
-                range=f"{sheet}!{chr(ord('A') + col)}{row + 1}:{chr(ord('A') + col + len(values) - 1)}",
+                range=(
+                    f"{sheet}!{chr(ord('A') + col)}{row + 1}:"
+                    f"{chr(ord('A') + col + len(values) - 1)}"
+                ),
                 valueInputOption="USER_ENTERED",
                 body={
                     "majorDimension": "ROWS",
@@ -172,7 +182,7 @@ class Sheet(GoogleApi):
         )
         request.execute()
 
-    def append_row(self, sheet: str, values: List[Any], row: int = 1) -> None:
+    def append_row(self, sheet: str, values: list[Any], row: int = 1) -> None:
         """Append row to Google Sheet.
 
         row 0-based
@@ -191,7 +201,7 @@ class Sheet(GoogleApi):
 
     def insert_row(self, sheet: str, after: int = 1) -> None:
         """Insert row to Google Sheet."""
-        INSERT_ROW_REQUEST = {
+        insert_row_request = {
             "requests": [
                 {
                     "insertDimension": {
@@ -202,18 +212,19 @@ class Sheet(GoogleApi):
                             "endIndex": after + 1,
                         },
                         "inheritFromBefore": False,
-                    }
+                    },
                 },
             ],
         }
         request = self.service.spreadsheets().batchUpdate(
-            spreadsheetId=self.spreadSheetId, body=INSERT_ROW_REQUEST
+            spreadsheetId=self.spreadSheetId,
+            body=insert_row_request,
         )
         request.execute()
 
     def copy_row_formatting(self, sheet: str, copy_from: int = 2, copy_to: int = 1) -> None:
         """Copy row formatting from copy_from to copy_to."""
-        COPY_FORMATTING_REQUEST = {
+        copy_formatting_request = {
             "requests": [
                 {
                     "copyPaste": {
@@ -233,16 +244,17 @@ class Sheet(GoogleApi):
                         },
                         "pasteType": "PASTE_FORMAT",
                         "pasteOrientation": "NORMAL",
-                    }
-                }
-            ]
+                    },
+                },
+            ],
         }
         request = self.service.spreadsheets().batchUpdate(
-            spreadsheetId=self.spreadSheetId, body=COPY_FORMATTING_REQUEST
+            spreadsheetId=self.spreadSheetId,
+            body=copy_formatting_request,
         )
         request.execute()
 
-    def get_rows(self, sheet: str, row: int = 1, rows: int = 1, cols: int = 3) -> List[List[Any]]:
+    def get_rows(self, sheet: str, row: int = 1, rows: int = 1, cols: int = 3) -> list[list[Any]]:
         """Get rows from Google Sheet.
 
         row 0-based
@@ -257,8 +269,7 @@ class Sheet(GoogleApi):
             )
             .execute()
         )
-        values = result.get("values", [])
-        return values  # type: ignore
+        return result.get("values", [])
 
     def from_serial_time(self, serial: float) -> datetime.datetime:
         """Convert google 'serial number' date-time to datetime."""
@@ -267,7 +278,7 @@ class Sheet(GoogleApi):
 
 def check() -> None:
     """Check."""
-    from amazon_dash import AmazonDash  # pylint: disable=import-outside-toplevel
+    from amazon_dash import AmazonDash
 
     dash = AmazonDash()
     settings = dash.load_settings()

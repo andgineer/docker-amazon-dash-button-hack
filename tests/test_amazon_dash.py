@@ -18,27 +18,29 @@ def test_setting_file_name(dash):
 
 
 def test_load_settings_valid(mocker, dash, settings):
-    mocker.patch('os.path.isfile', return_value=True)
-    mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps(settings.model_dump())))
+    mocker.patch("os.path.isfile", return_value=True)
+    mocker.patch("builtins.open", mocker.mock_open(read_data=json.dumps(settings.model_dump())))
     result = dash.load_settings()
     assert result == settings
 
 
 def test_load_settings_no_file(mocker, dash):
-    mocker.patch('os.path.isfile', return_value=False)
+    mocker.patch("os.path.isfile", return_value=False)
     with pytest.raises(SystemExit):
         dash.load_settings()
 
 
 def test_load_buttons_valid(mocker, dash):
-    mocker.patch('os.path.isfile', return_value=True)
-    mocker.patch('builtins.open', mocker.mock_open(read_data=json.dumps({"68:54:fd:27:aa:f1": "Button1"})))
+    mocker.patch("os.path.isfile", return_value=True)
+    mocker.patch(
+        "builtins.open", mocker.mock_open(read_data=json.dumps({"68:54:fd:27:aa:f1": "Button1"}))
+    )
     result = dash.load_buttons()
     assert result == {"68:54:fd:27:aa:f1": "Button1"}
 
 
 def test_load_buttons_no_file(mocker, dash):
-    mocker.patch('os.path.isfile', return_value=False)
+    mocker.patch("os.path.isfile", return_value=False)
     with pytest.raises(SystemExit):
         dash.load_buttons()
 
@@ -52,7 +54,7 @@ def test_load_buttons_no_file(mocker, dash):
 )
 def test_trigger_debouncing(mocker, dash, settings, current_time, chatter_time, expected):
     dash.debounce = {"button1": {"time": chatter_time}}
-    mock_action = mocker.patch('amazon_dash.Action')
+    mock_action = mocker.patch("amazon_dash.Action")
 
     call_action = mock_action.return_value.action
     dash.settings = settings
@@ -84,7 +86,7 @@ def test_arp_handler_known_mac(mocker, dash):
 
     # Set up your test scenario
     dash.buttons = {known_mac: "TestButton"}
-    mock_trigger = mocker.patch('amazon_dash.AmazonDash.trigger')
+    mock_trigger = mocker.patch("amazon_dash.AmazonDash.trigger")
 
     dash.arp_handler(pkt)
     mock_trigger.assert_called_once_with("TestButton", datetime.fromtimestamp(pkt.time))
@@ -92,9 +94,9 @@ def test_arp_handler_known_mac(mocker, dash):
 
 def test_run(mocker, dash):
     # Mock necessary functions
-    mocker.patch.object(dash, 'load_buttons', return_value={})
-    mocker.patch.object(dash, 'load_settings', return_value={})
-    mock_sniff = mocker.patch('amazon_dash.sniff')
+    mocker.patch.object(dash, "load_buttons", return_value={})
+    mocker.patch.object(dash, "load_settings", return_value={})
+    mock_sniff = mocker.patch("amazon_dash.sniff")
 
     dash.run()
     mock_sniff.assert_called_once()

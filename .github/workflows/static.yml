@@ -24,5 +24,5 @@ jobs:
         uses: andgineer/uv-venv@v1
       - name: Static source code checks
         run: |
-          uv pip install -r requirements.dev.txt  
+          uv pip install -r requirements.dev.txt
           pre-commit run --verbose --all-files

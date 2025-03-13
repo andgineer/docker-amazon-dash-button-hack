@@ -8,30 +8,34 @@ def test_valid_input():
     valid_data_1 = {
         "event_type": "button",
         "summary": "A simple summary",
-        "actions": [{
-            "type": "sheet",
-            "name": "amazon_dash",
-            "press_sheet": "press",
-            "event_sheet": "event",
-            "restart": 15,
-            "autoclose": 10800,
-            "default": 900
-        }]
+        "actions": [
+            {
+                "type": "sheet",
+                "name": "amazon_dash",
+                "press_sheet": "press",
+                "event_sheet": "event",
+                "restart": 15,
+                "autoclose": 10800,
+                "default": 900,
+            }
+        ],
     }
 
     # Valid list type summary input
     valid_data_2 = {
         "event_type": "button",
         "summary": [{"summary": "summary1", "before": "10:00:00", "image": "morning.png"}],
-        "actions": [{
-            "type": "sheet",
-            "name": "amazon_dash",
-            "press_sheet": "press",
-            "event_sheet": "event",
-            "restart": 15,
-            "autoclose": 10800,
-            "default": 900
-        }]
+        "actions": [
+            {
+                "type": "sheet",
+                "name": "amazon_dash",
+                "press_sheet": "press",
+                "event_sheet": "event",
+                "restart": 15,
+                "autoclose": 10800,
+                "default": 900,
+            }
+        ],
     }
 
     assert EventActions(**valid_data_1)
@@ -43,15 +47,17 @@ def test_invalid_input():
     invalid_data = {
         "event_type": "button",
         "summary": [],
-        "actions": [{
-            "type": "sheet",
-            "name": "amazon_dash",
-            "press_sheet": "press",
-            "event_sheet": "event",
-            "restart": 15,
-            "autoclose": 10800,
-            "default": 900
-        }]
+        "actions": [
+            {
+                "type": "sheet",
+                "name": "amazon_dash",
+                "press_sheet": "press",
+                "event_sheet": "event",
+                "restart": 15,
+                "autoclose": 10800,
+                "default": 900,
+            }
+        ],
     }
 
     with pytest.raises(ValidationError) as excinfo:

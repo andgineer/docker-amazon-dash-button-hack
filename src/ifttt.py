@@ -4,12 +4,14 @@ https://ifttt.com/maker_webhooks
 """
 
 import json
-from typing import Any, Dict
+from typing import Any
 
 import requests
 from requests import RequestException
 
 import models
+
+HTTP_OK = 200
 
 
 class Ifttt:
@@ -21,9 +23,9 @@ class Ifttt:
         self.key_file = self.load_key()
         self.key = self.key_file["key"]
 
-    def load_key(self) -> Dict[str, Any]:
+    def load_key(self) -> dict[str, Any]:
         """Load IFTTT key from file."""
-        with open(self.settings.ifttt_key_file_name, "r", encoding="utf-8-sig") as key_file:
+        with open(self.settings.ifttt_key_file_name, encoding="utf-8-sig") as key_file:
             return json.loads(key_file.read())  # type: ignore
 
     def press(self, summary: str, v1: str, v2: str, v3: str) -> None:
@@ -38,7 +40,7 @@ class Ifttt:
                 headers={"content-type": "application/json"},
                 timeout=5,
             )
-            if result.status_code != 200:
+            if result.status_code != HTTP_OK:
                 print("*" * 10, "IFTTT error:\n", url, "\n", result)
         except RequestException as e:
             print("*" * 10, "IFTTT request fail:\n", url, "\n", e)
@@ -46,7 +48,7 @@ class Ifttt:
 
 def check() -> None:
     """Check IFTTT."""
-    from amazon_dash import AmazonDash  # pylint: disable=import-outside-toplevel,cyclic-import
+    from amazon_dash import AmazonDash
 
     dash = AmazonDash()
     settings = dash.load_settings()

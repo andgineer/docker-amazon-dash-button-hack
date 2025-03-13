@@ -15,7 +15,7 @@ def mock_get_credentials_http():
 
 @pytest.fixture
 def mock_discovery_build():
-    with patch('googleapiclient.discovery.build') as mock_build:
+    with patch("googleapiclient.discovery.build") as mock_build:
         yield mock_build
 
 
@@ -23,9 +23,12 @@ def mock_discovery_build():
 def mock_sheet(mock_get_credentials_http, mock_discovery_build):
     settings = {"test": "setting", "credentials_file_name": "test_credentials.json"}
     sheet_name = "test_calendar_id"
-    with patch('google_calendar.GoogleApi', return_value=Mock()), patch('google_sheet.Sheet.get_file_id', return_value="test_id"):
+    with (
+        patch("google_calendar.GoogleApi", return_value=Mock()),
+        patch("google_sheet.Sheet.get_file_id", return_value="test_id"),
+    ):
         sheet = Sheet(settings, sheet_name)
-        with patch.object(sheet, 'service', new_callable=PropertyMock) as mock_service:
+        with patch.object(sheet, "service", new_callable=PropertyMock) as mock_service:
             mock_service.return_value = Mock()  # Mocking the actual Google Sheet service
 
             sheet.drive_service = Mock()  # Mocking the Drive service
@@ -33,7 +36,9 @@ def mock_sheet(mock_get_credentials_http, mock_discovery_build):
 
             # Mock get_file_id behavior
             sheet.drive_service = Mock()
-            sheet.drive_service.files().list.return_value.execute.return_value = {'files': [{'id': 'test_id', 'name': 'Test Sheet Name'}]}
+            sheet.drive_service.files().list.return_value.execute.return_value = {
+                "files": [{"id": "test_id", "name": "Test Sheet Name"}]
+            }
 
             return sheet
 
@@ -100,7 +105,7 @@ def test_get_last_event(mock_sheet):
     # Mocking serial numbers for '01/01/2023 12:00:00' and '02/01/2023 12:00:00'
     mock_serial_for_start_date = (datetime(2023, 1, 1, 12, 0) - datetime(1899, 12, 30)).days
     mock_serial_for_end_date = (datetime(2023, 1, 2, 12, 0) - datetime(1899, 12, 30)).days
-    mock_rows = [['summary', mock_serial_for_start_date, mock_serial_for_end_date]]
+    mock_rows = [["summary", mock_serial_for_start_date, mock_serial_for_end_date]]
     mock_sheet.get_rows = Mock(return_value=mock_rows)
 
     # When
@@ -108,9 +113,11 @@ def test_get_last_event(mock_sheet):
 
     # Then
     assert row == 1
-    expected_event = ['summary',
-                      serial_to_datetime(mock_serial_for_start_date),
-                      serial_to_datetime(mock_serial_for_end_date)]
+    expected_event = [
+        "summary",
+        serial_to_datetime(mock_serial_for_start_date),
+        serial_to_datetime(mock_serial_for_end_date),
+    ]
     assert event == expected_event
 
 
@@ -130,7 +137,7 @@ def test_get_last_event_not_found(mock_sheet):
 def test_start_event(mock_sheet):
     # Given
     current_time = datetime(2023, 1, 1, 12, 0)
-    with patch('datetime.datetime') as mock_datetime:
+    with patch("datetime.datetime") as mock_datetime:
         mock_datetime.now.return_value = current_time
         mock_sheet.insert_row = Mock()
         mock_sheet.copy_row_formatting = Mock()
@@ -144,7 +151,7 @@ def test_start_event(mock_sheet):
         mock_sheet.copy_row_formatting.assert_called_once_with(sheet=mock_sheet.event_sheet)
         mock_sheet.update_cells.assert_called_once_with(
             sheet=mock_sheet.event_sheet,
-            values=["Test Event", current_time.strftime("%d/%m/%Y %H:%M:%S")]
+            values=["Test Event", current_time.strftime("%d/%m/%Y %H:%M:%S")],
         )
 
 
@@ -164,14 +171,14 @@ def test_close_event(mock_sheet):
         sheet=mock_sheet.event_sheet,
         row=event_row,
         col=2,
-        values=[close_time.strftime("%d/%m/%Y %H:%M:%S"), "=C2-B2"]
+        values=[close_time.strftime("%d/%m/%Y %H:%M:%S"), "=C2-B2"],
     )
 
 
 def test_press(mock_sheet):
     # Given
     current_time = datetime(2023, 1, 3, 12, 0)
-    with patch('datetime.datetime') as mock_datetime:
+    with patch("datetime.datetime") as mock_datetime:
         mock_datetime.now.return_value = current_time
         mock_sheet.insert_row = Mock()
         mock_sheet.copy_row_formatting = Mock()
@@ -185,7 +192,7 @@ def test_press(mock_sheet):
         mock_sheet.copy_row_formatting.assert_called_once_with(sheet=mock_sheet.press_sheet)
         mock_sheet.update_cells.assert_called_once_with(
             sheet=mock_sheet.press_sheet,
-            values=["Button Pressed", current_time.strftime("%d/%m/%Y %H:%M:%S")]
+            values=["Button Pressed", current_time.strftime("%d/%m/%Y %H:%M:%S")],
         )
 
 
@@ -208,7 +215,9 @@ def test_copy_row_formatting(mock_sheet):
 
 def test_get_rows(mock_sheet):
     # Given
-    mock_sheet.service.spreadsheets().values().get().execute = Mock(return_value={"values": [["A1", "B1", "C1"]]})
+    mock_sheet.service.spreadsheets().values().get().execute = Mock(
+        return_value={"values": [["A1", "B1", "C1"]]}
+    )
 
     # When
     rows = mock_sheet.get_rows("TestSheet", 1, 3, 3)

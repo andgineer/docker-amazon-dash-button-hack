@@ -7,7 +7,7 @@ import collections.abc
 import sys
 import traceback
 from datetime import datetime, timedelta
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Union
 
 import models
 from google_api import GoogleApi
@@ -23,11 +23,12 @@ class Action:
     def __init__(self, settings: models.Settings) -> None:
         """Init."""
         self.settings = settings
-        self.events: Dict[str, models.EventActions] = settings.events
+        self.events: dict[str, models.EventActions] = settings.events
 
     def set_summary_by_time(
-        self, button_actions: List[models.ActionItem]
-    ) -> List[models.ActionItem]:
+        self,
+        button_actions: list[models.ActionItem],
+    ) -> list[models.ActionItem]:
         """Set event summary according now().
 
         If summary is a list like
@@ -38,19 +39,22 @@ class Action:
 
         :param button_actions:
         :return:
-        if summary of any action in button_actions is a list, then select only one summary from the list
-        in accordance with the current time
+        if summary of any action in button_actions is a list, then select only one summary
+        from the list in accordance with the current time
         """
         result_actions = [action.model_copy(deep=True) for action in button_actions]
         for action in result_actions:
             if isinstance(action.summary, list):
                 assert (  # todo: put into pydantic validation
                     len(action.summary) > 0
-                ), """summary param must be string or array like
-        [{"summary":"summary1", "before":"10:00:00"}, {"summary": "summary2", "before":"19:00:00"}, ...]"""
+                ), """summary param must be string or array like [
+        {"summary":"summary1", "before":"10:00:00"},
+        {"summary": "summary2", "before":"19:00:00"},
+        ...
+        ]"""
                 time = datetime.now()
                 interval = None
-                for interval_idx, interval in enumerate(action.summary):
+                for _, interval in enumerate(action.summary):
                     if interval.before is not None:
                         interval_end_parts = [int(s) for s in self.get_time_parts(interval.before)]
                         interval_end = time.replace(
@@ -65,25 +69,30 @@ class Action:
                     action.summary = interval.summary if interval else ""
         return result_actions
 
-    def get_time_parts(self, time_str: str) -> List[str]:
+    def get_time_parts(self, time_str: str) -> list[str]:
         """Get [h, m, s] from string HH:MM:SS."""
         time_parts = time_str.split(":")
         valid_parts = []
         for i in time_parts:
             try:
-                if 0 <= int(i) < 60:
+                max_time_unit = 60
+                if 0 <= int(i) < max_time_unit:
                     valid_parts.append(i)
             except ValueError as e:
                 raise ValueError('Between ":" in `before` param should be numbers.') from e
-        if len(valid_parts) != 3:
+        full_time_parts = 3
+        if len(valid_parts) != full_time_parts:
             raise ValueError(
-                f'`before` param should be "HH:MM:SS", for example 10:00:00. Got `{time_str}` instead.'
+                '`before` param should be "HH:MM:SS", '
+                f"for example 10:00:00. Got `{time_str}` instead.",
             )
         return time_parts
 
     def preprocess_actions(
-        self, button: str, button_settings: models.EventActions
-    ) -> List[models.ActionItem]:
+        self,
+        button: str,
+        button_settings: models.EventActions,
+    ) -> list[models.ActionItem]:
         """Add to all actions summary.
 
         From button settings or just button name,
@@ -102,17 +111,17 @@ class Action:
                 return [subst(item) for item in param]
             return param
 
-        result: List[models.ActionItem] = [
+        result: list[models.ActionItem] = [
             models.ActionItemLoad(
                 subst(
                     (
                         action
                         if action.summary or not button_settings.summary and not button
                         else action.model_copy(
-                            update={"summary": button_settings.summary or button}
+                            update={"summary": button_settings.summary or button},
                         )
-                    ).model_dump()
-                )
+                    ).model_dump(),
+                ),
             )
             for action in button_settings.actions
         ]
@@ -122,7 +131,7 @@ class Action:
 
     def action(self, button: str, dry_run: bool = False) -> None:
         """Register event from the button."""
-        ACTION_HANDLERS: Dict[str, Callable[..., None]] = {
+        action_handlers: dict[str, Callable[..., None]] = {
             "sheet": self.sheet_action,
             "calendar": self.calendar_action,
             "ifttt": self.ifttt_action,
@@ -138,14 +147,14 @@ class Action:
             print(f"Event for {act.type}: ({act})")
             if not dry_run:
                 try:
-                    ACTION_HANDLERS[act.type](button, act)
-                except Exception as e:
+                    action_handlers[act.type](button, act)
+                except Exception as e:  # noqa: BLE001
                     print("!" * 5, f"Event handling error:\n{e}")
                     traceback.print_exception(*sys.exc_info())
 
     def ifttt_action(
         self,
-        button: str,  # pylint: disable=unused-argument
+        button: str,  # noqa: ARG002
         action_params: models.IftttAction,
     ) -> None:
         """Register event in IFTTT."""
@@ -160,7 +169,7 @@ class Action:
 
     def openhab_action(
         self,
-        button: str,  # pylint: disable=unused-argument
+        button: str,  # noqa: ARG002
         action_params: models.OpenhabAction,
     ) -> None:
         """Register event in OpenHab."""
@@ -169,7 +178,7 @@ class Action:
 
     def calendar_action(
         self,
-        button: str,  # pylint: disable=unused-argument
+        button: str,  # noqa: ARG002
         action_params: models.CalendarAction,
     ) -> None:
         """Register event in Google Calendar."""
@@ -178,7 +187,7 @@ class Action:
 
     def sheet_action(
         self,
-        button: str,  # pylint: disable=unused-argument
+        button: str,  # noqa: ARG002
         action_params: models.SheetAction,
     ) -> None:
         """Register event in Google Sheet."""
@@ -193,7 +202,9 @@ class Action:
         self.event(sheet, action_params)
 
     def event(
-        self, target: GoogleApi, action_params: Union[models.CalendarAction, models.SheetAction]
+        self,
+        target: GoogleApi,
+        action_params: Union[models.CalendarAction, models.SheetAction],
     ) -> None:
         """Event registration common logic."""
         assert isinstance(action_params.summary, str)
@@ -201,24 +212,27 @@ class Action:
         if last_event:
             assert last_event_row is not None
             last_start = last_event[1]
-            last_end = last_event[2] if len(last_event) > 2 else None
+            last_end = last_event[2] if len(last_event) > 2 else None  # noqa: PLR2004
             nowtz = datetime.now(last_start.tzinfo)
             if last_end and abs(nowtz - last_end) < timedelta(seconds=action_params.restart):
                 print(
-                    "Button press ignored because previuos event closed and it is too early to start new one"
+                    "Button press ignored because previuos event closed "
+                    "and it is too early to start new one",
                 )
                 return
             if last_start <= nowtz and (nowtz - last_start) < timedelta(
-                seconds=action_params.restart
+                seconds=action_params.restart,
             ):
                 print(
-                    "Button press ignored because event in progress and it is too early to close it"
+                    "Button press ignored because event in progress "
+                    "and it is too early to close it",
                 )
                 return
             if not last_end:
                 if abs(nowtz - last_start) > timedelta(seconds=action_params.autoclose):
                     target.close_event(
-                        last_event_row, (last_start + timedelta(seconds=action_params.default))
+                        last_event_row,
+                        (last_start + timedelta(seconds=action_params.default)),
                     )
                     print("Auto close previous event")
                 else:

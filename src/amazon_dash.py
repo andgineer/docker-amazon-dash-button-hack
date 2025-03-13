@@ -7,9 +7,12 @@ Register events in class Action
 import os.path
 import sys
 from datetime import datetime, timedelta
-from typing import Any, Dict, Optional, Set
+from typing import Any, Optional
 
-from scapy.all import Packet, sniff  # pyright: ignore [reportMissingImports, reportMissingTypeStubs]
+from scapy.all import (  # pyright: ignore [reportMissingImports, reportMissingTypeStubs]
+    Packet,
+    sniff,
+)
 from scapy.layers.dhcp import DHCP  # pyright: ignore [reportMissingImports, reportMissingTypeStubs]
 from scapy.layers.l2 import ARP  # pyright: ignore [reportMissingImports, reportMissingTypeStubs]
 
@@ -26,12 +29,13 @@ class AmazonDash:
 
     def __init__(self) -> None:
         """Init."""
-        self.buttons: Dict[str, Any] = {}
+        self.buttons: dict[str, Any] = {}
         self.settings: Optional[models.Settings] = None
-        self.seen_macs: Set[str] = set()
-        self.seen_dhcp: Set[str] = set()
-        self.debounce: Dict[  # bounce protection (repeated packets in less than bounce_delay from last event)
-            str, Dict[str, Any]
+        self.seen_macs: set[str] = set()
+        self.seen_dhcp: set[str] = set()
+        self.debounce: dict[  # bounce protection (in less than bounce_delay from last event)
+            str,
+            dict[str, Any],
         ] = {}
 
     @staticmethod
@@ -50,22 +54,23 @@ class AmazonDash:
             print(NO_SETTINGS_FILE.format(self.setting_file_name(settings_folder)))
             sys.exit(1)
         with open(
-            self.setting_file_name(settings_folder), "r", encoding="utf-8-sig"
+            self.setting_file_name(settings_folder),
+            encoding="utf-8-sig",
         ) as settings_file:
             return models.Settings.model_validate_json(settings_file.read())
 
-    def load_buttons(self, settings_folder: str = "..") -> Dict[str, Any]:
+    def load_buttons(self, settings_folder: str = "..") -> dict[str, Any]:
         """Load known buttons."""
         if not os.path.isfile(self.button_file_name(settings_folder)):
             print(NO_SETTINGS_FILE.format(self.button_file_name(settings_folder)))
             sys.exit(1)
         with open(
-            self.button_file_name(settings_folder), "r", encoding="utf-8-sig"
+            self.button_file_name(settings_folder),
+            encoding="utf-8-sig",
         ) as buttons_file:
-            buttons = models.ButtonMacs.model_validate_json(buttons_file.read()).model_dump(
-                exclude_none=True
+            return models.ButtonMacs.model_validate_json(buttons_file.read()).model_dump(
+                exclude_none=True,
             )
-        return buttons  # type: ignore
 
     def arp_handler(self, pkt: Packet) -> None:
         """Handle sniffed ARP and DHCP requests."""
@@ -103,7 +108,8 @@ class AmazonDash:
         assert self.settings is not None
         if self.is_bounced(button, press_time):
             print(
-                f'Bounce protection. Skip this network request from "{button}" as duplicate (see "bounce_delay" in settings).'
+                f'Bounce protection. Skip this network request from "{button}" '
+                f'as duplicate (see "bounce_delay" in settings).',
             )
             return
         print(f'button "{button}" pressed')

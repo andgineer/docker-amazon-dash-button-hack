@@ -1,6 +1,12 @@
-from typing import Any, Dict, List, Literal, Optional, Union
+from typing import Any, Callable, Literal, Optional, Union
 
-from pydantic import BaseModel, RootModel, TypeAdapter, constr, model_validator  # pyright: ignore [reportMissingImports]
+from pydantic import (  # pyright: ignore [reportMissingImports]
+    BaseModel,
+    RootModel,
+    TypeAdapter,
+    constr,
+    model_validator,
+)
 
 BOUNCE_DELAY = 5
 
@@ -26,24 +32,24 @@ class DashboardItem(BaseModel):
 
     summary: str
     empty_image: str
-    absent: List[DashBoardAbsent]
+    absent: list[DashBoardAbsent]
 
 
-SummaryType = Union[str, List[TimeSummary]]
+SummaryType = Union[str, list[TimeSummary]]
 
 
 class CustomBaseModel(BaseModel):
     """Base model with custom validators."""
 
     @model_validator(mode="before")
-    def check_summary_type_fields(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+    def check_summary_type_fields(cls, values: dict[str, Any]) -> dict[str, Any]:  # noqa: N805
         """Check summary type fields."""
         for field, value in values.items():
             expected_type = cls.__annotations__.get(field)
             if expected_type is SummaryType and isinstance(value, list):
-                assert len(value) > 0, (
-                    """summary param must be string or array like [{"summary":"summary1", "before":"10:00:00"}, {"summary": "summary2", "before":"19:00:00"}, ...]"""
-                )
+                assert len(value) > 0, """summary param must be string or array like [
+{"summary":"summary1", "before":"10:00:00"}, {"summary": "summary2", "before":"19:00:00"}, ...
+]"""
         return values
 
 
@@ -83,7 +89,7 @@ class IftttAction(CustomBaseModel):
 
 
 class OpenhabAction(CustomBaseModel):
-    """Action for a OpenHab.""" ""
+    """Action for a OpenHab."""
 
     type: Literal["openhab"]
     summary: Optional[SummaryType] = None
@@ -93,7 +99,7 @@ class OpenhabAction(CustomBaseModel):
 
 
 ActionItem = Union[SheetAction, CalendarAction, IftttAction, OpenhabAction]
-ActionItemLoad = TypeAdapter(ActionItem).validate_python
+ActionItemLoad: Callable[[Any], ActionItem] = TypeAdapter(ActionItem).validate_python
 
 
 class EventActions(CustomBaseModel):
@@ -101,11 +107,11 @@ class EventActions(CustomBaseModel):
 
     # todo: flag that this is button event to have other types of events
     summary: SummaryType
-    actions: List[ActionItem]
+    actions: list[ActionItem]
 
 
 class Settings(BaseModel):
-    """Settings for the application.""" ""
+    """Settings for the application."""
 
     latitude: str
     longitude: str
@@ -114,9 +120,9 @@ class Settings(BaseModel):
     openweathermap_key_file_name: str
     images_folder: str
     bounce_delay: int = BOUNCE_DELAY
-    dashboards: Dict[str, DashboardItem]
-    events: Dict[str, EventActions]
+    dashboards: dict[str, DashboardItem]
+    events: dict[str, EventActions]
 
 
 MACAddress = constr(pattern="^(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$")
-ButtonMacs = RootModel[Dict[MACAddress, str]]  # type: ignore
+ButtonMacs = RootModel[dict[MACAddress, str]]  # type: ignore
