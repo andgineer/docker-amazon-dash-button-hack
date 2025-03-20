@@ -49,8 +49,7 @@ repos:
         files: ^tests/
         args: [
           --fix-only,
-          --line-length=99,
-          --exit-zero    # Don't fail on issues
+          --line-length=99
         ]
       - id: ruff-format
         args: [
