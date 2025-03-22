@@ -67,5 +67,6 @@ repos:
           "--namespace-packages",
           "--explicit-package-bases"
         ]
-        language: system
-        types: [ python ]
+        files: \.py$
+        exclude: ^tests/
+        language: python
