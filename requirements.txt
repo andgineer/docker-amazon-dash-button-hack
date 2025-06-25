@@ -8,15 +8,15 @@ annotated-types==0.7.0
     # via pydantic
 cachetools==5.5.2
     # via google-auth
-certifi==2025.4.26
+certifi==2025.6.15
     # via requests
 cffi==1.17.1
     # via -r requirements.in
 charset-normalizer==3.4.2
     # via requests
-google-api-core==2.25.0
+google-api-core==2.25.1
     # via google-api-python-client
-google-api-python-client==2.172.0
+google-api-python-client==2.173.0
     # via -r requirements.in
 google-auth==2.40.3
     # via
@@ -55,7 +55,7 @@ pyasn1-modules==0.4.2
     #   oauth2client
 pycparser==2.22
     # via cffi
-pydantic==2.11.5
+pydantic==2.11.7
     # via -r requirements.in
 pydantic-core==2.33.2
     # via pydantic
@@ -86,5 +86,5 @@ typing-inspection==0.4.1
     # via pydantic
 uritemplate==4.2.0
     # via google-api-python-client
-urllib3==2.4.0
+urllib3==2.5.0
     # via requests

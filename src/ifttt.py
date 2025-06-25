@@ -48,7 +48,7 @@ class Ifttt:
 
 def check() -> None:
     """Check IFTTT."""
-    from amazon_dash import AmazonDash
+    from amazon_dash import AmazonDash  # noqa: PLC0415
 
     dash = AmazonDash()
     settings = dash.load_settings()

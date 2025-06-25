@@ -10,7 +10,7 @@ annotated-types==0.7.0
     #   pydantic
 astroid==3.3.10
     # via pylint
-bracex==2.5.post1
+bracex==2.6
     # via wcmatch
 build==1.2.2.post1
     # via pip-tools
@@ -18,7 +18,7 @@ cachetools==5.5.2
     # via
     #   -r requirements.txt
     #   google-auth
-certifi==2025.4.26
+certifi==2025.6.15
     # via
     #   -r requirements.txt
     #   requests
@@ -35,7 +35,7 @@ click==8.2.1
     #   mkdocs
     #   pip-tools
     #   typer
-coverage[toml]==7.8.2
+coverage[toml]==7.9.1
     # via pytest-cov
 dill==0.4.0
     # via pylint
@@ -47,11 +47,11 @@ freezegun==1.5.2
     # via -r requirements.dev.in
 ghp-import==2.1.0
     # via mkdocs
-google-api-core==2.25.0
+google-api-core==2.25.1
     # via
     #   -r requirements.txt
     #   google-api-python-client
-google-api-python-client==2.172.0
+google-api-python-client==2.173.0
     # via
     #   -r requirements.txt
     #   google-api-python-client-stubs
@@ -91,7 +91,7 @@ jinja2==3.1.6
     # via mkdocs
 lazydocs==0.4.8
     # via -r requirements.dev.in
-markdown==3.8
+markdown==3.8.2
     # via mkdocs
 markdown-it-py==3.0.0
     # via rich
@@ -115,7 +115,7 @@ mkdocs-awesome-pages-plugin==2.10.1
     # via -r requirements.dev.in
 mkdocs-get-deps==0.2.0
     # via mkdocs
-mypy==1.16.0
+mypy==1.16.1
     # via -r requirements.dev.in
 mypy-extensions==1.1.0
     # via mypy
@@ -142,7 +142,9 @@ platformdirs==4.3.8
     #   pylint
     #   virtualenv
 pluggy==1.6.0
-    # via pytest
+    # via
+    #   pytest
+    #   pytest-cov
 pre-commit==4.2.0
     # via -r requirements.dev.in
 proto-plus==1.26.1
@@ -170,13 +172,13 @@ pycparser==2.22
     # via
     #   -r requirements.txt
     #   cffi
-pydantic==2.11.5
+pydantic==2.11.7
     # via -r requirements.txt
 pydantic-core==2.33.2
     # via
     #   -r requirements.txt
     #   pydantic
-pygments==2.19.1
+pygments==2.19.2
     # via
     #   pytest
     #   rich
@@ -190,12 +192,12 @@ pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pytest==8.4.0
+pytest==8.4.1
     # via
     #   -r requirements.dev.in
     #   pytest-cov
     #   pytest-mock
-pytest-cov==6.1.1
+pytest-cov==6.2.1
     # via -r requirements.dev.in
 pytest-mock==3.14.1
     # via -r requirements.dev.in
@@ -239,7 +241,7 @@ tomlkit==0.13.3
     # via pylint
 typer==0.16.0
     # via lazydocs
-types-httplib2==0.22.0.20250516
+types-httplib2==0.22.0.20250622
     # via google-api-python-client-stubs
 typing-extensions==4.14.0
     # via
@@ -258,7 +260,7 @@ uritemplate==4.2.0
     # via
     #   -r requirements.txt
     #   google-api-python-client
-urllib3==2.4.0
+urllib3==2.5.0
     # via
     #   -r requirements.txt
     #   requests
@@ -266,7 +268,7 @@ virtualenv==20.31.2
     # via pre-commit
 watchdog==6.0.0
     # via mkdocs
-wcmatch==10.0
+wcmatch==10.1
     # via mkdocs-awesome-pages-plugin
 wheel==0.45.1
     # via pip-tools

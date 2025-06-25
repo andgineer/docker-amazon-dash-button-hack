@@ -159,7 +159,7 @@ class Calendar(GoogleApi):
 
 def check() -> None:
     """Check."""
-    from amazon_dash import AmazonDash
+    from amazon_dash import AmazonDash  # noqa: PLC0415
 
     dash = AmazonDash()
     settings = dash.load_settings()
