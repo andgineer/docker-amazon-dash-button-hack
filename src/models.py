@@ -1,4 +1,5 @@
-from typing import Any, Callable, Literal, Optional, Union
+from collections.abc import Callable
+from typing import Any, Literal, Union
 
 from pydantic import (  # pyright: ignore [reportMissingImports]
     BaseModel,
@@ -15,7 +16,7 @@ class TimeSummary(BaseModel):
     """Summary for a time interval."""
 
     summary: str
-    before: Optional[str] = None
+    before: str | None = None
     image: str
 
 
@@ -57,7 +58,7 @@ class SheetAction(CustomBaseModel):
     """Action for a google sheet."""
 
     type: Literal["sheet"]
-    summary: Optional[SummaryType] = None
+    summary: SummaryType | None = None
     name: str
     press_sheet: str
     event_sheet: str
@@ -70,9 +71,9 @@ class CalendarAction(CustomBaseModel):
     """Action for a google calendar."""
 
     type: Literal["calendar"]
-    summary: Optional[SummaryType] = None
+    summary: SummaryType | None = None
     calendar_id: str
-    dashboard: Optional[str] = None
+    dashboard: str | None = None
     restart: int
     autoclose: int
     default: int
@@ -82,7 +83,7 @@ class IftttAction(CustomBaseModel):
     """Action for a IFTTT."""
 
     type: Literal["ifttt"]
-    summary: Optional[SummaryType] = None
+    summary: SummaryType | None = None
     value1: str = ""
     value2: str = ""
     value3: str = ""
@@ -92,7 +93,7 @@ class OpenhabAction(CustomBaseModel):
     """Action for a OpenHab."""
 
     type: Literal["openhab"]
-    summary: Optional[SummaryType] = None
+    summary: SummaryType | None = None
     path: str
     item: str
     command: str

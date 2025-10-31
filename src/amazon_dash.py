@@ -7,7 +7,7 @@ Register events in class Action
 import os.path
 import sys
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 from scapy.all import (  # pyright: ignore [reportMissingImports, reportMissingTypeStubs]
     Packet,
@@ -30,7 +30,7 @@ class AmazonDash:
     def __init__(self) -> None:
         """Init."""
         self.buttons: dict[str, Any] = {}
-        self.settings: Optional[models.Settings] = None
+        self.settings: models.Settings | None = None
         self.seen_macs: set[str] = set()
         self.seen_dhcp: set[str] = set()
         self.debounce: dict[  # bounce protection (in less than bounce_delay from last event)

@@ -4,7 +4,7 @@ exclude: |
     )
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer
@@ -12,7 +12,7 @@ repos:
       - id: trailing-whitespace
         exclude_types: [ python ]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.0
+    rev: v0.14.3
     hooks:
       - id: ruff
         exclude: ^tests/
@@ -42,7 +42,7 @@ repos:
           --select=TRY,   # Exception handling
           --select=UP,    # Upgrade syntax
           --select=W,     # Warnings
-          '--ignore=B019,S101,G004,TRY003,TRY300,TRY301,TRY400'  # Ignore docstring and `assert` detection
+          '--ignore=B019,S101,G004,TRY003,TRY300,TRY301,TRY400,UP007'  # Ignore docstring and `assert` detection
         ]
       - id: ruff
         name: ruff-format-tests

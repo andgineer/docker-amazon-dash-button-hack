@@ -6,8 +6,9 @@ Supports google sheet (google_sheet.py), google calendar (google_calendar.py) an
 import collections.abc
 import sys
 import traceback
+from collections.abc import Callable
 from datetime import datetime, timedelta
-from typing import Any, Callable, Union
+from typing import Any
 
 import models
 from google_api import GoogleApi
@@ -204,7 +205,7 @@ class Action:
     def event(
         self,
         target: GoogleApi,
-        action_params: Union[models.CalendarAction, models.SheetAction],
+        action_params: models.CalendarAction | models.SheetAction,
     ) -> None:
         """Event registration common logic."""
         assert isinstance(action_params.summary, str)

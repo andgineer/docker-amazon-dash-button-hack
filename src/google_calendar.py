@@ -3,7 +3,7 @@
 import datetime
 import os
 import time
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import dateutil.parser
 
@@ -22,7 +22,7 @@ class Calendar(GoogleApi):
         self.tz = os.environ.get("TZ", "Europe/Moscow")
         self.calendarId = calendar_id
 
-    def get_calendar_id(self, name: str) -> Optional[str]:
+    def get_calendar_id(self, name: str) -> str | None:
         """Get ID of the calendar named as `name`.
 
         Does not work for some unclear reasons.
@@ -77,7 +77,7 @@ class Calendar(GoogleApi):
         )
         # print('Calendar event created: %s' % (event.get('htmlLink')))
 
-    def get_last_event(self, summary: str) -> tuple[Optional[str], Optional[list[Any]]]:
+    def get_last_event(self, summary: str) -> tuple[str | None, list[Any] | None]:
         """Get last event from Google Calendar.
 
         :param summary: text to search
@@ -124,7 +124,7 @@ class Calendar(GoogleApi):
             eventId=event_id,  # 'primary',
         ).execute()
 
-    def close_event(self, event_id: Union[int, str], close_time: datetime.datetime) -> None:
+    def close_event(self, event_id: int | str, close_time: datetime.datetime) -> None:
         """Close event in Google Calendar."""
         event = (
             self.service.events()

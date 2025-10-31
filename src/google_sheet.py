@@ -1,7 +1,7 @@
 """Register Amazon Dash Button events in Google Sheets using Google Sheets API."""
 
 import datetime
-from typing import Any, Optional, Union
+from typing import Any
 
 import models
 from google_api import GoogleApi
@@ -31,7 +31,7 @@ class Sheet(GoogleApi):
         self.spreadSheetId = self.get_file_id(name)
         self.sheets = self.get_sheets(press_sheet, event_sheet)
 
-    def get_last_event(self, summary: str) -> tuple[Optional[int], Optional[list[Any]]]:
+    def get_last_event(self, summary: str) -> tuple[int | None, list[Any] | None]:
         """Get last event from Google Sheet.
 
         :param summary: text to search
@@ -56,7 +56,7 @@ class Sheet(GoogleApi):
 
     def close_event(
         self,
-        event_id: Union[int, str],
+        event_id: int | str,
         close_time: datetime.datetime,
     ) -> None:
         """Close event in Google Sheet.
@@ -83,7 +83,7 @@ class Sheet(GoogleApi):
             values=[summary, datetime.datetime.now().strftime(GSHEET_TIME_FORMAT)],
         )
 
-    def get_file_id(self, name: str) -> Optional[str]:
+    def get_file_id(self, name: str) -> str | None:
         """Get file id by name.
 
         :param name: file name
@@ -117,7 +117,7 @@ class Sheet(GoogleApi):
         sheet: str,
         search_string: str,
         search_in_col: int = 0,
-    ) -> tuple[Optional[int], Optional[list[Any]]]:
+    ) -> tuple[int | None, list[Any] | None]:
         """Find last row with search_string in search_in_col column.
 
         Very stupid implementation, but:

@@ -11,46 +11,46 @@ This is a Docker-based Amazon Dash Button hack that sniffs network traffic to de
 ### Environment Setup
 ```bash
 # Set up or activate development environment
-. ./activate.sh
+source ./activate.sh
 
 # Install/upgrade dependencies
-make reqs
+source ./activate.sh && make reqs
 ```
+
+**IMPORTANT**: Always activate the virtual environment before running any commands. Use `source ./activate.sh` before each command.
 
 ### Testing and Quality
 ```bash
 # Run tests with doctests
-pytest
+source ./activate.sh && pytest
 
 # Run network sniff check (requires sudo)
-make check
+source ./activate.sh && make check
 
-# Type checking (via pre-commit hook)
-mypy src/
-
-# Linting (via pre-commit hook)
-ruff check src/
-ruff format src/
+# Run all pre-commit hooks
+source ./activate.sh && pre-commit run --all-files
 ```
+
+**IMPORTANT**: Always use `pre-commit run --all-files` for code quality checks. Never run ruff or mypy directly.
 
 ### Development Workflow
 ```bash
 # Build documentation
-make docs
+source ./activate.sh && make docs
 
 # Version management
-make ver-bug     # Bump bug version
-make ver-feature # Bump feature version
-make ver-release # Bump release version
+source ./activate.sh && make ver-bug     # Bump bug version
+source ./activate.sh && make ver-feature # Bump feature version
+source ./activate.sh && make ver-release # Bump release version
 
 # View all available make commands
-make help
+source ./activate.sh && make help
 ```
 
 ### Running the Application
 ```bash
 # For development on macOS/Windows (cannot sniff in Docker)
-sudo python src/amazon_dash.py
+source ./activate.sh && sudo python src/amazon_dash.py
 
 # For production (Linux with Docker)
 docker run --net host -it --rm -v $PWD/../amazon-dash-private:/amazon-dash-private:ro andgineer/amazon-dash-button-hack

@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from functools import cached_property
-from typing import Any, Optional, Union
+from typing import Any
 
 import httplib2
 from googleapiclient import discovery  # pyright: ignore [reportMissingImports]
@@ -58,7 +58,7 @@ class GoogleApi:
     def get_last_event(
         self,
         summary: str,
-    ) -> tuple[Optional[Union[int, str]], Optional[list[Any]]]:
+    ) -> tuple[int | str | None, list[Any] | None]:
         """Get last event."""
         raise NotImplementedError
 
@@ -66,6 +66,6 @@ class GoogleApi:
         """Start event."""
         raise NotImplementedError
 
-    def close_event(self, event_id: Union[int, str], close_time: datetime) -> None:
+    def close_event(self, event_id: int | str, close_time: datetime) -> None:
         """Close event."""
         raise NotImplementedError
