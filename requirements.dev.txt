@@ -8,34 +8,34 @@ annotated-types==0.7.0
     # via
     #   -r requirements.txt
     #   pydantic
-astroid==4.0.1
+astroid==4.0.2
     # via pylint
 bracex==2.6
     # via wcmatch
 build==1.3.0
     # via pip-tools
-cachetools==6.2.1
+cachetools==6.2.2
     # via
     #   -r requirements.txt
     #   google-auth
-certifi==2025.10.5
+certifi==2025.11.12
     # via
     #   -r requirements.txt
     #   requests
 cffi==2.0.0
     # via -r requirements.txt
-cfgv==3.4.0
+cfgv==3.5.0
     # via pre-commit
 charset-normalizer==3.4.4
     # via
     #   -r requirements.txt
     #   requests
-click==8.3.0
+click==8.3.1
     # via
     #   mkdocs
     #   pip-tools
     #   typer
-coverage[toml]==7.11.0
+coverage[toml]==7.12.0
     # via pytest-cov
 dill==0.4.0
     # via pylint
@@ -51,13 +51,13 @@ google-api-core==2.28.1
     # via
     #   -r requirements.txt
     #   google-api-python-client
-google-api-python-client==2.186.0
+google-api-python-client==2.187.0
     # via
     #   -r requirements.txt
     #   google-api-python-client-stubs
-google-api-python-client-stubs==1.30.0
+google-api-python-client-stubs==1.31.0
     # via -r requirements.dev.in
-google-auth==2.42.1
+google-auth==2.43.0
     # via
     #   -r requirements.txt
     #   google-api-core
@@ -67,7 +67,7 @@ google-auth-httplib2==0.2.1
     # via
     #   -r requirements.txt
     #   google-api-python-client
-googleapis-common-protos==1.71.0
+googleapis-common-protos==1.72.0
     # via
     #   -r requirements.txt
     #   google-api-core
@@ -91,7 +91,7 @@ jinja2==3.1.6
     # via mkdocs
 lazydocs==0.4.8
     # via -r requirements.dev.in
-markdown==3.9
+markdown==3.10
     # via mkdocs
 markdown-it-py==4.0.0
     # via rich
@@ -134,7 +134,7 @@ pathspec==0.12.1
     # via
     #   mkdocs
     #   mypy
-pip-tools==7.5.1
+pip-tools==7.5.2
     # via -r requirements.dev.in
 platformdirs==4.5.0
     # via
@@ -145,13 +145,13 @@ pluggy==1.6.0
     # via
     #   pytest
     #   pytest-cov
-pre-commit==4.3.0
+pre-commit==4.5.0
     # via -r requirements.dev.in
 proto-plus==1.26.1
     # via
     #   -r requirements.txt
     #   google-api-core
-protobuf==6.33.0
+protobuf==6.33.1
     # via
     #   -r requirements.txt
     #   google-api-core
@@ -172,9 +172,9 @@ pycparser==2.23
     # via
     #   -r requirements.txt
     #   cffi
-pydantic==2.12.3
+pydantic==2.12.4
     # via -r requirements.txt
-pydantic-core==2.41.4
+pydantic-core==2.41.5
     # via
     #   -r requirements.txt
     #   pydantic
@@ -182,7 +182,7 @@ pygments==2.19.2
     # via
     #   pytest
     #   rich
-pylint==4.0.2
+pylint==4.0.3
     # via -r requirements.dev.in
 pyparsing==3.2.5
     # via
@@ -192,7 +192,7 @@ pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pytest==8.4.2
+pytest==9.0.1
     # via
     #   -r requirements.dev.in
     #   pytest-cov
