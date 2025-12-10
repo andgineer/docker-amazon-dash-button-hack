@@ -35,7 +35,7 @@ click==8.3.1
     #   mkdocs
     #   pip-tools
     #   typer
-coverage[toml]==7.12.0
+coverage[toml]==7.13.0
     # via pytest-cov
 dill==0.4.0
     # via pylint
@@ -91,6 +91,8 @@ jinja2==3.1.6
     # via mkdocs
 lazydocs==0.4.8
     # via -r requirements.dev.in
+librt==0.7.3
+    # via mypy
 markdown==3.10
     # via mkdocs
 markdown-it-py==4.0.0
@@ -115,7 +117,7 @@ mkdocs-awesome-pages-plugin==2.10.1
     # via -r requirements.dev.in
 mkdocs-get-deps==0.2.0
     # via mkdocs
-mypy==1.18.2
+mypy==1.19.0
     # via -r requirements.dev.in
 mypy-extensions==1.1.0
     # via mypy
@@ -136,7 +138,7 @@ pathspec==0.12.1
     #   mypy
 pip-tools==7.5.2
     # via -r requirements.dev.in
-platformdirs==4.5.0
+platformdirs==4.5.1
     # via
     #   mkdocs-get-deps
     #   pylint
@@ -151,7 +153,7 @@ proto-plus==1.26.1
     # via
     #   -r requirements.txt
     #   google-api-core
-protobuf==6.33.1
+protobuf==6.33.2
     # via
     #   -r requirements.txt
     #   google-api-core
@@ -182,7 +184,7 @@ pygments==2.19.2
     # via
     #   pytest
     #   rich
-pylint==4.0.3
+pylint==4.0.4
     # via -r requirements.dev.in
 pyparsing==3.2.5
     # via
@@ -192,7 +194,7 @@ pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pytest==9.0.1
+pytest==9.0.2
     # via
     #   -r requirements.dev.in
     #   pytest-cov
@@ -260,7 +262,7 @@ uritemplate==4.2.0
     # via
     #   -r requirements.txt
     #   google-api-python-client
-urllib3==2.5.0
+urllib3==2.6.1
     # via
     #   -r requirements.txt
     #   requests
