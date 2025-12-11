@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from typing import Any, Literal, Union
 
-from pydantic import (  # pyright: ignore [reportMissingImports]
+from pydantic import (
     BaseModel,
     RootModel,
     TypeAdapter,

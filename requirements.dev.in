@@ -13,12 +13,13 @@ requests-mock
 freezegun
 
 # code quality
-pylint
-mypy
 pre-commit
 
 # type stubs
 google-api-python-client-stubs
+types-requests
+types-python-dateutil
+types-httplib2
 
 # docs
 lazydocs

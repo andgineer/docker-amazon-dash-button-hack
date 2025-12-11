@@ -10,7 +10,7 @@
 ## Build, Test, and Development Commands
 - `./activate.sh`: Create/activate local venv (Python 3.12) and install dev deps.
 - `make help`: List available Make targets.
-- `make check`: Run static checks (pre-commit/ruff/mypy via `sniff_check.py`).
+- `make check`: Run static checks (pre-commit/ruff/pyrefly via `sniff_check.py`).
 - `python -m pytest -vv --cov=src tests/`: Run tests with coverage (CI mirrors this).
 - `make docs` or `scripts/build-docs.sh`: Generate docs to `site/` and `docs/docstrings/`.
 - Docker (Linux): `docker run --net host -v $PWD/../amazon-dash-private:/amazon-dash-private:ro andgineer/amazon-dash-button-hack`.
@@ -19,7 +19,7 @@
 ## Coding Style & Naming Conventions
 - Python ≥ 3.10 (CI targets 3.10–3.12).
 - Linting/formatting: `ruff` (line length ~100, double-quoted docstrings), run via pre-commit.
-- Types: `mypy` (ignore_missing_imports; prefer precise annotations in `src/`).
+- Types: `pyrefly` (prefer precise annotations in `src/`).
 - Naming: modules and functions `snake_case`, classes `PascalCase`, constants `UPPER_SNAKE_CASE`.
 
 ## Testing Guidelines

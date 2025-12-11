@@ -5,9 +5,9 @@ from functools import cached_property
 from typing import Any
 
 import httplib2
-from googleapiclient import discovery  # pyright: ignore [reportMissingImports]
+from googleapiclient import discovery
 from oauth2client.service_account import (
-    ServiceAccountCredentials,  # pyright: ignore [reportMissingImports, reportMissingTypeStubs]
+    ServiceAccountCredentials,
 )
 
 import models
@@ -30,7 +30,7 @@ class GoogleApi:
         try:
             credentials = ServiceAccountCredentials.from_json_keyfile_name(
                 self.settings.credentials_file_name,
-                [  # pyright: ignore [reportArgumentType]
+                [
                     "https://www.googleapis.com/auth/calendar",
                     "https://www.googleapis.com/auth/spreadsheets",
                     "https://www.googleapis.com/auth/drive.metadata.readonly",
@@ -51,7 +51,7 @@ class GoogleApi:
         return discovery.build(api, version, http=self.http)
 
     @cached_property
-    def service(self) -> Any:  # do not use discovery.Resource as workaround for mypy
+    def service(self) -> Any:  # do not use discovery.Resource as workaround for pyrefly
         """Get service."""
         return self.get_service(self.api, self.version)
 

@@ -31,7 +31,7 @@ source ./activate.sh && make check
 source ./activate.sh && pre-commit run --all-files
 ```
 
-**IMPORTANT**: Always use `pre-commit run --all-files` for code quality checks. Never run ruff or mypy directly.
+**IMPORTANT**: Always use `pre-commit run --all-files` for code quality checks. Never run ruff or pyrefly directly.
 
 ### Development Workflow
 ```bash
@@ -95,7 +95,7 @@ Required configuration files in `amazon-dash-private/`:
 ### Code Quality Standards
 
 - **Line length**: 100 characters (99 for tests)
-- **Type checking**: MyPy enabled for src/ (excluded for tests/)
+- **Type checking**: Pyrefly enabled for src/ (excluded for tests/)
 - **Linting**: Ruff with extensive rule set including Pylint, security checks, import ordering
 - **Formatting**: Ruff formatter
 - **Pre-commit hooks**: Automated code quality checks
