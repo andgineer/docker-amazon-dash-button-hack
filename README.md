@@ -13,7 +13,7 @@
 | src/models.py           |       36 |        0 |    100% |           |
 | src/openhab.py          |       21 |        0 |    100% |           |
 | src/version.py          |        1 |        1 |      0% |         1 |
-|               **TOTAL** |  **459** |   **70** | **85%** |           |
+| **TOTAL**               |  **459** |   **70** | **85%** |           |
 
 
 ## Setup coverage badge
