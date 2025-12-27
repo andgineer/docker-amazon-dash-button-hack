@@ -14,6 +14,7 @@ freezegun
 
 # code quality
 pre-commit
+pyrefly
 
 # type stubs
 google-api-python-client-stubs

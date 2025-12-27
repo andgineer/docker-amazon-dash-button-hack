@@ -1,7 +1,7 @@
 # dependencies list to build requirements.txt with pip-compile (from pip-tools package)
 python-dateutil
-# in scapy 2.6.1 found Arbitrary Code Execution via Untrusted Pickle Deserialization #32
-scapy!=2.6.1
+# in scapy 2.6.0/1 found Arbitrary Code Execution via Untrusted Pickle Deserialization #32
+scapy!=2.6.1,!=2.6.0
 oauth2client
 google-api-python-client
 requests
