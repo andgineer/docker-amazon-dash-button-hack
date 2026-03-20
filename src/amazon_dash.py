@@ -76,7 +76,7 @@ class AmazonDash:
         """Handle sniffed ARP and DHCP requests."""
         who_has_request = 1
         if pkt.haslayer(ARP) and pkt[ARP].op == who_has_request or pkt.haslayer(DHCP):
-            mac = pkt.src  # pkt[layer].hwsrc
+            mac = str(pkt.src)  # pkt[layer].hwsrc
             if mac in self.buttons:
                 self.trigger(self.buttons[mac], datetime.fromtimestamp(float(pkt.time)))
             else:
