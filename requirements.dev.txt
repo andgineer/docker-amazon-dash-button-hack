@@ -14,7 +14,7 @@ bracex==2.6
     # via wcmatch
 build==1.5.0
     # via pip-tools
-certifi==2026.5.20
+certifi==2026.6.17
     # via
     #   -r requirements.txt
     #   requests
@@ -28,19 +28,19 @@ charset-normalizer==3.4.7
     # via
     #   -r requirements.txt
     #   requests
-click==8.4.1
+click==8.4.2
     # via
     #   mkdocs
     #   pip-tools
-coverage[toml]==7.14.1
+coverage[toml]==7.14.3
     # via pytest-cov
-cryptography==48.0.0
+cryptography==49.0.0
     # via
     #   -r requirements.txt
     #   google-auth
-distlib==0.4.0
+distlib==0.4.3
     # via virtualenv
-filelock==3.29.0
+filelock==3.29.4
     # via
     #   python-discovery
     #   virtualenv
@@ -48,17 +48,17 @@ freezegun==1.5.5
     # via -r requirements.dev.in
 ghp-import==2.1.0
     # via mkdocs
-google-api-core==2.30.3
+google-api-core==2.31.0
     # via
     #   -r requirements.txt
     #   google-api-python-client
-google-api-python-client==2.196.0
+google-api-python-client==2.197.0
     # via
     #   -r requirements.txt
     #   google-api-python-client-stubs
 google-api-python-client-stubs==1.37.0
     # via -r requirements.dev.in
-google-auth==2.53.0
+google-auth==2.55.0
     # via
     #   -r requirements.txt
     #   google-api-core
@@ -80,7 +80,7 @@ httplib2==0.31.2
     #   oauth2client
 identify==2.6.19
     # via pre-commit
-idna==3.16
+idna==3.18
     # via
     #   -r requirements.txt
     #   requests
@@ -143,7 +143,7 @@ proto-plus==1.28.0
     # via
     #   -r requirements.txt
     #   google-api-core
-protobuf==7.35.0
+protobuf==7.35.1
     # via
     #   -r requirements.txt
     #   google-api-core
@@ -182,9 +182,9 @@ pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pyrefly==1.0.0
+pyrefly==1.1.1
     # via -r requirements.dev.in
-pytest==9.0.3
+pytest==9.1.1
     # via
     #   -r requirements.dev.in
     #   pytest-cov
@@ -198,7 +198,7 @@ python-dateutil==2.9.0.post0
     #   -r requirements.txt
     #   freezegun
     #   ghp-import
-python-discovery==1.4.0
+python-discovery==1.4.2
     # via virtualenv
 pyyaml==6.0.3
     # via
@@ -230,7 +230,7 @@ six==1.17.0
     #   -r requirements.txt
     #   oauth2client
     #   python-dateutil
-typer==0.26.2
+typer==0.26.7
     # via lazydocs
 types-httplib2==0.31.2.20260408
     # via
@@ -260,7 +260,7 @@ urllib3==2.7.0
     #   -r requirements.txt
     #   requests
     #   types-requests
-virtualenv==21.4.1
+virtualenv==21.5.1
     # via pre-commit
 watchdog==6.0.0
     # via mkdocs
