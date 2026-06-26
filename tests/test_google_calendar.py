@@ -8,8 +8,8 @@ from freezegun import freeze_time
 
 
 @pytest.fixture
-def mock_get_credentials_http():
-    with patch("google_calendar.GoogleApi.get_credentials_http") as mock_method:
+def mock_get_credentials():
+    with patch("google_calendar.GoogleApi.get_credentials") as mock_method:
         mock_http = Mock()
         mock_method.return_value = mock_http
         yield mock_method
@@ -22,7 +22,7 @@ def mock_discovery_build():
 
 
 @pytest.fixture
-def mock_calendar(mock_get_credentials_http, mock_discovery_build):
+def mock_calendar(mock_get_credentials, mock_discovery_build):
     settings = {"test": "setting", "credentials_file_name": "test_credentials.json"}
     calendar_id = "test_calendar_id"
     with patch("google_calendar.GoogleApi", return_value=Mock()):
@@ -73,13 +73,13 @@ def test_close_event(mock_calendar):
     assert mock_calendar.service.events().update.call_count == 1
 
 
-def test_google_api_get_credentials_http(mock_get_credentials_http):
-    # This test checks if the get_credentials_http method was mocked correctly
+def test_google_api_get_credentials(mock_get_credentials):
+    # This test checks if the get_credentials method was mocked correctly
     settings = {"test": "setting", "credentials_file_name": "test_credentials.json"}
     calendar_id = "test_calendar_id"
     calendar = Calendar(settings, calendar_id)
-    assert calendar.http is not None
-    mock_get_credentials_http.assert_called_once()
+    assert calendar.credentials is not None
+    mock_get_credentials.assert_called_once()
 
 
 def test_google_now(mock_calendar):

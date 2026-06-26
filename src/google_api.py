@@ -4,11 +4,8 @@ from datetime import datetime
 from functools import cached_property
 from typing import Any
 
-import httplib2
+from google.oauth2 import service_account
 from googleapiclient import discovery
-from oauth2client.service_account import (
-    ServiceAccountCredentials,
-)
 
 import models
 
@@ -21,16 +18,16 @@ class GoogleApi:
     def __init__(self, settings: models.Settings, api: str, version: str) -> None:
         """Init."""
         self.settings = settings
-        self.http = self.get_credentials_http()
+        self.credentials = self.get_credentials()
         self.api = api
         self.version = version
 
-    def get_credentials_http(self) -> httplib2.Http:
+    def get_credentials(self) -> service_account.Credentials:
         """Get credentials for http."""
         try:
-            credentials = ServiceAccountCredentials.from_json_keyfile_name(
+            credentials = service_account.Credentials.from_service_account_file(
                 self.settings.credentials_file_name,
-                [
+                scopes=[
                     "https://www.googleapis.com/auth/calendar",
                     "https://www.googleapis.com/auth/spreadsheets",
                     "https://www.googleapis.com/auth/drive.metadata.readonly",
@@ -43,12 +40,12 @@ class GoogleApi:
             )
             raise ValueError(error_message) from e
 
-        return credentials.authorize(httplib2.Http())
+        return credentials
 
     def get_service(self, api: str, version: str) -> Any:
-        if not self.http:
+        if not self.credentials:
             raise ValueError(f"Cannot get service `{self.api}`: Google API is not authorized.")
-        return discovery.build(api, version, http=self.http)
+        return discovery.build(api, version, credentials=self.credentials)
 
     @cached_property
     def service(self) -> Any:  # do not use discovery.Resource as workaround for pyrefly

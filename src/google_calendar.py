@@ -1,8 +1,8 @@
 """Register Amazon Dash Button events in Google Calendar using Google Calendar API."""
 
-import datetime
 import os
 import time
+from datetime import datetime, timedelta
 from typing import Any, cast
 
 import dateutil.parser
@@ -45,11 +45,11 @@ class Calendar(GoogleApi):
                 break
         return None
 
-    def parse_time(self, s: str) -> datetime.datetime:
+    def parse_time(self, s: str) -> datetime:
         """Parse Google Calendar time format to datetime."""
         return dateutil.parser.parse(s)
 
-    def time_to_str(self, t: datetime.datetime) -> str:
+    def time_to_str(self, t: datetime) -> str:
         """Convert datetime to Google Calendar time format."""
         gcal_time_format = "%Y-%m-%dT%H:%M:%S"
         tz_minutes = -time.timezone // 60
@@ -62,11 +62,11 @@ class Calendar(GoogleApi):
             "summary": summary,
             "description": "Event created by amazon dash (button) click.",
             "start": {
-                "dateTime": self.time_to_str(datetime.datetime.now()),
+                "dateTime": self.time_to_str(datetime.now()),
                 # 'timeZone': '{tz}'.format(tz=self.tz),
             },
             "end": {
-                "dateTime": self.time_to_str(datetime.datetime.now()),
+                "dateTime": self.time_to_str(datetime.now()),
                 # 'timeZone': '{tz}'.format(tz=self.tz),
             },
         }
@@ -92,7 +92,7 @@ class Calendar(GoogleApi):
                 .list(
                     calendarId=self.calendarId,  # 'primary',
                     timeMin=self.google_time_format(
-                        datetime.datetime.now() - datetime.timedelta(days=100),
+                        datetime.now() - timedelta(days=100),
                     ),  # better limit than sorry
                     q=summary,
                     # timeZone='UTC',
@@ -110,12 +110,21 @@ class Calendar(GoogleApi):
                     event = events["items"][-1]
                     # from pprint import pprint
                     # pprint(events)
-                    start = self.parse_time(event["start"]["dateTime"])
+                    start = self.get_event_datetime(event, "start")
                     if event["start"] == event["end"]:
                         return event["id"], [event["summary"], start]
-                    end = self.parse_time(event["end"]["dateTime"])
+                    end = self.get_event_datetime(event, "end")
                     return event["id"], [event["summary"], start, end]
                 return None, None
+
+    def get_event_datetime(self, event, name: str) -> datetime | None:
+        if "dateTime" in event[name]:
+            start = self.parse_time(event[name]["dateTime"])
+        elif "date" in event[name]:
+            start = self.parse_time(event[name]["date"])
+        else:
+            start = None
+        return start
 
     def delete_event(self, event_id: str) -> None:
         """Delete event from Google Calendar."""
@@ -124,7 +133,7 @@ class Calendar(GoogleApi):
             eventId=event_id,  # 'primary',
         ).execute()
 
-    def close_event(self, event_id: int | str, close_time: datetime.datetime) -> None:
+    def close_event(self, event_id: int | str, close_time: datetime) -> None:
         """Close event in Google Calendar."""
         event = (
             self.service.events()
@@ -142,18 +151,18 @@ class Calendar(GoogleApi):
         )
         # print(updated_event)
 
-    def google_time_format(self, t: datetime.datetime) -> str:
+    def google_time_format(self, t: datetime) -> str:
         """Convert datetime to Google Calendar time format."""
         return t.strftime("%Y-%m-%dT%H:%M:%SZ")
 
     def google_now(self) -> str:
         """Get current time in Google Calendar time format."""
-        return self.google_time_format(datetime.datetime.now())
+        return self.google_time_format(datetime.now())
 
     def google_today(self) -> str:
         """Get today's date in Google Calendar time format."""
         return self.google_time_format(
-            datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0),
+            datetime.now().replace(hour=0, minute=0, second=0, microsecond=0),
         )
 
 
@@ -184,7 +193,7 @@ def check() -> None:
     # Get it from Calendar and "close" (set end as + 5 minutes)
     _id, event = calendar.get_last_event("Google")
     assert _id
-    calendar.close_event(_id, (datetime.datetime.now() + datetime.timedelta(minutes=5)))
+    calendar.close_event(_id, (datetime.now() + timedelta(minutes=5)))
 
 
 if __name__ == "__main__":  # pragma: no cover

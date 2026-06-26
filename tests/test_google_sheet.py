@@ -6,8 +6,8 @@ from google_sheet import Sheet
 
 
 @pytest.fixture
-def mock_get_credentials_http():
-    with patch("google_calendar.GoogleApi.get_credentials_http") as mock_method:
+def mock_get_credentials():
+    with patch("google_calendar.GoogleApi.get_credentials") as mock_method:
         mock_http = Mock()
         mock_method.return_value = mock_http
         yield mock_method
@@ -20,7 +20,7 @@ def mock_discovery_build():
 
 
 @pytest.fixture
-def mock_sheet(mock_get_credentials_http, mock_discovery_build):
+def mock_sheet(mock_get_credentials, mock_discovery_build):
     settings = {"test": "setting", "credentials_file_name": "test_credentials.json"}
     sheet_name = "test_calendar_id"
     with (
@@ -32,7 +32,7 @@ def mock_sheet(mock_get_credentials_http, mock_discovery_build):
             mock_service.return_value = Mock()  # Mocking the actual Google Sheet service
 
             sheet.drive_service = Mock()  # Mocking the Drive service
-            sheet.http = Mock()  # Mocking the http attribute
+            sheet.credentials = Mock()  # Mocking the http attribute
 
             # Mock get_file_id behavior
             sheet.drive_service = Mock()

@@ -42,7 +42,9 @@ def action(settings):
 
 @pytest.fixture
 def google_credentials():
-    with patch("google_api.ServiceAccountCredentials.from_json_keyfile_name") as mock_from_json:
+    with patch(
+        "google_api.service_account.Credentials.from_service_account_file"
+    ) as mock_from_json:
         mock_from_json.return_value = Mock()
         yield mock_from_json
 
