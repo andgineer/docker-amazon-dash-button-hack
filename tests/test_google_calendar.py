@@ -87,7 +87,7 @@ def test_google_now(mock_calendar):
     mock_now = datetime.datetime(2023, 9, 15, 12, 0, 0)
 
     with patch("google_calendar.datetime") as mock_datetime:
-        mock_datetime.datetime.now.return_value = mock_now
+        mock_datetime.now.return_value = mock_now
 
         result = mock_calendar.google_now()
 
@@ -101,7 +101,7 @@ def test_google_today(mock_calendar):
     mock_today = datetime.datetime(2023, 9, 15, 12, 0, 0)
 
     with patch("google_calendar.datetime") as mock_datetime:
-        mock_datetime.datetime.now.return_value = mock_today
+        mock_datetime.now.return_value = mock_today
 
         result = mock_calendar.google_today()
 

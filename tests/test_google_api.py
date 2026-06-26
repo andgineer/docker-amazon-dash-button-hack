@@ -38,7 +38,9 @@ def test_get_service_with_http(mock_build, google_api_instance):
 
     service = google_api_instance.get_service("calendar", "v3")
 
-    mock_build.assert_called_once_with("calendar", "v3", http=google_api_instance.credentials)
+    mock_build.assert_called_once_with(
+        "calendar", "v3", credentials=google_api_instance.credentials
+    )
     assert service == mock_service
 
 
