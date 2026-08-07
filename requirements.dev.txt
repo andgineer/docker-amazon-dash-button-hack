@@ -4,27 +4,27 @@
 #
 #    pip-compile requirements.dev.in
 #
-annotated-doc==0.0.4
+annotated-doc==0.0.5
     # via typer
-annotated-types==0.7.0
+annotated-types==0.8.0
     # via
     #   -r requirements.txt
     #   pydantic
-bracex==2.6
+bracex==3.0.1
     # via wcmatch
 build==1.5.0
     # via pip-tools
-certifi==2026.6.17
+certifi==2026.7.22
     # via
     #   -r requirements.txt
     #   requests
-cffi==2.0.0
+cffi==2.1.1
     # via
     #   -r requirements.txt
     #   cryptography
 cfgv==3.5.0
     # via pre-commit
-charset-normalizer==3.4.7
+charset-normalizer==3.4.9
     # via
     #   -r requirements.txt
     #   requests
@@ -32,15 +32,15 @@ click==8.4.2
     # via
     #   mkdocs
     #   pip-tools
-coverage[toml]==7.14.3
+coverage[toml]==7.15.4
     # via pytest-cov
-cryptography==49.0.0
+cryptography==50.0.0
     # via
     #   -r requirements.txt
     #   google-auth
 distlib==0.4.3
     # via virtualenv
-filelock==3.29.4
+filelock==3.32.2
     # via
     #   python-discovery
     #   virtualenv
@@ -48,7 +48,7 @@ freezegun==1.5.5
     # via -r requirements.dev.in
 ghp-import==2.1.0
     # via mkdocs
-google-api-core==2.31.0
+google-api-core==2.34.0
     # via
     #   -r requirements.txt
     #   google-api-python-client
@@ -56,23 +56,23 @@ google-api-python-client==2.198.0
     # via
     #   -r requirements.txt
     #   google-api-python-client-stubs
-google-api-python-client-stubs==1.37.0
+google-api-python-client-stubs==1.39.0
     # via -r requirements.dev.in
-google-auth==2.55.1
+google-auth==2.56.3
     # via
     #   -r requirements.txt
     #   google-api-core
     #   google-api-python-client
     #   google-auth-httplib2
-google-auth-httplib2==0.4.0
+google-auth-httplib2==0.4.1
     # via
     #   -r requirements.txt
     #   google-api-python-client
-googleapis-common-protos==1.75.0
+googleapis-common-protos==1.75.1
     # via
     #   -r requirements.txt
     #   google-api-core
-httplib2==0.31.2
+httplib2==0.32.0
     # via
     #   -r requirements.txt
     #   google-api-python-client
@@ -89,7 +89,7 @@ jinja2==3.1.6
     # via mkdocs
 lazydocs==0.4.8
     # via -r requirements.dev.in
-markdown==3.10.2
+markdown==3.10.3
     # via mkdocs
 markdown-it-py==4.2.0
     # via rich
@@ -115,7 +115,7 @@ natsort==8.4.0
     # via mkdocs-awesome-pages-plugin
 nodeenv==1.10.0
     # via pre-commit
-packaging==26.2
+packaging==26.3
     # via
     #   build
     #   mkdocs
@@ -123,20 +123,19 @@ packaging==26.2
     #   wheel
 pathspec==1.1.1
     # via mkdocs
-pip-tools==7.5.3
+pip-tools==7.6.0
     # via -r requirements.dev.in
-platformdirs==4.10.0
+platformdirs==4.11.0
     # via
     #   mkdocs-get-deps
-    #   python-discovery
     #   virtualenv
 pluggy==1.6.0
     # via
     #   pytest
     #   pytest-cov
-pre-commit==4.6.0
+pre-commit==4.6.1
     # via -r requirements.dev.in
-proto-plus==1.28.0
+proto-plus==1.28.3
     # via
     #   -r requirements.txt
     #   google-api-core
@@ -146,7 +145,7 @@ protobuf==7.35.1
     #   google-api-core
     #   googleapis-common-protos
     #   proto-plus
-pyasn1==0.6.3
+pyasn1==0.6.4
     # via
     #   -r requirements.txt
     #   pyasn1-modules
@@ -176,7 +175,7 @@ pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pyrefly==1.1.1
+pyrefly==1.2.0
     # via -r requirements.dev.in
 pytest==9.1.1
     # via
@@ -192,7 +191,7 @@ python-dateutil==2.9.0.post0
     #   -r requirements.txt
     #   freezegun
     #   ghp-import
-python-discovery==1.4.2
+python-discovery==1.5.1
     # via virtualenv
 pyyaml==6.0.3
     # via
@@ -219,17 +218,17 @@ six==1.17.0
     # via
     #   -r requirements.txt
     #   python-dateutil
-typer==0.26.7
+typer==0.27.1
     # via lazydocs
-types-httplib2==0.31.2.20260408
+types-httplib2==0.32.0.20260720
     # via
     #   -r requirements.dev.in
     #   google-api-python-client-stubs
-types-python-dateutil==2.9.0.20260518
+types-python-dateutil==2.9.0.20260807
     # via -r requirements.dev.in
-types-requests==2.33.0.20260518
+types-requests==2.33.0.20260712
     # via -r requirements.dev.in
-typing-extensions==4.15.0
+typing-extensions==4.16.0
     # via
     #   -r requirements.txt
     #   google-api-python-client-stubs
@@ -249,11 +248,11 @@ urllib3==2.7.0
     #   -r requirements.txt
     #   requests
     #   types-requests
-virtualenv==21.5.1
+virtualenv==21.7.1
     # via pre-commit
 watchdog==6.0.0
     # via mkdocs
-wcmatch==10.1
+wcmatch==11.0
     # via mkdocs-awesome-pages-plugin
 wheel==0.47.0
     # via pip-tools
