@@ -6,39 +6,41 @@
 #
 annotated-types==0.8.0
     # via pydantic
-certifi==2026.7.22
+certifi==2026.10.19
     # via requests
 cffi==2.1.1
     # via
     #   -r requirements.in
     #   cryptography
-charset-normalizer==3.4.9
+charset-normalizer==3.5.2
     # via requests
-cryptography==50.0.0
+cryptography==50.0.2
     # via google-auth
-google-api-core==2.34.0
+google-api-core==2.42.0
     # via google-api-python-client
-google-api-python-client==2.198.0
+google-api-python-client==2.201.0
     # via -r requirements.in
-google-auth==2.56.3
+google-auth==2.62.0
     # via
     #   google-api-core
     #   google-api-python-client
     #   google-auth-httplib2
-google-auth-httplib2==0.4.1
+google-auth-httplib2==0.4.4
     # via google-api-python-client
-googleapis-common-protos==1.75.1
+googleapis-common-protos==1.75.5
     # via google-api-core
 httplib2==0.32.0
     # via
     #   -r requirements.in
     #   google-api-python-client
     #   google-auth-httplib2
-idna==3.18
+idna==3.20
     # via requests
-proto-plus==1.28.3
+opentelemetry-api==1.45.1
     # via google-api-core
-protobuf==7.35.1
+proto-plus==1.29.0
+    # via google-api-core
+protobuf==7.36.2
     # via
     #   google-api-core
     #   googleapis-common-protos
@@ -47,32 +49,35 @@ pyasn1==0.6.4
     # via pyasn1-modules
 pyasn1-modules==0.4.2
     # via google-auth
-pycparser==3.0
+pycparser==3.11
     # via cffi
-pydantic==2.13.4
+pydantic==2.14.1
     # via -r requirements.in
-pydantic-core==2.46.4
+pydantic-core==2.50.1
     # via pydantic
-pyparsing==3.3.2
+pyparsing==3.3.3
     # via httplib2
-python-dateutil==2.9.0.post0
+python-dateutil==3.0.0
     # via -r requirements.in
 requests==2.34.2
     # via
     #   -r requirements.in
     #   google-api-core
-scapy==2.7.0
+scapy==2.8.0
     # via -r requirements.in
 six==1.17.0
     # via python-dateutil
 typing-extensions==4.16.0
     # via
+    #   opentelemetry-api
     #   pydantic
     #   pydantic-core
     #   typing-inspection
-typing-inspection==0.4.2
+typing-inspection==0.4.4
     # via pydantic
+tzdata==2026.5
+    # via python-dateutil
 uritemplate==4.2.0
     # via google-api-python-client
-urllib3==2.7.0
+urllib3==2.8.0
     # via requests
